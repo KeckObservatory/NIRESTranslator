@@ -1,0 +1,9 @@
+
+common:
+  prefix: name_of_this_module
+  suffix: null
+
+links:
+
+  whatyoutypeintothecommandline:
+    cmd: pythonpath.to.your.function
