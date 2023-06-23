@@ -18,3 +18,19 @@ coadd(s/v)
 sampmode(s/v)
 nsamp(s/v)
 """
+
+from NIRESTranslatorFunction import NIRESTranslatorFunction
+
+class SetDetectorConfig(NIRESTranslatorFunction):
+
+    @classmethod
+    def pre_condition(cls, args, logger, cfg):
+        pass
+
+    @classmethod
+    def perform(cls, args, logger, cfg):
+        pass
+
+    @classmethod
+    def post_condition(cls, args, logger, cfg):
+        pass
