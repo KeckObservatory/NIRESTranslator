@@ -1,4 +1,8 @@
-import ktl
+try:
+    import ktl
+except:
+    print("KTL could not be imported!")
+    ktl = ""
 """
 Sets the following detector parameters:
 - integration time
@@ -29,7 +33,7 @@ class SetDetectorConfig(NIRESTranslatorFunction):
         """Sets the integration time to n seconds for either the NIRES spectrographic or imager detector.
 
         Args:
-            requestTime (int): time in seconds.
+            requestTime (float): time in seconds.
             sv (int): spec 's' or imager 'v'
             logger (class): Logger object
         """
