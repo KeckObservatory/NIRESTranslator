@@ -17,7 +17,7 @@ from NIRESTranslatorFunction import NIRESTranslatorFunction
 class TakeExposures(NIRESTranslatorFunction):
 
     @classmethod
-    def take_an_exposure(cls, nFrames=1, sv='s', logger=None):
+    def _take_an_exposure(cls, logger, cfg, nFrames=1, sv='s'):
         """Takes an exposure to on
         the H2RG detector (spectrograph), 
         H1 imaging detector, or both
@@ -29,26 +29,26 @@ class TakeExposures(NIRESTranslatorFunction):
         """
 
         if 'sv' in sv:
-            cls.take_an_sv_exposure(nFrames, logger)
+            cls._take_an_sv_exposure(logger, cfg, nFrames)
             # run take an exposure on both in parallel
             return
-        service = cls.determine_nires_service(sv)
+        service = cls._determine_nires_service(sv)
         framenum = ktl.read(service, 'framenum')
         logger.info(f'Taking {service} frame # {framenum}')
 
         while nFrames > 0:
-            ktl.write(service, 'GO', 0)
-            ktl.write(service, 'GO', 1)
+            cls._write_to_ktl(service, 'GO', 0, logger, cfg)
+            cls._write_to_ktl(service, 'GO', 1, logger, cfg)
             fileName = ktl.read(service, 'filename')
             cls.wait_for_exposure()
-            ktl.write(service, 'GO', 0)
+            cls._write_to_ktl(service, 'GO', 0, logger, cfg)
             nFrames = nFrames - 1
             if (nFrames > 0):
                 logger.info(f'Took file {fileName}, {nFrames} left')
                 time.sleep(1)
 
     @classmethod
-    def take_an_sv_exposure(cls, nFrames, logger):
+    def _take_an_sv_exposure(cls, logger, cfg, nFrames):
         """Takes an exposure to on both
         the H2RG detector (spectrograph) and
         H1 imaging detector
@@ -64,18 +64,18 @@ class TakeExposures(NIRESTranslatorFunction):
         logger.info(f'Taking nids frame # {framenumv}')
 
         while nFrames > 0:
-            ktl.write('nsds', 'GO', 0)
-            ktl.write('nids', 'GO', 0)
-            ktl.write('nsds', 'GO', 1)
-            ktl.write('nids', 'GO', 1)
+            cls._write_to_ktl('nsds', 'GO', 0, logger, cfg)
+            cls._write_to_ktl('nids', 'GO', 0, logger, cfg)
+            cls._write_to_ktl('nsds', 'GO', 1, logger, cfg)
+            cls._write_to_ktl('nids', 'GO', 1, logger, cfg)
 
             fileNames = ktl.read('nsds', 'filename')
             fileNamev = ktl.read('nids', 'filename')
 
             cls.wait_for_exposure('s') # Wait for spec exposure to take, assume imager takes just as long.
 
-            ktl.write('nsds', 'GO', 0)
-            ktl.write('nids', 'GO', 0)
+            cls._write_to_ktl('nsds', 'GO', 0, logger, cfg)
+            cls._write_to_ktl('nids', 'GO', 0, logger, cfg)
             nFrames = nFrames - 1
             if (nFrames > 0):
                 logger.info(f'Took file {fileNames}, {nFrames} left')

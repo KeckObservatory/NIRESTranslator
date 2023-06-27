@@ -15,7 +15,7 @@ from NIRESTranslatorFunction import NIRESTranslatorFunction
 class WaitForExposure(NIRESTranslatorFunction):
 
     @classmethod
-    def wait_for_exposure(cls, sv, logger):
+    def wait_for_exposure(cls, sv, logger, cfg):
         """Waits for an exposure to finsih on either
         the H2RG detector (spectrograph) or 
         H1 imaging detector
@@ -25,12 +25,12 @@ class WaitForExposure(NIRESTranslatorFunction):
             logger (class): Logger object
         """
 
-        service = cls.determine_nires_service(sv)
+        service = cls._determine_nires_service(sv)
         itime = ktl.read(service, 'itime')
         coadd = ktl.read(service, 'coadds')
         nread = ktl.read(service, 'numreads')
-        waitForEndReads = 1.5 * nread
-        extra = 30 # add some extra to "wait" to allow for miscalculations
+        waitForEndReads = cfg['n_read_padding'] * nread
+        extra = cfg['extra_wait'] # add some extra to "wait" to allow for miscalculations
         wait = int(itime) * int(waitForEndReads) * int(coadd) + extra
 
         logger.info(f'wait_for_exposure: Time estimate: ${wait} seconds (includes ${extra} seconds for overhead)')
