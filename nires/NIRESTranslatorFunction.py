@@ -14,12 +14,12 @@ class NIRESTranslatorFunction(TranslatorModuleFunction):
 
     @classmethod
     def _write_to_ktl(cls, service, keyword, value, logger, cfg, wait=None, timeout=None):
-        if cfg['ob_keys']['test']:
-            logger.write('testing ktl.write({service}, {keyword}, {value})')
-        else:
+        if cfg['operation_mode']['operation_mode'].lower()=='production':
             wait = wait if wait is not None else cfg['ob_keys']['ktl_wait']
             timeout = timeout if timeout is not None else cfg['ob_keys']['ktl_timeout']
             ktl.write(service, keyword, value, wait=wait, timeout=timeout)
+        else:
+            logger.write('testing ktl.write({service}, {keyword}, {value})')
 
     @classmethod
     def _create_logger(cls, cfg, semid, progid, author):
