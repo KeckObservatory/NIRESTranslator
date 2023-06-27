@@ -22,7 +22,7 @@ class NIRESTranslatorFunction(TranslatorModuleFunction):
             ktl.write(service, keyword, value, wait=wait, timeout=timeout)
 
     @classmethod
-    def _create_logger(cfg, semid, progid, author):
+    def _create_logger(cls, cfg, semid, progid, author):
         formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
         ch = logging.StreamHandler()
         ch.setLevel(logging.INFO)
