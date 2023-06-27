@@ -152,16 +152,16 @@ class SetDetectorConfig(NIRESTranslatorFunction):
              
     @classmethod
     def pre_condition(cls, args, logger, cfg):
-        pass
 
     @classmethod
     def perform(cls, args, logger, cfg):
+        sv = args['sv']
         logger.info('setting coadd')
-        cls.set_coadd()
+        cls.set_coadd(args['nCoadd'], sv, logger, cfg)
         logger.info('setting integration time')
-        cls.set_integration_time()
+        cls.set_integration_time(args['requestTime'], sv, logger, cfg)
         logger.info('setting readout mode')
-        cls.set_readout_mode() 
+        cls.set_readout_mode(args['readoutMode'], sv, logger, cfg, args.get('nSamp', None)) 
         logger.info('set_dectector_configuration complete')
         
 
