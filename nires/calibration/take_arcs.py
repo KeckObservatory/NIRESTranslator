@@ -20,12 +20,12 @@ from ..shared.wait_for_exposure import WaitForExposure
 class TakeArcs(NIRESTranslatorFunction):
 
     @classmethod
-    def _take_arcs(cls, logger, cfg, nFrames=None, manual=True):
+    def _take_arcs(cls, logger, cfg, nFrames=None, manual=False):
         """take nFrames arcs using the NIRES spec server.
 
         Args:
-            nFrames (int): number of coadds 
-            manual (bool): if True, does not set ktl kws sampmode, itime, numfs, coadds
+            nFrames (int): number of frames 
+            manual (bool): if True, does not automatically set ktl kws sampmode, itime, numfs, coadds
             sv (int): spec 's' or imager 'v'
             cfg (class): Config object
             logger (class): Logger object
@@ -35,7 +35,7 @@ class TakeArcs(NIRESTranslatorFunction):
         logger.info(f'taking frame # {framenum}')
 
         cls._write_to_ktl('nsds', 'obstype', 'domearc', logger, cfg)
-        if manual:
+        if not manual:
             cls._write_to_ktl('nsds', 'sampmode', 3, logger, cfg)
             cls._write_to_ktl('nsds', 'itime', 120, logger, cfg)
             cls._write_to_ktl('nsds', 'numfs', 1, logger, cfg)

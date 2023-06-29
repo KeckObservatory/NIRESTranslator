@@ -21,9 +21,9 @@ class TakeDarks(NIRESTranslatorFunction):
         the exp time and Fowler mode defined before
 
         Args:
-            nFrames (int): number of coadds 
-            cfg (class): Config object
+            nFrames (int): number of frames 
             logger (class): Logger object
+            cfg (class): Config object
         """
         
         cls._write_to_ktl('nsds', 'obstype', 'dark')

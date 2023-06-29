@@ -54,10 +54,10 @@ class ToggleDomeLamp(NIRESTranslatorFunction):
             mode = "imaging"
         elif flimagin=="off" and flspectr=="on":
             mode = "spectral"
-        elif flimagin=="off" and flspectr=="off":
-            mode = "off"
         elif flimagin=="on" and flspectr=="on":
             mode = "both"
+        elif flimagin=="off" and flspectr=="off":
+            mode = "off"
         else:
             logger.warning("Error invalid lamp mode")
         logger.info(f"Lamp mode: {mode}")
