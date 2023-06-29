@@ -80,7 +80,6 @@ class TakeExposures(NIRESTranslatorFunction):
             nFrames = nFrames - 1
             if (nFrames > 0):
                 logger.info(f'Took file {fileNames}, {nFrames} left')
-                logger.info(f'Took file {fileNamev}, {nFrames} left')
                 time.sleep(1)
 
 
