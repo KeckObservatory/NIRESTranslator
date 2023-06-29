@@ -1,5 +1,3 @@
-import ktl
-import time
 """
 Takes exposure(s)
 
@@ -11,6 +9,8 @@ Replaces:
 goi(s/v)
 goisv
 """
+import ktl
+import time
 
 from NIRESTranslatorFunction import NIRESTranslatorFunction
 

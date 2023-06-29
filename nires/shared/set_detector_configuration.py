@@ -1,4 +1,3 @@
-import ktl
 """
 Sets the following detector parameters:
 - integration time
@@ -19,6 +18,7 @@ coadd(s/v)
 sampmode(s/v)
 nsamp(s/v)
 """
+import ktl
 
 from NIRESTranslatorFunction import NIRESTranslatorFunction
 

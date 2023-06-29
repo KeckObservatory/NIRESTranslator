@@ -5,8 +5,8 @@ from ddoitranslatormodule.BaseFunction import TranslatorModuleFunction
 
 try:
     import ktl
-except:
-    print("KTL could not be imported!")
+except Exception as err:
+    print(f"KTL could not be imported! err: {err}")
     ktl = ""
 
 

@@ -1,7 +1,3 @@
-import ktl
-import os
-import time
-from subprocess import Popen
 """
 Takes arc frames
 
@@ -12,6 +8,10 @@ Replaces:
 goarcs
 niresarcs
 """
+import ktl
+import os
+import time
+from subprocess import Popen
 
 from NIRESTranslatorFunction import NIRESTranslatorFunction
 from ..shared.take_exposures import TakeExposures

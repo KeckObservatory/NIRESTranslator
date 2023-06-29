@@ -1,5 +1,3 @@
-import ktl
-import time
 """
 Waits for exposure to finish (blocking)
 
@@ -9,6 +7,8 @@ Arguments:
 Replaces:
 wfg(s/v)
 """
+import ktl
+import time
 
 from NIRESTranslatorFunction import NIRESTranslatorFunction
 
