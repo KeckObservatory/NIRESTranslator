@@ -53,7 +53,9 @@ class WaitForExposure(NIRESTranslatorFunction):
 
     @classmethod
     def perform(cls, args, logger, cfg):
-        pass
+
+        sv = args['sv']
+        cls.wait_for_exposure(sv, logger, cfg)
 
     @classmethod
     def post_condition(cls, args, logger, cfg):

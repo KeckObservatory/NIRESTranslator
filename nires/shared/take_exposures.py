@@ -89,7 +89,9 @@ class TakeExposures(NIRESTranslatorFunction):
 
     @classmethod
     def perform(cls, args, logger, cfg):
-        pass
+        nFrames = args['nFrames']
+        sv = args['sv']
+        cls._take_an_exposure(logger, cfg, nFrames=nFrames, sv=sv)
 
     @classmethod
     def post_condition(cls, args, logger, cfg):
