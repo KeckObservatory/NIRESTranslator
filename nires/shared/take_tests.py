@@ -17,7 +17,8 @@ class TakeTests(NIRESTranslatorFunction):
 
     @classmethod
     def take_test(cls, nFrames, sv, logger, cfg):
-        """Takes a test exposure.
+        """takes nFrames NIRES spec or imager "test" frames (nFrames=1 by default).
+        Test frames are not written to disk.
 
         Args:
             nFrames (int): number of frames 

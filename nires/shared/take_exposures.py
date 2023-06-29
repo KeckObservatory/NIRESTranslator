@@ -13,6 +13,7 @@ import ktl
 import time
 
 from NIRESTranslatorFunction import NIRESTranslatorFunction
+from .wait_for_exposure import WaitForExposure 
 
 class TakeExposures(NIRESTranslatorFunction):
 
@@ -40,7 +41,7 @@ class TakeExposures(NIRESTranslatorFunction):
             cls._write_to_ktl(service, 'GO', 0, logger, cfg)
             cls._write_to_ktl(service, 'GO', 1, logger, cfg)
             fileName = ktl.read(service, 'filename')
-            cls.wait_for_exposure()
+            WaitForExposure.execute({'sv', sv}, logger, cfg)
             cls._write_to_ktl(service, 'GO', 0, logger, cfg)
             nFrames = nFrames - 1
             if (nFrames > 0):

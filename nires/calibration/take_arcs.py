@@ -20,9 +20,8 @@ from ..shared.wait_for_exposure import WaitForExposure
 class TakeArcs(NIRESTranslatorFunction):
 
     @classmethod
-    def take_arcs(cls, logger, cfg, nFrames=None, manual=True):
-        """will configure the NIRES spec/imaging server to 
-        create nFrames arcframes into one frame.
+    def _take_arcs(cls, logger, cfg, nFrames=None, manual=True):
+        """take nFrames arcs using the NIRES spec server.
 
         Args:
             nFrames (int): number of coadds 
@@ -45,21 +44,13 @@ class TakeArcs(NIRESTranslatorFunction):
         Popen(["ssh", "nireseng@niresserver1", "power", "on", "8"])
         if nFrames == None:
             nFrames = framenum
-            while nFrames > 0:
-                teArgs = {'nFrames': nFrames, 'sv': 's'}
-                TakeExposures.execute(teArgs, logger, cfg)
-                fileName = ktl.read('nsds', 'filename')
-                wfeArgs = {'sv': 's'}
-                WaitForExposure.execute(wfeArgs, logger, cfg)
-                nFrames = nFrames - 1
-                if (nFrames>0):
-                    logger.info(f'Took file {fileName}, {nFrames} left')
-                    time.sleep(1)
+            teArgs = {'nFrames': nFrames, 'sv': 's'}
+            TakeExposures.execute(teArgs, logger, cfg)
         else:
             fileName = ktl.read('nsds', 'filename')
             logger.info(f'File {fileName}')
-            wfeArgs = {'sv': 's'}
-            WaitForExposure.execute(wfeArgs, logger, cfg)
+            teArgs = {'nFrames': nFrames, 'sv': 's'}
+            TakeExposures.execute(teArgs, logger, cfg)
             cls._write_to_ktl('nsds', 'GO', 0, logger, cfg, True)
             
         Popen(["ssh", "nireseng@niresserver1", "power", "off", "8"])
@@ -72,7 +63,9 @@ class TakeArcs(NIRESTranslatorFunction):
 
     @classmethod
     def perform(cls, args, logger, cfg):
-        pass
+        nFrames = args.get('nFrames', None)
+        manual = args.get('manual', False)
+        cls._take_arcs(logger, cfg, nFrames, manual)
 
     @classmethod
     def post_condition(cls, args, logger, cfg):
