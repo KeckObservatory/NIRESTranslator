@@ -23,6 +23,7 @@ class WaitForExposure(NIRESTranslatorFunction):
         Args:
             sv (int): spec 's' or imager 'v'
             logger (class): Logger object
+            cfg (class): cfg object
         """
 
         service = cls._determine_nires_service(sv)

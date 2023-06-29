@@ -35,17 +35,19 @@ class TakeFlatsOnOff(NIRESTranslatorFunction):
         ToggleDomeLamp.execute({'status': 'off'})
         ToggleDomeLamp.execute({'status': 'spec'})
 
-        # Take nFrames with dome lamps on and then nFrames with dome lamps off.
-        ToggleDomeLamp.execute({'status': 'off'})
-        ToggleDomeLamp.execute({'status': 'spec'})
-        cls._write_to_ktl('nsds', 'obstype', 'domeflat', logger, cfg)
-        teArgs = {'nFrames': nFrames, 'sv': 's'} 
-        TakeExposures.execute(teArgs, logger, cfg)
-
-        ToggleDomeLamp.execute({'status': 'off'})
-        cls._write_to_ktl('nsds', 'obstype', 'dark', logger, cfg)
-        teArgs = {'nFrames': nFrames, 'sv': 's'} # take only one exposure at a time
-        TakeExposures.execute(teArgs, logger, cfg)
+        # Take one frame with dome lamps on and then one frame with dome lamps off for nFrames times.
+        # TODO: find out if we can take nFrames of flats and then nFrames of darks.
+        logger.info(f"Taking {nFrames} flats and darks.")
+        while nFrames > 0:
+            ToggleDomeLamp.execute({'status': 'off'})
+            ToggleDomeLamp.execute({'status': 'spec'})
+            cls._write_to_ktl('nsds', 'obstype', 'domeflat', logger, cfg)
+            teArgs = {'nFrames': 1, 'sv': 's'} # take only one exposure at a time
+            TakeExposures.execute(teArgs, logger, cfg)
+            ToggleDomeLamp.execute({'status': 'off'})
+            cls._write_to_ktl('nsds', 'obstype', 'dark', logger, cfg)
+            teArgs = {'nFrames': 1, 'sv': 's'} # take only one exposure at a time
+            TakeExposures.execute(teArgs, logger, cfg)
 
 
         ToggleDomeLamp.execute({'status': 'off'})
