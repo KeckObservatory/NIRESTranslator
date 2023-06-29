@@ -22,22 +22,6 @@ class NIRESTranslatorFunction(TranslatorModuleFunction):
             logger.write('testing ktl.write({service}, {keyword}, {value})')
 
     @classmethod
-    def _create_logger(cls, cfg, semid, progid, author):
-        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-        ch = logging.StreamHandler()
-        ch.setLevel(logging.INFO)
-        ch.setFormatter(formatter)
-        logger = logging.getLogger()
-        logger.addHandler(ch)
-        try:
-            zmq_log_handler = dl.ZMQHandler(cfg['logger']['subsystem'], cfg['logger']['configLoc'], author, progid, semid)
-            logger.addHandler(zmq_log_handler)
-        except Exception as err:
-            print('zmq log handler failed. not going to add')
-        logger.setLevel(logging.INFO)
-        return logger
-
-    @classmethod
     def _determine_nires_service(cls, sv):
         """determines if use spectrograph (nsds) or imager server (nids)
 

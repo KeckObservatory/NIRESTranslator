@@ -21,6 +21,17 @@ class TakeArcs(NIRESTranslatorFunction):
 
     @classmethod
     def take_arcs(cls, logger, cfg, nFrames=None, manual=True):
+        """will configure the NIRES spec/imaging server to 
+        create nFrames arcframes into one frame.
+
+        Args:
+            nFrames (int): number of coadds 
+            manual (bool): if True, does not set ktl kws sampmode, itime, numfs, coadds
+            sv (int): spec 's' or imager 'v'
+            cfg (class): Config object
+            logger (class): Logger object
+        """
+
         framenum = ktl.read('nsds', 'framenum')
         logger.info(f'taking frame # {framenum}')
 

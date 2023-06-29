@@ -47,10 +47,10 @@ class SetDetectorConfig(NIRESTranslatorFunction):
     @classmethod
     def set_coadd(cls, nCoadd, sv, logger, cfg):
         """will configure the NIRES spec/imaging server to 
-        coadd n integrations into one frame.
+        coadd nCoadd integrations into one frame.
 
         Args:
-            n (int): number of coadds 
+            nCoadd (int): number of coadds 
             sv (int): spec 's' or imager 'v'
             cfg (class): Config object
             logger (class): Logger object
