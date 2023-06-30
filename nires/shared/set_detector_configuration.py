@@ -75,9 +75,23 @@ class SetDetectorConfig(NIRESTranslatorFunction):
                                 3 (or "MCDS") Multiple-read Correlated Double (Fowler) Sampling
                                 4 (or "single") Single exposure
             sv (int): spec 's' or imager 'v'
-            cfg (class): Config object
             logger (class): Logger object
+            cfg (class): Config object
         """
+
+        if isinstance(readoutMode, str):
+            if 'UTR' in readoutMode:
+                readoutMode = 1
+            elif 'PCDS' in readoutMode or 'pcds' in readoutMode:
+                readoutMode = 2
+            elif any([x in readoutMode for x in ['MCDS', 'mcds', 'Fowler', 'fowler']]):
+                readoutMode = 3
+            elif 'single' in readoutMode or 'Single' in readoutMode:
+                readoutMode = 4
+            else:
+                logger.warn(f"Do not understand sampling mode {readoutMode}. Not going to set.")
+                return
+            
 
         if readoutMode == 1:
             msg = "Sampling mode = 1 (up the Ramp sampling)"
@@ -88,7 +102,7 @@ class SetDetectorConfig(NIRESTranslatorFunction):
         elif readoutMode == 4:
             msg = "Sampling mode = 4 (single sample)"
         else:
-            logger.warn("Do not understand sampling mode. Not going to set.")
+            logger.warn(f"Do not understand sampling mode {readoutMode}. Not going to set.")
             return
             
 
@@ -108,8 +122,8 @@ class SetDetectorConfig(NIRESTranslatorFunction):
 
         Args:
             sv (int): spec 's' or imager 'v'
-            cfg (dict): Config object
             logger (class): Logger object
+            cfg (dict): Config object
         """
         service = cls._determine_nires_service(sv) 
         integrationTime = ktl.read(service, 'itime')

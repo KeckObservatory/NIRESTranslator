@@ -24,9 +24,10 @@ class TakeExposures(NIRESTranslatorFunction):
         H1 imaging detector, or both
 
         Args:
+            logger (class): Logger object
+            cfg (class): cfg object
             nFrames (int): Number of frames to take
             sv (int): spec 's', imager 'v', or both 'sv' 
-            logger (class): Logger object
         """
 
         if 'sv' in sv:
@@ -35,8 +36,9 @@ class TakeExposures(NIRESTranslatorFunction):
             return
         service = cls._determine_nires_service(sv)
         framenum = ktl.read(service, 'framenum')
-        logger.info(f'Taking {service} frame # {framenum}')
+        logger.info(f'Taking {nFrames} using service {service}. Starting on frame # {framenum}')
 
+        maxFrames = nFrames
         while nFrames > 0:
             cls._write_to_ktl(service, 'GO', 0, logger, cfg)
             cls._write_to_ktl(service, 'GO', 1, logger, cfg)
@@ -45,7 +47,7 @@ class TakeExposures(NIRESTranslatorFunction):
             cls._write_to_ktl(service, 'GO', 0, logger, cfg)
             nFrames = nFrames - 1
             if (nFrames > 0):
-                logger.info(f'Took file {fileName}, {nFrames} left')
+                logger.info(f'Took file {fileName}, {nFrames} left out of {maxFrames}')
                 time.sleep(1)
 
     @classmethod
@@ -55,8 +57,9 @@ class TakeExposures(NIRESTranslatorFunction):
         H1 imaging detector
 
         Args:
-            nFrames (int): Number of frames to take
             logger (class): Logger object
+            cfg (class): cfg object
+            nFrames (int): Number of frames to take
         """
 
         framenums = ktl.read('nsds', 'framenum')

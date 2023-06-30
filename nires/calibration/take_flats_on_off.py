@@ -37,7 +37,7 @@ class TakeFlatsOnOff(NIRESTranslatorFunction):
 
         # Take one frame with dome lamps on and then one frame with dome lamps off for nFrames times.
         # TODO: find out if we can take nFrames of flats and then nFrames of darks.
-        logger.info(f"Taking {nFrames} flats and darks.")
+        logger.info(f"Taking {nFrames} flats and {nFrames} darks each.")
         while nFrames > 0:
             ToggleDomeLamp.execute({'status': 'off'})
             ToggleDomeLamp.execute({'status': 'spec'})
