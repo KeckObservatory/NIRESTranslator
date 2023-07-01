@@ -14,7 +14,7 @@ import ktl
 class ToggleDomeLamp(NIRESTranslatorFunction):
 
     @classmethod
-    def toggle_dome_lamps(cls, status, logger, cfg):
+    def _toggle_dome_lamps(cls, status, logger, cfg):
         """domelamps -- turn spectral or imaging dome lamps on or off.
         Set the lamps to the specififed mode. Each set of lamps may be 
         turned on or off by issuing the appropriate command.
@@ -42,7 +42,7 @@ class ToggleDomeLamp(NIRESTranslatorFunction):
             logger.debug('Invalid lamp status. Not setting lamps.')
 
     @classmethod
-    def show_lamp_status(cls, logger):
+    def _show_lamp_status(cls, logger):
         """shows status of lamps.
 
         Args:
@@ -63,16 +63,33 @@ class ToggleDomeLamp(NIRESTranslatorFunction):
         logger.info(f"Lamp mode: {mode}")
 
     @classmethod
+    def _simulate_toggle_dome_lamps(cls, status, logger, cfg):
+        if 'spec' in status:
+            logger.info('spec lamps simulation "turned on')
+        elif 'im' in status:
+            logger.info('img lamps simulation "turned on')
+        elif 'both' in status:
+            logger.info('both lamps simulation "turned on')
+        elif 'off' in status:
+            logger.info('lamps simulation "turned off')
+        else:
+            logger.debug('Invalid lamp status. Not setting lamps.')
+
+    
+    @classmethod
     def pre_condition(cls, args, logger, cfg):
         pass
 
     @classmethod
     def perform(cls, args, logger, cfg):
         status = args.get('status', False)
+        opMode = cfg['operation_mode']['operation_mode']
         if not status: # With no arguements, report the current status of the dome flatfield
-            cls.show_lamp_status(logger)
+            cls._show_lamp_status(logger)
+        elif opMode == 'production':
+            cls._toggle_dome_lamps(status, logger, cfg)
         else:
-            cls.toggle_dome_lamps(status, logger, cfg)
+            cls._simulate_toggle_dome_lamps(status, logger, cfg)
 
     @classmethod
     def post_condition(cls, args, logger, cfg):

@@ -41,7 +41,10 @@ class TakeArcs(NIRESTranslatorFunction):
             cls._write_to_ktl('nsds', 'numfs', 1, logger, cfg)
             cls._write_to_ktl('nsds', 'coadds', 1, logger, cfg)
 
-        Popen(["ssh", "nireseng@niresserver1", "power", "on", "8"])
+        if cfg['operation_mode']['operation_mode'] == 'production':
+            Popen(["ssh", "nireseng@niresserver1", "power", "on", "8"])
+        else:
+            logger.debug('simulating turning arclamps on.')
         if nFrames == None:
             nFrames = framenum
             teArgs = {'nFrames': nFrames, 'sv': 's'}
@@ -53,7 +56,10 @@ class TakeArcs(NIRESTranslatorFunction):
             TakeExposures.execute(teArgs, logger, cfg)
             cls._write_to_ktl('nsds', 'GO', 0, logger, cfg, True)
             
-        Popen(["ssh", "nireseng@niresserver1", "power", "off", "8"])
+        if cfg['operation_mode']['operation_mode'] == 'production':
+            Popen(["ssh", "nireseng@niresserver1", "power", "off", "8"])
+        else:
+            logger.debug('simulating turning arclamps off.')
         cls._write_to_ktl('nsds', 'obstype', 'object', logger, cfg)
         
 

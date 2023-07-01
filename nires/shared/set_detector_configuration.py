@@ -128,7 +128,7 @@ class SetDetectorConfig(NIRESTranslatorFunction):
         service = cls._determine_nires_service(sv) 
         integrationTime = ktl.read(service, 'itime')
         minimumTime = cls._minimum_integration_time(sv)
-        iTimeTooSmall = integrationTime-minimumTime < 0
+        iTimeTooSmall = integrationTime - minimumTime < 0
         if iTimeTooSmall:
             logger.debug("setting itime to zero")
             cls.set_integration_time(minimumTime, sv, logger, cfg)
@@ -153,16 +153,21 @@ class SetDetectorConfig(NIRESTranslatorFunction):
 
         service = cls._determine_nires_service(sv) 
 
-        if not readoutMode:
-            readoutMode = ktl.read(service, 'sampmode')
+        if nSamp:
+            if not readoutMode:
+                readoutMode = ktl.read(service, 'sampmode')
 
-        if readoutMode==3: # Fowler mode
-            cls._write_to_ktl(service, 'numfs', nSamp, logger, cfg)
-        else:
-            cls._write_to_ktl(service, 'numreads', nSamp, logger, cfg)
-        # Check to make sure minumum 
-        # integration time is consitant with old
-        cls.check_integration_time(sv, logger, cfg) 
+            if readoutMode==3: # Fowler mode
+                cls._write_to_ktl(service, 'numfs', nSamp, logger, cfg)
+            else:
+                cls._write_to_ktl(service, 'numreads', nSamp, logger, cfg)
+            # Check to make sure minumum 
+            # integration time is consitant with old
+            cls.check_integration_time(sv, logger, cfg) 
+        else: # If nSamp is not included
+            keyword = 'numfs' if readoutMode==3 else 'numreads'
+            nSamp = ktl.read(service, keyword)
+            logger.info('{service} {keyword}: {}')
              
     @classmethod
     def pre_condition(cls, args, logger, cfg):

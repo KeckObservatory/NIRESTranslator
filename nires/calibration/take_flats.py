@@ -8,7 +8,6 @@ Replaces:
 goflats
 """
 
-from subprocess import Popen
 from NIRESTranslatorFunction import NIRESTranslatorFunction
 from ..shared.take_exposures import TakeExposures
 from .toggle_dome_lamps import ToggleDomeLamp
