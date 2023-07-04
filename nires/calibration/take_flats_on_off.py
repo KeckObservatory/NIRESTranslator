@@ -7,7 +7,8 @@ Arguments:
 Replaces:
 goflatonoff
 """
-
+import ktl
+import time
 from NIRESTranslatorFunction import NIRESTranslatorFunction
 from ..shared.take_exposures import TakeExposures
 from .toggle_dome_lamps import ToggleDomeLamp
@@ -37,16 +38,24 @@ class TakeFlatsOnOff(NIRESTranslatorFunction):
 
         # Take one frame with dome lamps on and then one frame with dome lamps off for nFrames times.
         logger.info(f"Taking {nFrames} flats and {nFrames} darks each.")
+        maxFrames = nFrames
         while nFrames > 0:
             ToggleDomeLamp.execute({'status': 'off'})
             ToggleDomeLamp.execute({'status': 'spec'})
             cls._write_to_ktl('nsds', 'obstype', 'domeflat', logger, cfg)
-            teArgs = {'nFrames': 1, 'sv': 's'} # take only one exposure at a time
-            TakeExposures.execute(teArgs, logger, cfg)
+            TakeExposures.expose('nsds', 's', logger, cfg)
+            fileName = ktl.read('nsds', 'filename')
+            if (nFrames > 0):
+                logger.info(f'Took file {fileName}, {nFrames} left out of {maxFrames} light flats')
+                time.sleep(1)
+
             ToggleDomeLamp.execute({'status': 'off'})
             cls._write_to_ktl('nsds', 'obstype', 'dark', logger, cfg)
-            teArgs = {'nFrames': 1, 'sv': 's'} # take only one exposure at a time
-            TakeExposures.execute(teArgs, logger, cfg)
+            TakeExposures.expose('nsds', 's', logger, cfg)
+            fileName = ktl.read('nsds', 'filename')
+            if (nFrames > 0):
+                logger.info(f'Took file {fileName}, {nFrames} left out of {maxFrames} dark flats')
+                time.sleep(1)
 
         ToggleDomeLamp.execute({'status': 'off'})
         cls._write_to_ktl('nsds', 'obstype', 'object', logger, cfg)

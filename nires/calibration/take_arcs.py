@@ -48,12 +48,13 @@ class TakeArcs(NIRESTranslatorFunction):
             logger.debug('simulating turning arclamps on.')
         if nFrames:
             fileName = ktl.read('nsds', 'filename')
-            logger.info(f'File {fileName}')
+            logger.info(f'Writing {nFrames} starting on File {fileName}')
             teArgs = {'nFrames': nFrames, 'sv': 's'}
             TakeExposures.execute(teArgs, logger, cfg)
             cls._write_to_ktl('nsds', 'GO', 0, logger, cfg, True)
         else:
             teArgs = {'nFrames': 1, 'sv': 's'}
+            # TODO: verify that original script has gois commented out intentionally! 
             # TakeExposures.execute(teArgs, logger, cfg)
             
         if isProduction:

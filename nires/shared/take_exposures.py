@@ -40,15 +40,19 @@ class TakeExposures(NIRESTranslatorFunction):
 
         maxFrames = nFrames
         while nFrames > 0:
-            cls._write_to_ktl(service, 'GO', 0, logger, cfg)
-            cls._write_to_ktl(service, 'GO', 1, logger, cfg)
-            fileName = ktl.read(service, 'filename')
-            WaitForExposure.execute({'sv', sv}, logger, cfg)
-            cls._write_to_ktl(service, 'GO', 0, logger, cfg)
             nFrames = nFrames - 1
+            cls.expose(service, sv, logger, cfg)
+            fileName = ktl.read(service, 'filename')
             if (nFrames > 0):
                 logger.info(f'Took file {fileName}, {nFrames} left out of {maxFrames}')
                 time.sleep(1)
+    
+    @classmethod
+    def expose(cls, service, sv, logger, cfg):
+        cls._write_to_ktl(service, 'GO', 0, logger, cfg)
+        cls._write_to_ktl(service, 'GO', 1, logger, cfg)
+        WaitForExposure.execute({'sv', sv}, logger, cfg)
+        cls._write_to_ktl(service, 'GO', 0, logger, cfg)
 
     @classmethod
     def _take_an_sv_exposure(cls, logger, cfg, nFrames):
