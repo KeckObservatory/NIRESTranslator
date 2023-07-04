@@ -34,6 +34,7 @@ class TakeArcs(NIRESTranslatorFunction):
         framenum = ktl.read('nsds', 'framenum')
         logger.info(f'taking frame # {framenum}')
 
+        isProduction = cfg['operation_mode']['operation_mode'] == 'production'
         cls._write_to_ktl('nsds', 'obstype', 'domearc', logger, cfg)
         if not manual:
             cls._write_to_ktl('nsds', 'sampmode', 3, logger, cfg)
@@ -41,22 +42,21 @@ class TakeArcs(NIRESTranslatorFunction):
             cls._write_to_ktl('nsds', 'numfs', 1, logger, cfg)
             cls._write_to_ktl('nsds', 'coadds', 1, logger, cfg)
 
-        if cfg['operation_mode']['operation_mode'] == 'production':
+        if isProduction:
             Popen(["ssh", "nireseng@niresserver1", "power", "on", "8"])
         else:
             logger.debug('simulating turning arclamps on.')
-        if nFrames == None:
-            nFrames = framenum
-            teArgs = {'nFrames': nFrames, 'sv': 's'}
-            TakeExposures.execute(teArgs, logger, cfg)
-        else:
+        if nFrames:
             fileName = ktl.read('nsds', 'filename')
             logger.info(f'File {fileName}')
             teArgs = {'nFrames': nFrames, 'sv': 's'}
             TakeExposures.execute(teArgs, logger, cfg)
             cls._write_to_ktl('nsds', 'GO', 0, logger, cfg, True)
+        else:
+            teArgs = {'nFrames': 1, 'sv': 's'}
+            # TakeExposures.execute(teArgs, logger, cfg)
             
-        if cfg['operation_mode']['operation_mode'] == 'production':
+        if isProduction:
             Popen(["ssh", "nireseng@niresserver1", "power", "off", "8"])
         else:
             logger.debug('simulating turning arclamps off.')

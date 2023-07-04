@@ -28,7 +28,7 @@ class TakeTests(NIRESTranslatorFunction):
         """        
 
         service = cls._determine_nires_service(sv)
-        if nFrames>0:
+        if nFrames:
             while nFrames > 0:
                 cls._write_to_ktl(service, 'test', 0)
                 cls._write_to_ktl(service, 'test', 1)

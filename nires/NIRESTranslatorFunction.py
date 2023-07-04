@@ -52,7 +52,7 @@ class NIRESTranslatorFunction(TranslatorModuleFunction):
         service = cls._determine_nires_service(sv)
         sampmode = ktl.read(service, 'sampmode')
         readtime = ktl.read(service, 'readtime')
-        if sampmode==1 | sampmode==2:
+        if sampmode==1 or sampmode==2:
             nsamp = ktl.read(service, 'numreads')
         else:
             nsamp = 1

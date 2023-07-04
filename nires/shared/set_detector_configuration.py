@@ -34,15 +34,25 @@ class SetDetectorConfig(NIRESTranslatorFunction):
             cfg (class): Config object
             logger (class): Logger object
         """
-        minimumTime = cls._minimum_integration_time()
-        timeTooSmall = requestTime-minimumTime < 0
-        
-        time = minimumTime if (timeTooSmall) else requestTime
-        if timeTooSmall: logger.debug(f'Request for integration less than the minimum {minimumTime}')
+
         service = cls._determine_nires_service(sv) 
-        cls._write_to_ktl(service, 'itime', time, logger, cfg)
-        msg = f'Integration time set to {time}'
-        logger.info(msg)
+        if not requestTime:
+            iTime = ktl.read(service, 'itime')
+            logger.info(f'{service} itime set to: {iTime}')
+            return
+
+        if requestTime:
+            minimumTime = cls._minimum_integration_time()
+            timeTooSmall = requestTime-minimumTime < 0
+            
+            time = minimumTime if (timeTooSmall) else requestTime
+            if timeTooSmall: logger.debug(f'Request for integration less than the minimum {minimumTime}')
+            cls._write_to_ktl(service, 'itime', time, logger, cfg)
+            msg = f'Integration time set to {time}'
+            logger.info(msg)
+        else:
+            itime = ktl.read(service, 'itime')
+            logger.info(f'itime={itime}')
 
     @classmethod
     def set_coadd(cls, nCoadd, sv, logger, cfg):
@@ -56,10 +66,15 @@ class SetDetectorConfig(NIRESTranslatorFunction):
             logger (class): Logger object
         """
 
+        service = cls._determine_nires_service(sv) 
+        if not nCoadd:
+            nCoadd = ktl.read(service, 'coadds')
+            logger.info(f'{service} coadds set to: {nCoadd}')
+            return
+
         if nCoadd<1:
             nCoadd=1
             logger.info('Attempt to set coadds to zero; coadds will be set to 1.')
-        service = cls._determine_nires_service(sv) 
         cls._write_to_ktl(service, 'coadds', nCoadd, logger, cfg)
 
     @classmethod
@@ -78,8 +93,14 @@ class SetDetectorConfig(NIRESTranslatorFunction):
             logger (class): Logger object
             cfg (class): Config object
         """
+        service = cls._determine_nires_service(sv) 
 
-        if isinstance(readoutMode, str):
+        if not readoutMode: # reading out keyword
+            readoutMode = ktl.read(service, 'sampmode')
+            cls.log_readout_mode(readoutMode, logger)
+            return
+
+        if isinstance(readoutMode, str): # readout mode can be a string!
             if 'UTR' in readoutMode:
                 readoutMode = 1
             elif 'PCDS' in readoutMode or 'pcds' in readoutMode:
@@ -92,7 +113,20 @@ class SetDetectorConfig(NIRESTranslatorFunction):
                 logger.warn(f"Do not understand sampling mode {readoutMode}. Not going to set.")
                 return
             
+            readoutModeValid = cls.log_readout_mode(readoutMode, logger)
+            if not readoutModeValid:
+                return
 
+        cls._write_to_ktl(service, 'sampmode', readoutMode, logger, cfg)
+
+        if readoutMode==3 and nSamp:
+            logger.info(f'Setting number of Fowler mode samples to {nSamp}')
+            cls.set_number_of_samples(nSamp, sv, logger, readoutMode)
+
+        cls.check_integration_time(sv, logger)
+
+    @classmethod
+    def log_readout_mode(cls, readoutMode, logger):
         if readoutMode == 1:
             msg = "Sampling mode = 1 (up the Ramp sampling)"
         elif readoutMode == 2:
@@ -103,18 +137,9 @@ class SetDetectorConfig(NIRESTranslatorFunction):
             msg = "Sampling mode = 4 (single sample)"
         else:
             logger.warn(f"Do not understand sampling mode {readoutMode}. Not going to set.")
-            return
-            
-
+            return False
         logger.info(msg)
-        service = cls._determine_nires_service(sv) 
-        cls._write_to_ktl(service, 'sampmode', readoutMode, logger, cfg)
-
-        if readoutMode==3 and nSamp:
-            logger.info(f'Setting number of Fowler mode samples to {nSamp}')
-            cls.set_number_of_samples(nSamp, sv, logger, readoutMode)
-
-        cls.check_integration_time(sv, logger)
+        return True
     
     @classmethod
     def check_integration_time(cls, sv, logger, cfg):
@@ -130,7 +155,7 @@ class SetDetectorConfig(NIRESTranslatorFunction):
         minimumTime = cls._minimum_integration_time(sv)
         iTimeTooSmall = integrationTime - minimumTime < 0
         if iTimeTooSmall:
-            logger.debug("setting itime to zero")
+            logger.debug(f"setting itime to minimum itime {minimumTime}")
             cls.set_integration_time(minimumTime, sv, logger, cfg)
 
     @classmethod
