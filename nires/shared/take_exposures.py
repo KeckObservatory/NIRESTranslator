@@ -9,7 +9,11 @@ Replaces:
 goi(s/v)
 goisv
 """
-import ktl
+import pdb
+try:
+    import ktl
+except ImportError:
+    ktl=""
 import time
 
 from NIRESTranslatorFunction import NIRESTranslatorFunction
@@ -80,7 +84,7 @@ class TakeExposures(NIRESTranslatorFunction):
             fileNames = ktl.read('nsds', 'filename')
             fileNamev = ktl.read('nids', 'filename')
 
-            cls.wait_for_exposure('s') # Wait for spec exposure to take, assume imager takes just as long.
+            WaitForExposure.execute({'sv', 's'}, logger, cfg)
 
             cls._write_to_ktl('nsds', 'GO', 0, logger, cfg)
             cls._write_to_ktl('nids', 'GO', 0, logger, cfg)
