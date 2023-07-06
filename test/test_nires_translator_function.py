@@ -1,10 +1,7 @@
 from nires.shared.set_detector_configuration import SetDetectorConfig as sdc
 from nires.NIRESTranslatorFunction import NIRESTranslatorFunction as ntf 
 import unittest
-import pdb
-from unittest.mock import Mock, patch, MagicMock 
-from unittest.mock import MagicMock 
-import time
+from unittest.mock import Mock, patch 
 try:
     import ktl
 except ImportError:
