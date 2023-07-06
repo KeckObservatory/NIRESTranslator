@@ -7,7 +7,11 @@ Arguments:
 Replaces:
 wfg(s/v)
 """
-import ktl
+import pdb
+try:
+    import ktl
+except ImportError:
+    ktl=""
 import time
 
 from NIRESTranslatorFunction import NIRESTranslatorFunction
@@ -25,16 +29,15 @@ class WaitForExposure(NIRESTranslatorFunction):
             logger (class): Logger object
             cfg (class): cfg object
         """
-
         service = cls._determine_nires_service(sv)
         itime = ktl.read(service, 'itime')
         coadd = ktl.read(service, 'coadds')
         nread = ktl.read(service, 'numreads')
         waitForEndReads = cfg['ob_keys']['n_read_padding'] * nread
         extra = cfg['ob_keys']['extra_wait'] # add some extra to "wait" to allow for miscalculations
-        wait = int(itime) * int(waitForEndReads) * int(coadd) + extra
+        wait = int(itime) * waitForEndReads * int(coadd) + extra
 
-        logger.info(f'wait_for_exposure: Time estimate: ${wait} seconds (includes ${extra} seconds for overhead)')
+        logger.info(f'wait_for_exposure: Time estimate: {wait} seconds (includes {extra} seconds for overhead)')
 
         logger.info('wait_for_exposure: Waiting for exposure to end.')
         count = 0
@@ -46,6 +49,7 @@ class WaitForExposure(NIRESTranslatorFunction):
         if imageDone: logger.info('image done: OK')
         else:
             logger.info('wait_for_exposure: exposure timed out.')
+        return wait
         
 
     @classmethod
