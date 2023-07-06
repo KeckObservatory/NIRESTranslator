@@ -36,7 +36,7 @@ class TestSetDetectorConfiguration(unittest.TestCase):
         
 
     @patch('nires.shared.set_detector_configuration.ktl')
-    def test_set_integration_time_none(self, mock_ktl):
+    def test_set_integration_time(self, mock_ktl):
         mock_ktl.read = Mock()
         mock_ktl.read.side_effect = ktl_side_effects
         sdc.set_integration_time(5, sv="s", logger=self.logger, cfg=self.cfg)
@@ -71,6 +71,33 @@ class TestSetDetectorConfiguration(unittest.TestCase):
 
         sdc.set_readout_mode(None, sv='s', logger=self.logger, cfg=self.cfg)
         sdc.set_readout_mode(3, sv='s', logger=self.logger, cfg=self.cfg, nSamp=None)
+
+
+    @patch('nires.shared.set_detector_configuration.ktl')
+    def test_check_integration_time(self, mock_ktl):
+        mock_ktl.read = Mock()
+        mock_ktl.read.side_effect = ktl_side_effects
+        sdc._minimum_integration_time = Mock()
+        sdc._minimum_integration_time.side_effect = lambda _: 1 
+
+        sdc.check_integration_time(sv='s', logger=self.logger, cfg=self.cfg)
+
+        sdc._minimum_integration_time.side_effect = lambda x: 10 
+        sdc.set_integration_time = Mock()
+        sdc.check_integration_time(sv='s', logger=self.logger, cfg=self.cfg)
+
+
+    @patch('nires.shared.set_detector_configuration.ktl')
+    def test_set_number_of_samples(self, mock_ktl):
+        mock_ktl.read = Mock()
+        mock_ktl.read.side_effect = ktl_side_effects
+
+        sdc.set_number_of_samples(11, sv='s', logger=self.logger, cfg=self.cfg, readoutMode=3)
+        sdc.set_number_of_samples(12, sv='s', logger=self.logger, cfg=self.cfg, readoutMode=None)
+        sdc.set_number_of_samples(13, sv='s', logger=self.logger, cfg=self.cfg, readoutMode=1)
+
+        sdc.set_number_of_samples(None, sv='s', logger=self.logger, cfg=self.cfg, readoutMode=1)
+        sdc.set_number_of_samples(None, sv='s', logger=self.logger, cfg=self.cfg, readoutMode=3)
         
     
 
