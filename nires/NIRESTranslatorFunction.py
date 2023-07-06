@@ -2,12 +2,10 @@ import os
 import logging 
 from DDOILoggerClient import DDOILogger as dl
 from ddoitranslatormodule.BaseFunction import TranslatorModuleFunction
-
 try:
     import ktl
-except Exception as err:
-    print(f"KTL could not be imported! err: {err}")
-    ktl = ""
+except ImportError:
+    ktl = ''
 
 
 class NIRESTranslatorFunction(TranslatorModuleFunction):
@@ -20,7 +18,7 @@ class NIRESTranslatorFunction(TranslatorModuleFunction):
             ktl.write(service, keyword, value, wait=wait, timeout=timeout)
         else:
             logger.write('testing ktl.write({service}, {keyword}, {value})')
-
+    
     @classmethod
     def _determine_nires_service(cls, sv):
         """determines if use spectrograph (nsds) or imager server (nids)

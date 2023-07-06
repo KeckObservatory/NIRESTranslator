@@ -18,7 +18,11 @@ coadd(s/v)
 sampmode(s/v)
 nsamp(s/v)
 """
-import ktl
+import pdb
+try:
+    import ktl
+except ImportError:
+    ktl = ""
 
 from NIRESTranslatorFunction import NIRESTranslatorFunction
 
@@ -34,15 +38,12 @@ class SetDetectorConfig(NIRESTranslatorFunction):
             cfg (class): Config object
             logger (class): Logger object
         """
-
         service = cls._determine_nires_service(sv) 
         if not requestTime:
             iTime = ktl.read(service, 'itime')
             logger.info(f'{service} itime set to: {iTime}')
-            return
-
-        if requestTime:
-            minimumTime = cls._minimum_integration_time()
+        else:
+            minimumTime = cls._minimum_integration_time(sv=sv)
             timeTooSmall = requestTime-minimumTime < 0
             
             time = minimumTime if (timeTooSmall) else requestTime
@@ -50,9 +51,6 @@ class SetDetectorConfig(NIRESTranslatorFunction):
             cls._write_to_ktl(service, 'itime', time, logger, cfg)
             msg = f'Integration time set to {time}'
             logger.info(msg)
-        else:
-            itime = ktl.read(service, 'itime')
-            logger.info(f'itime={itime}')
 
     @classmethod
     def set_coadd(cls, nCoadd, sv, logger, cfg):
@@ -74,7 +72,7 @@ class SetDetectorConfig(NIRESTranslatorFunction):
 
         if nCoadd<1:
             nCoadd=1
-            logger.info('Attempt to set coadds to zero; coadds will be set to 1.')
+            logger.info('Attempt to set coadds to < zero; coadds will be set to 1.')
         cls._write_to_ktl(service, 'coadds', nCoadd, logger, cfg)
 
     @classmethod
@@ -101,13 +99,13 @@ class SetDetectorConfig(NIRESTranslatorFunction):
             return
 
         if isinstance(readoutMode, str): # readout mode can be a string!
-            if 'UTR' in readoutMode:
+            if 'UTR' in readoutMode.upper():
                 readoutMode = 1
-            elif 'PCDS' in readoutMode or 'pcds' in readoutMode:
+            elif 'PCDS' in readoutMode.upper() or 'pcds' in readoutMode:
                 readoutMode = 2
-            elif any([x in readoutMode for x in ['MCDS', 'mcds', 'Fowler', 'fowler']]):
+            elif any([x in readoutMode.upper() for x in ['MCDS', 'mcds', 'Fowler', 'fowler']]):
                 readoutMode = 3
-            elif 'single' in readoutMode or 'Single' in readoutMode:
+            elif 'single' in readoutMode.upper() or 'Single' in readoutMode:
                 readoutMode = 4
             else:
                 logger.warn(f"Do not understand sampling mode {readoutMode}. Not going to set.")
