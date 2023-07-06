@@ -111,9 +111,9 @@ class SetDetectorConfig(NIRESTranslatorFunction):
                 logger.warn(f"Do not understand sampling mode {readoutMode}. Not going to set.")
                 return
             
-            readoutModeValid = cls.log_readout_mode(readoutMode, logger)
-            if not readoutModeValid:
-                return
+        readoutModeValid = cls.log_readout_mode(readoutMode, logger)
+        if not readoutModeValid:
+            return
 
         cls._write_to_ktl(service, 'sampmode', readoutMode, logger, cfg)
 
@@ -190,7 +190,7 @@ class SetDetectorConfig(NIRESTranslatorFunction):
         else: # If nSamp is not included
             keyword = 'numfs' if readoutMode==3 else 'numreads'
             nSamp = ktl.read(service, keyword)
-            logger.info('{service} {keyword}: {}')
+            logger.info(f'{service} {keyword}: {nSamp}')
              
     @classmethod
     def pre_condition(cls, args, logger, cfg):

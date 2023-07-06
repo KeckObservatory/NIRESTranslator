@@ -98,8 +98,6 @@ class TestSetDetectorConfiguration(unittest.TestCase):
 
         sdc.set_number_of_samples(None, sv='s', logger=self.logger, cfg=self.cfg, readoutMode=1)
         sdc.set_number_of_samples(None, sv='s', logger=self.logger, cfg=self.cfg, readoutMode=3)
-        
-    
 
 if __name__ == "__main__":
     unittest.main()
