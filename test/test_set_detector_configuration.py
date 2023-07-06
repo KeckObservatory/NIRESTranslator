@@ -99,6 +99,20 @@ class TestSetDetectorConfiguration(unittest.TestCase):
         sdc.set_number_of_samples(None, sv='s', logger=self.logger, cfg=self.cfg, readoutMode=1)
         sdc.set_number_of_samples(None, sv='s', logger=self.logger, cfg=self.cfg, readoutMode=3)
 
+
+    @patch('nires.shared.set_detector_configuration.ktl')
+    def test_perform(self, mock_ktl):
+        mock_ktl.read = Mock()
+        mock_ktl.read.side_effect = ktl_side_effects
+        sdc.check_integration_time = Mock()
+        args = {}
+        args['det_exp_number'] = 1
+        args['det_exp_read_pairs'] = 2
+        args['det_samp_mode'] = 1
+        args['det_exp_time'] = 1
+        args['sv'] = 's'
+        sdc.perform(args=args, logger=self.logger, cfg=self.cfg)
+
 if __name__ == "__main__":
     unittest.main()
 
