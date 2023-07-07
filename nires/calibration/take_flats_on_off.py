@@ -7,11 +7,14 @@ Arguments:
 Replaces:
 goflatonoff
 """
-import ktl
+try:
+    import ktl
+except ImportError:
+    ktl=""
 import time
 from NIRESTranslatorFunction import NIRESTranslatorFunction
-from ..shared.take_exposures import TakeExposures
-from .toggle_dome_lamps import ToggleDomeLamp
+from ..shared.take_exposures import TakeExposures as te
+from .toggle_dome_lamps import ToggleDomeLamp as tdl
 
 class TakeFlatsOnOff(NIRESTranslatorFunction):
 
@@ -33,31 +36,31 @@ class TakeFlatsOnOff(NIRESTranslatorFunction):
         cls._write_to_ktl('nsds', 'numfs', 1, logger, cfg)
         cls._write_to_ktl('nsds', 'coadds', 1, logger, cfg)
 
-        ToggleDomeLamp.execute({'status': 'off'})
-        ToggleDomeLamp.execute({'status': 'spec'})
+        tdl.execute({'status': 'off'})
+        tdl.execute({'status': 'spec'})
 
         # Take one frame with dome lamps on and then one frame with dome lamps off for nFrames times.
         logger.info(f"Taking {nFrames} flats and {nFrames} darks each.")
         maxFrames = nFrames
         while nFrames > 0:
-            ToggleDomeLamp.execute({'status': 'off'})
-            ToggleDomeLamp.execute({'status': 'spec'})
+            tdl.execute({'status': 'off'})
+            tdl.execute({'status': 'spec'})
             cls._write_to_ktl('nsds', 'obstype', 'domeflat', logger, cfg)
-            TakeExposures.expose('nsds', 's', logger, cfg)
+            te.expose('nsds', 's', logger, cfg)
             fileName = ktl.read('nsds', 'filename')
-            if (nFrames > 0):
-                logger.info(f'Took file {fileName}, {nFrames} left out of {maxFrames} light flats')
-                time.sleep(1)
+            logger.info(f'Took file {fileName}, {nFrames} left out of {maxFrames} light flats')
+            time.sleep(1)
 
-            ToggleDomeLamp.execute({'status': 'off'})
+            tdl.execute({'status': 'off'})
             cls._write_to_ktl('nsds', 'obstype', 'dark', logger, cfg)
-            TakeExposures.expose('nsds', 's', logger, cfg)
+            te.expose('nsds', 's', logger, cfg)
             fileName = ktl.read('nsds', 'filename')
-            if (nFrames > 0):
-                logger.info(f'Took file {fileName}, {nFrames} left out of {maxFrames} dark flats')
-                time.sleep(1)
+            logger.info(f'Took file {fileName}, {nFrames} left out of {maxFrames} dark flats')
+            time.sleep(1)
 
-        ToggleDomeLamp.execute({'status': 'off'})
+            nFrames = nFrames-1
+
+        tdl.execute({'status': 'off'})
         cls._write_to_ktl('nsds', 'obstype', 'object', logger, cfg)
 
     @classmethod
