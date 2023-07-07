@@ -8,9 +8,13 @@ Replaces:
 goflats
 """
 
+try:
+    import ktl
+except ImportError:
+    ktl=""
 from NIRESTranslatorFunction import NIRESTranslatorFunction
-from ..shared.take_exposures import TakeExposures
-from .toggle_dome_lamps import ToggleDomeLamp
+from ..shared.take_exposures import TakeExposures as te
+from .toggle_dome_lamps import ToggleDomeLamp as tdl
 
 class TakeFlats(NIRESTranslatorFunction):
 
@@ -33,15 +37,15 @@ class TakeFlats(NIRESTranslatorFunction):
             cls._write_to_ktl('nsds', 'coadds', 1, logger, cfg)
 
 
-        ToggleDomeLamp.execute({'status': 'off'})
-        ToggleDomeLamp.execute({'status': 'spec'})
+        tdl.execute({'status': 'off'})
+        tdl.execute({'status': 'spec'})
 
         
         teArgs = {'nFrames': nFrames, 'sv': 's'}
-        TakeExposures.execute(teArgs, logger, cfg)
-        cls._write_to_ktl('nsds', 'go', 0)
+        te.execute(teArgs, logger, cfg)
+        cls._write_to_ktl('nsds', 'go', 0, logger, cfg)
 
-        ToggleDomeLamp.execute({'status': 'off'})
+        tdl.execute({'status': 'off'})
         cls._write_to_ktl('nsds', 'obstype', 'object', logger, cfg)
 
     @classmethod
