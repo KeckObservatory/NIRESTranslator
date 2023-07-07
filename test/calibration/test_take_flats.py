@@ -14,7 +14,7 @@ def ktl_side_effects(service, value):
 def logger_side_effect(msg):
     print(msg)
 
-class TestTakeExposures(unittest.TestCase):
+class TestTakeFlats(unittest.TestCase):
 
     def setUp(self):
         ktl.read = Mock()
