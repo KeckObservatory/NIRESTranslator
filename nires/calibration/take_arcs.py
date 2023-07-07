@@ -8,9 +8,11 @@ Replaces:
 goarcs
 niresarcs
 """
-import ktl
-import os
-import time
+import pdb
+try:
+    import ktl
+except ImportError:
+    ktl=""
 from subprocess import Popen
 
 from NIRESTranslatorFunction import NIRESTranslatorFunction

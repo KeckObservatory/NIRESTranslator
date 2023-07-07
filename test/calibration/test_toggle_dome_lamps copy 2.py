@@ -20,7 +20,7 @@ def cfg_side_effect(service, value):
     if value == 'n_read_padding': return 1 
     if value == 'extra_wait': return 1
 
-class TestToggleDomeLamps(unittest.TestCase):
+class TestTakeExposures(unittest.TestCase):
 
     def setUp(self):
         ktl.read = Mock()

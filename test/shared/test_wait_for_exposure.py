@@ -20,11 +20,6 @@ def ktl_side_effects(service, value):
 def logger_side_effect(msg):
     print(msg)
 
-def cfg_side_effect(service, value):
-    if value == 'operation_mode': return 'testing'
-    if value == 'n_read_padding': return 1 
-    if value == 'extra_wait': return 1
-
 class TestWaitForExposure(unittest.TestCase):
 
     def setUp(self):

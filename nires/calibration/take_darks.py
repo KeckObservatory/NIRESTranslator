@@ -8,10 +8,14 @@ Replaces:
 godarks
 """
 
+import pdb
+try:
+    import ktl
+except ImportError:
+    ktl=""
 from NIRESTranslatorFunction import NIRESTranslatorFunction
-from .toggle_dome_lamps import ToggleDomeLamp
-from ..shared.take_exposures import TakeExposures
-from ..shared.wait_for_exposure import WaitForExposure
+from .toggle_dome_lamps import ToggleDomeLamp as tdl
+from ..shared.take_exposures import TakeExposures as te
 
 class TakeDarks(NIRESTranslatorFunction):
 
@@ -26,16 +30,16 @@ class TakeDarks(NIRESTranslatorFunction):
             cfg (class): Config object
         """
         
-        cls._write_to_ktl('nsds', 'obstype', 'dark')
-        ToggleDomeLamp.execute({'status': 'off'})
-        ToggleDomeLamp.execute({'status': 'spec'})
+        cls._write_to_ktl('nsds', 'obstype', 'dark', logger, cfg)
+        tdl.execute({'status': 'off'})
+        tdl.execute({'status': 'spec'})
 
         teArgs = {'nFrames': nFrames, 'sv': 's'}
-        TakeExposures.execute(teArgs, logger, cfg)
-        cls._write_to_ktl('nsds', 'go', 0)
+        te.execute(teArgs, logger, cfg)
+        cls._write_to_ktl('nsds', 'go', 0, logger, cfg)
 
-        ToggleDomeLamp.execute({'status': 'off'})
-        cls._write_to_ktl('nsds', 'obstype', 'object')
+        tdl.execute({'status': 'off'})
+        cls._write_to_ktl('nsds', 'obstype', 'object', logger, cfg)
 
     @classmethod
     def pre_condition(cls, args, logger, cfg):
