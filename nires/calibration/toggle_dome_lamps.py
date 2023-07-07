@@ -9,7 +9,10 @@ domelamps
 """
 
 from NIRESTranslatorFunction import NIRESTranslatorFunction
-import ktl
+try:
+    import ktl
+except ImportError:
+    ktl = "" 
 
 class ToggleDomeLamp(NIRESTranslatorFunction):
 
@@ -27,17 +30,17 @@ class ToggleDomeLamp(NIRESTranslatorFunction):
         status = status.lower()
 
         if 'spec' in status:
-            cls._write_to_ktl('dcs2', 'flimagin', 0)
-            cls._write_to_ktl('dcs2', 'flspectr', 1)
+            cls._write_to_ktl('dcs2', 'flimagin', 0, logger, cfg)
+            cls._write_to_ktl('dcs2', 'flspectr', 1, logger, cfg)
         elif 'im' in status:
-            cls._write_to_ktl('dcs2', 'flimagin', 1)
-            cls._write_to_ktl('dcs2', 'flspectr', 0)
+            cls._write_to_ktl('dcs2', 'flimagin', 1, logger, cfg)
+            cls._write_to_ktl('dcs2', 'flspectr', 0, logger, cfg)
         elif 'both' in status:
-            cls._write_to_ktl('dcs2', 'flimagin', 1)
-            cls._write_to_ktl('dcs2', 'flspectr', 1)
+            cls._write_to_ktl('dcs2', 'flimagin', 1, logger, cfg)
+            cls._write_to_ktl('dcs2', 'flspectr', 1, logger, cfg)
         elif 'off' in status:
-            cls._write_to_ktl('dcs2', 'flimagin', 0)
-            cls._write_to_ktl('dcs2', 'flspectr', 0)
+            cls._write_to_ktl('dcs2', 'flimagin', 0, logger, cfg)
+            cls._write_to_ktl('dcs2', 'flspectr', 0, logger, cfg)
         else:
             logger.debug('Invalid lamp status. Not setting lamps.')
 
@@ -60,6 +63,7 @@ class ToggleDomeLamp(NIRESTranslatorFunction):
             mode = "off"
         else:
             logger.warning("Error invalid lamp mode")
+            mode = "invalid"
         logger.info(f"Lamp mode: {mode}")
 
     @classmethod
