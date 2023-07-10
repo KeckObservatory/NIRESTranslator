@@ -65,6 +65,7 @@ class ToggleDomeLamp(NIRESTranslatorFunction):
             logger.warning("Error invalid lamp mode")
             mode = "invalid"
         logger.info(f"Lamp mode: {mode}")
+        return mode
 
     @classmethod
     def _simulate_toggle_dome_lamps(cls, status, logger, cfg):
