@@ -36,7 +36,7 @@ class TestTakeDarks(unittest.TestCase):
     @patch('nires.calibration.take_darks.ktl')
     @patch('nires.calibration.take_darks.te')
     @patch('nires.calibration.take_darks.tdl')
-    def test_toggle_dome_lamps(self, mock_toggle_dome_lamp, mock_take_exposures, mock_ktl):
+    def test_take_darks(self, mock_toggle_dome_lamp, mock_take_exposures, mock_ktl):
         mock_ktl.read = Mock()
         mock_take_exposures.execute = Mock()
         mock_toggle_dome_lamp.execute = Mock()

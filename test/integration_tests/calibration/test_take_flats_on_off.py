@@ -23,7 +23,7 @@ class TestTakeFlatsOnOff(unittest.TestCase):
             }
         }
     
-    def test_toggle_dome_lamps(self):
+    def test_take_flats_on_off(self):
         services = 'nsds'
         ktl.write(services, 'sampmode', 3)
         ktl.wait(f'${services}.sampmode=={3}', timeout=2)

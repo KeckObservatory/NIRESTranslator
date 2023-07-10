@@ -35,7 +35,7 @@ class TestTakeFlats(unittest.TestCase):
     @patch('nires.calibration.take_flats.ktl')
     @patch('nires.calibration.take_flats.te')
     @patch('nires.calibration.take_flats.tdl')
-    def test_toggle_dome_lamps(self, mock_tdl, mock_te, mock_ktl):
+    def test_take_flats(self, mock_tdl, mock_te, mock_ktl):
         mock_tdl.execute = Mock()
         mock_te.execute = Mock()
         mock_ktl.read = Mock()

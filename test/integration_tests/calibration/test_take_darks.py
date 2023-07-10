@@ -23,7 +23,7 @@ class TestTakeDarks(unittest.TestCase):
             }
         }
     
-    def test_toggle_dome_lamps(self):
+    def test_take_darks(self):
 
         service = 'nsds'
         ktl.write(service, 'sampmode', 3)
