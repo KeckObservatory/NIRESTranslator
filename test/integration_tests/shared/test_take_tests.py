@@ -1,10 +1,9 @@
 from nires.shared.take_tests import TakeTests as tt 
+from nires.shared.set_detector_configuration import SetDetectorConfig as sdc
 import unittest
 from unittest.mock import Mock, patch, MagicMock
-try:
-    import ktl
-except ImportError:
-    ktl = Mock()
+import ktl
+import os
 
 
 def ktl_side_effects(service, value):
@@ -34,18 +33,32 @@ class TestTakeTests(unittest.TestCase):
                 'extra_wait': 1
             },
             'operation_mode': {
-                'operation_mode': 'test'
+                'operation_mode': 'production'
             }
         }
     
-    @patch('nires.shared.take_tests.ktl')
-    def test_take_tests(self, mock_ktl):
-        mock_ktl.read = Mock()
-        mock_ktl.read.side_effect = ktl_side_effects
-        tt._take_tests(nFrames=1, sv='s', logger=self.logger, cfg=self.cfg)
-        tt._take_tests(nFrames=5, sv='s', logger=self.logger, cfg=self.cfg)
-        tt._take_tests(nFrames=None, sv='s', logger=self.logger, cfg=self.cfg)
+    def test_perform(self):
 
+        args = {}
+        args['nFrames'] = 1
+        args['sv'] = 'v'
+        args = {}
+        # config detector for exposures
+        args['det_exp_number'] = 1 # coadds
+        args['det_exp_read_pairs'] = 1 # numreads
+        args['det_samp_mode'] = 4 # sampmode
+        args['det_exp_time'] = 3 # itime
+        args['sv'] = 's'
+        service = 'nsds'
+        sdc.perform(args=args, logger=self.logger, cfg=self.cfg)
+
+        # check that file is not created
+        framenumBeginning = ktl.read('nids', 'framenum')
+        tt.perform(args, logger=self.logger, cfg=self.cfg)
+        framenumAfter = ktl.read('nids', 'framenum')
+        self.assertEqual(framenumBeginning, framenumAfter)
+        filename= ktl.read('nids', 'filename')
+        self.assertFalse(os.path.exists(filename), 'File should not have been created')
 
 if __name__ == "__main__":
     unittest.main()

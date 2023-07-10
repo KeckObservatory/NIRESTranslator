@@ -39,7 +39,7 @@ class TestTakeExposures(unittest.TestCase):
         }
     
     @patch('nires.shared.take_exposures.ktl')
-    def test_wait_for_exposure(self, mock_ktl):
+    def test_take_an_exposure(self, mock_ktl):
         mock_ktl.read = Mock()
         mock_ktl.read.side_effect = ktl_side_effects
         te._take_an_exposure(logger=self.logger, cfg=self.cfg)
