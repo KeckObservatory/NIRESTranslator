@@ -1,6 +1,6 @@
 from nires.calibration.take_darks import TakeDarks as td
 import unittest
-from unittest.mock import Mock, patch, MagicMock
+from unittest.mock import MagicMock
 import ktl
 
 

@@ -24,7 +24,7 @@ try:
 except ImportError:
     ktl = ""
 
-from NIRESTranslatorFunction import NIRESTranslatorFunction
+from nires.NIRESTranslatorFunction import NIRESTranslatorFunction
 
 class SetDetectorConfig(NIRESTranslatorFunction):
 

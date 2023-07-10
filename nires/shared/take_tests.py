@@ -9,7 +9,7 @@ Replaces:
 test(s/v)
 """
 
-from NIRESTranslatorFunction import NIRESTranslatorFunction
+from nires.NIRESTranslatorFunction import NIRESTranslatorFunction
 from ..shared.wait_for_exposure import WaitForExposure 
 try:
     import ktl

@@ -16,7 +16,7 @@ except ImportError:
     ktl=""
 import time
 
-from NIRESTranslatorFunction import NIRESTranslatorFunction
+from nires.NIRESTranslatorFunction import NIRESTranslatorFunction
 from .wait_for_exposure import WaitForExposure 
 
 class TakeExposures(NIRESTranslatorFunction):

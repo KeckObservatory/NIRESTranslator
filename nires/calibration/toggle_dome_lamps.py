@@ -8,7 +8,7 @@ Replaces:
 domelamps
 """
 
-from NIRESTranslatorFunction import NIRESTranslatorFunction
+from nires.NIRESTranslatorFunction import NIRESTranslatorFunction
 try:
     import ktl
 except ImportError:

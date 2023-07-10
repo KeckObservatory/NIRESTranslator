@@ -13,7 +13,7 @@ try:
     import ktl
 except ImportError:
     ktl=""
-from NIRESTranslatorFunction import NIRESTranslatorFunction
+from nires.NIRESTranslatorFunction import NIRESTranslatorFunction
 from .toggle_dome_lamps import ToggleDomeLamp as tdl
 from ..shared.take_exposures import TakeExposures as te
 

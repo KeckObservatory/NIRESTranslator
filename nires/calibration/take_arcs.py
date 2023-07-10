@@ -15,7 +15,7 @@ except ImportError:
     ktl=""
 from subprocess import Popen
 
-from NIRESTranslatorFunction import NIRESTranslatorFunction
+from nires.NIRESTranslatorFunction import NIRESTranslatorFunction
 from ..shared.take_exposures import TakeExposures
 from ..shared.wait_for_exposure import WaitForExposure 
 

@@ -12,7 +12,7 @@ try:
 except ImportError:
     ktl=""
 import time
-from NIRESTranslatorFunction import NIRESTranslatorFunction
+from nires.NIRESTranslatorFunction import NIRESTranslatorFunction
 from ..shared.take_exposures import TakeExposures as te
 from .toggle_dome_lamps import ToggleDomeLamp as tdl
 

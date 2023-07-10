@@ -1,6 +1,6 @@
 from nires.calibration.take_arcs import TakeArcs as ta 
 import unittest
-from unittest.mock import Mock, patch, MagicMock
+from unittest.mock import MagicMock
 import ktl
 
 
