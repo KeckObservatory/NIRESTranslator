@@ -36,7 +36,7 @@ class TakeArcs(NIRESTranslatorFunction):
         framenum = ktl.read('nsds', 'framenum')
         logger.info(f'taking frame # {framenum}')
 
-        isProduction = cfg['operation_mode']['operation_mode'] == 'production'
+        isoperational = cfg['operation_mode']['operation_mode'] == 'operational'
         cls._write_to_ktl('nsds', 'obstype', 'domearc', logger, cfg)
         if not manual:
             cls._write_to_ktl('nsds', 'sampmode', 3, logger, cfg)
@@ -44,7 +44,7 @@ class TakeArcs(NIRESTranslatorFunction):
             cls._write_to_ktl('nsds', 'numfs', 1, logger, cfg)
             cls._write_to_ktl('nsds', 'coadds', 1, logger, cfg)
 
-        if isProduction:
+        if isoperational:
             userserver = cfg['operation_mode']['arclamp_user_server']
             Popen(["ssh", userserver, "power", "on", "8"])
         else:
@@ -60,7 +60,7 @@ class TakeArcs(NIRESTranslatorFunction):
             # TODO: verify that original script has gois commented out intentionally! 
             # TakeExposures.execute(teArgs, logger, cfg)
             
-        if isProduction:
+        if isoperational:
             userserver = cfg['operation_mode']['arclamp_user_server']
             Popen(["ssh", userserver, "power", "off", "8"])
         else:

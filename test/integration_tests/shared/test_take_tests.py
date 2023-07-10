@@ -33,7 +33,7 @@ class TestTakeTests(unittest.TestCase):
                 'extra_wait': 1
             },
             'operation_mode': {
-                'operation_mode': 'production'
+                'operation_mode': 'operational'
             }
         }
     

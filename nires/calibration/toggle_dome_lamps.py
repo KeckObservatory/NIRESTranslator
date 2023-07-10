@@ -91,7 +91,7 @@ class ToggleDomeLamp(NIRESTranslatorFunction):
         opMode = cfg['operation_mode']['operation_mode']
         if not status: # With no arguements, report the current status of the dome flatfield
             cls._show_lamp_status(logger)
-        elif opMode == 'production':
+        elif opMode == 'operational':
             cls._toggle_dome_lamps(status, logger, cfg)
         else:
             cls._simulate_toggle_dome_lamps(status, logger, cfg)
