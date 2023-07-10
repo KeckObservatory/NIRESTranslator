@@ -140,10 +140,10 @@ class TestSetDetectorConfiguration(unittest.TestCase):
 
     def test_perform(self):
         args = {}
-        args['det_exp_number'] = 1
-        args['det_exp_read_pairs'] = 2
-        args['det_samp_mode'] = 1
-        args['det_exp_time'] = 10
+        args['det_exp_number'] = 1 # coadds
+        args['det_exp_read_pairs'] = 2 # numreads
+        args['det_samp_mode'] = 1 # sampmode
+        args['det_exp_time'] = 10 # itime
         args['sv'] = 's'
         service = 'nsds'
         sdc.perform(args=args, logger=self.logger, cfg=self.cfg)
