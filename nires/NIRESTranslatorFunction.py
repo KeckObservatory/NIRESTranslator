@@ -17,7 +17,7 @@ class NIRESTranslatorFunction(TranslatorModuleFunction):
             timeout = timeout if timeout is not None else cfg['ob_keys']['ktl_timeout']
             ktl.write(service, keyword, value, wait=wait, timeout=timeout)
         else:
-            logger.write('testing ktl.write({service}, {keyword}, {value})')
+            logger.debug(f'testing ktl.write({service}, {keyword}, {value})')
     
     @classmethod
     def _determine_nires_service(cls, sv):

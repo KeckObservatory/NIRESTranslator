@@ -155,15 +155,16 @@ class TestSetDetectorConfiguration(unittest.TestCase):
         numreads = ktl.read(service, 'numreads')
         self.assertEqual(numreads, 13)
 
-    def test_perform(self):
+    def test_execute(self):
         args = {}
-        args['det_exp_number'] = 1 # coadds
-        args['det_exp_read_pairs'] = 2 # numreads
-        args['det_samp_mode'] = 1 # sampmode
-        args['det_exp_time'] = 10 # itime
+
+        args['nCoadd'] = 1 
+        args['numreads'] = 2 
+        args['readoutMode'] = 1 
+        args['itime'] = 10 
         args['sv'] = 's'
         service = 'nsds'
-        sdc.perform(args=args, logger=self.logger, cfg=self.cfg)
+        sdc.execute(args=args, logger=self.logger, cfg=self.cfg)
 
         sampmode = ktl.read(service, 'sampmode')
         self.assertEqual(args['det_samo_mode'], sampmode)

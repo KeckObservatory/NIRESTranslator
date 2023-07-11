@@ -42,5 +42,36 @@ class TestToggleDomeLamps(unittest.TestCase):
         self.assertEqual(sts, status)
 
 
+    def test_execute(self):
+        sts = 'off'
+        args = {
+            'status': sts
+        }
+        tdl.execute(args=args, logger=self.logger, cfg=self.cfg)
+        status = tdl._show_lamp_status(self.logger)
+        self.assertEqual(sts, status)
+        sts = 'both'
+        args = {
+            'status': sts
+        }
+        tdl.execute(args=args, logger=self.logger, cfg=self.cfg)
+        status = tdl._show_lamp_status(self.logger)
+        self.assertEqual(sts, status)
+        sts = 'spectral'
+        args = {
+            'status': sts
+        }
+        tdl.execute(args=args, logger=self.logger, cfg=self.cfg)
+        status = tdl._show_lamp_status(self.logger)
+        self.assertEqual(sts, status)
+        sts = 'imaging'
+        args = {
+            'status': sts
+        }
+        tdl.execute(args=args, logger=self.logger, cfg=self.cfg)
+        status = tdl._show_lamp_status(logger=self.logger)
+        self.assertEqual(sts, status)
+
+
 if __name__ == "__main__":
     unittest.main()

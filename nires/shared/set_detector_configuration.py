@@ -199,10 +199,10 @@ class SetDetectorConfig(NIRESTranslatorFunction):
     @classmethod
     def perform(cls, args, logger, cfg):
         # numreads
-        nCoadd = args['det_exp_number'] # coadds
-        numreads = args['det_exp_read_pairs'] # numreads 
-        readoutMode = args['det_samp_mode'] # sampmode
-        requestTime = args['det_exp_time'] # itime
+        nCoadd = args['nCoadd'] # coadds
+        numreads = args['numreads'] # numreads 
+        readoutMode = args['readoutMode'] # sampmode
+        requestTime = args['itime'] # itime
 
         sv = args['sv']
         logger.info('setting coadd')
