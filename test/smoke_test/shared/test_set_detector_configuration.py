@@ -106,10 +106,10 @@ class TestSetDetectorConfiguration(unittest.TestCase):
         mock_ktl.read.side_effect = ktl_side_effects
         sdc.check_integration_time = Mock()
         args = {}
-        args['det_exp_number'] = 1
-        args['det_exp_read_pairs'] = 2
-        args['det_samp_mode'] = 1
-        args['det_exp_time'] = 1
+        args['nCoadd'] = 1 
+        args['numreads'] = 2 
+        args['readoutMode'] = 1 
+        args['itime'] = 10 
         args['sv'] = 's'
         sdc.perform(args=args, logger=self.logger, cfg=self.cfg)
 

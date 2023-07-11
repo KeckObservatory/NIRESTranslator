@@ -75,6 +75,16 @@ class TestTakeExposures(unittest.TestCase):
         filename= ktl.read(service, 'filename')
         self.assertTrue(os.path.exists(filename))
 
+    def test_execute(self):
+        nFrames = 1 
+        sv = 's' 
+        args = {
+            'nFrames': nFrames,
+            'sv': sv
+        }
+
+        te.execute( args=args, logger=self.logger, cfg=self.cfg )
+
 
 if __name__ == "__main__":
     unittest.main()

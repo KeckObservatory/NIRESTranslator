@@ -37,28 +37,22 @@ class TestTakeTests(unittest.TestCase):
             }
         }
     
-    def test_perform(self):
+    def test_execute(self):
 
         args = {}
         args['nFrames'] = 1
         args['sv'] = 'v'
         args = {}
-        # config detector for exposures
-        args['det_exp_number'] = 1 # coadds
-        args['det_exp_read_pairs'] = 1 # numreads
-        args['det_samp_mode'] = 4 # sampmode
-        args['det_exp_time'] = 3 # itime
-        args['sv'] = 's'
-        service = 'nsds'
         sdc.perform(args=args, logger=self.logger, cfg=self.cfg)
 
         # check that file is not created
         framenumBeginning = ktl.read('nids', 'framenum')
-        tt.perform(args, logger=self.logger, cfg=self.cfg)
+        tt.execute(args, logger=self.logger, cfg=self.cfg)
         framenumAfter = ktl.read('nids', 'framenum')
         self.assertEqual(framenumBeginning, framenumAfter)
         filename= ktl.read('nids', 'filename')
         self.assertFalse(os.path.exists(filename), 'File should not have been created')
+
 
 if __name__ == "__main__":
     unittest.main()

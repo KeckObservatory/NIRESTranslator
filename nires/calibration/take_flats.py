@@ -54,7 +54,9 @@ class TakeFlats(NIRESTranslatorFunction):
 
     @classmethod
     def perform(cls, args, logger, cfg):
-        pass
+        nFrames = args.get('nFrames', 1)
+        manual = args.get('manual', False)
+        cls._take_flats(logger=logger, cfg=cfg, nFrames=nFrames, manual=manual)
 
     @classmethod
     def post_condition(cls, args, logger, cfg):
