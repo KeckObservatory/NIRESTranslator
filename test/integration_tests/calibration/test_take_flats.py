@@ -2,6 +2,7 @@ from nires.calibration.take_flats import TakeFlats as tf
 import unittest
 from unittest.mock import Mock, patch, MagicMock
 import ktl
+import os
 
 
 def logger_side_effect(msg):
@@ -39,11 +40,17 @@ class TestTakeFlats(unittest.TestCase):
         framenumAfter1 = ktl.read(service, 'framenum')
         self.assertEqual(framenumAfter1, framenumBefore1+1)
 
+        filename = ktl.read(service, 'filename')
+        self.assertTrue(os.path.exists(filename))
+
+
         framenumBefore3 = ktl.read(service, 'framenum')
         tf._take_flats(logger=self.logger, cfg=self.cfg, nFrames=3, manual=True)
         framenumAfter3 = ktl.read(service, 'framenum')
-
         self.assertEqual(framenumAfter3, framenumBefore3+3)
+
+        filename = ktl.read(service, 'filename')
+        self.assertTrue(os.path.exists(filename))
 
     def test_execute(self):
         service = 'nsds'
@@ -66,11 +73,16 @@ class TestTakeFlats(unittest.TestCase):
         framenumAfter1 = ktl.read(service, 'framenum')
         self.assertEqual(framenumAfter1, framenumBefore1+1)
 
+        filename = ktl.read(service, 'filename')
+        self.assertTrue(os.path.exists(filename))
+
         framenumBefore3 = ktl.read(service, 'framenum')
         tf._take_flats(logger=self.logger, cfg=self.cfg, nFrames=3, manual=True)
         framenumAfter3 = ktl.read(service, 'framenum')
-
         self.assertEqual(framenumAfter3, framenumBefore3+3)
+        
+        filename = ktl.read(service, 'filename')
+        self.assertTrue(os.path.exists(filename))
 
 if __name__ == "__main__":
     unittest.main()

@@ -41,6 +41,9 @@ class TestToggleDomeLamps(unittest.TestCase):
         status = tdl._show_lamp_status(logger=self.logger)
         self.assertEqual(sts, status)
 
+        ktl.write('dcs2', 'flimagin', 0)
+        ktl.write('dcs2', 'flspectr', 0)
+
 
     def test_execute(self):
         sts = 'off'

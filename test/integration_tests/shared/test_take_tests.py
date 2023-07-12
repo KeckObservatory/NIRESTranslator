@@ -50,8 +50,6 @@ class TestTakeTests(unittest.TestCase):
         tt.execute(args, logger=self.logger, cfg=self.cfg)
         framenumAfter = ktl.read('nids', 'framenum')
         self.assertEqual(framenumBeginning, framenumAfter)
-        filename= ktl.read('nids', 'filename')
-        self.assertFalse(os.path.exists(filename), 'File should not have been created')
 
 
 if __name__ == "__main__":

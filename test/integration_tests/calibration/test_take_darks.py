@@ -2,6 +2,7 @@ from nires.calibration.take_darks import TakeDarks as td
 import unittest
 from unittest.mock import MagicMock
 import ktl
+import os
 
 
 def logger_side_effect(msg):
@@ -40,6 +41,9 @@ class TestTakeDarks(unittest.TestCase):
         framenumAfter = ktl.read(service, 'framenum')
         self.assertEqual(framenumAfter, framenumBefore+1)
 
+        filename = ktl.read(service, 'filename')
+        self.assertTrue(os.path.exists(filename))
+
     def test_execute(self):
 
         service = 'nsds'
@@ -60,6 +64,8 @@ class TestTakeDarks(unittest.TestCase):
         framenumAfter = ktl.read(service, 'framenum')
         self.assertEqual(framenumAfter, framenumBefore+1)
 
+        filename = ktl.read(service, 'filename')
+        self.assertTrue(os.path.exists(filename))
 
 if __name__ == "__main__":
     unittest.main()

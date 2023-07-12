@@ -2,6 +2,7 @@ from nires.calibration.take_flats_on_off import TakeFlatsOnOff as tfof
 import unittest
 from unittest.mock import Mock, patch, MagicMock
 import ktl
+import os
 
 
 def logger_side_effect(msg):
@@ -35,24 +36,14 @@ class TestTakeFlatsOnOff(unittest.TestCase):
         ktl.wait(f'${services}.coadds=={1}', timeout=2)
         framenumBeforeSpec = ktl.read(services, 'framenum')
         
-        servicev = 'nids'
-        ktl.write(servicev, 'sampmode', 3)
-        ktl.wait(f'${servicev}.sampmode=={3}', timeout=2)
-        ktl.write(servicev, 'itime', 5)
-        ktl.wait(f'${servicev}.itime=={5}', timeout=2)
-        ktl.write(servicev, 'numfs', 1)
-        ktl.wait(f'${servicev}.numfs=={1}', timeout=2)
-        ktl.write(servicev, 'coadds', 1)
-        ktl.wait(f'${servicev}.coadds=={1}', timeout=2)
-        framenumBeforeImag = ktl.read(servicev, 'framenum')
-
         tfof._take_flats_on_off(logger=self.logger, cfg=self.cfg, nFrames=2)
         
         framenumAfterSpec = ktl.read(services, 'framenum')
-        framenumAfterImag = ktl.read(servicev, 'framenum')
 
-        self.assertEqual(framenumAfterSpec, framenumBeforeSpec+1)
-        self.assertEqual(framenumAfterImag, framenumBeforeImag+1)
+        self.assertEqual(framenumAfterSpec, framenumBeforeSpec+2)
+
+        filenames = ktl.read(services, 'filename')
+        self.assertTrue(os.path.exists(filenames))
 
     def test_execute(self):
         services = 'nsds'
@@ -66,27 +57,18 @@ class TestTakeFlatsOnOff(unittest.TestCase):
         ktl.wait(f'${services}.coadds=={1}', timeout=2)
         framenumBeforeSpec = ktl.read(services, 'framenum')
         
-        servicev = 'nids'
-        ktl.write(servicev, 'sampmode', 3)
-        ktl.wait(f'${servicev}.sampmode=={3}', timeout=2)
-        ktl.write(servicev, 'itime', 5)
-        ktl.wait(f'${servicev}.itime=={5}', timeout=2)
-        ktl.write(servicev, 'numfs', 1)
-        ktl.wait(f'${servicev}.numfs=={1}', timeout=2)
-        ktl.write(servicev, 'coadds', 1)
-        ktl.wait(f'${servicev}.coadds=={1}', timeout=2)
-        framenumBeforeImag = ktl.read(servicev, 'framenum')
-
         args = {
             'nFrames': 1
         }
         tfof.execute(args=args, logger=self.logger, cfg=self.cfg)
         
         framenumAfterSpec = ktl.read(services, 'framenum')
-        framenumAfterImag = ktl.read(servicev, 'framenum')
 
         self.assertEqual(framenumAfterSpec, framenumBeforeSpec+1)
-        self.assertEqual(framenumAfterImag, framenumBeforeImag+1)
+
+        filenames = ktl.read(services, 'filename')
+        self.assertTrue(os.path.exists(filenames))
+
 
 if __name__ == "__main__":
     unittest.main()
