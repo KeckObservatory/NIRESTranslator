@@ -19,23 +19,16 @@ from .toggle_dome_lamps import ToggleDomeLamp as tdl
 class TakeFlats(NIRESTranslatorFunction):
 
     @classmethod
-    def _take_flats(cls, logger, cfg, nFrames=1, manual=False):
+    def _take_flats(cls, logger, cfg, nFrames=1):
         """takes nFrames flats using the NIRES spec server
 
         Args:
             logger (class): Logger object
             cfg (class): Config object
             nFrames (int, optional): number of flat frames to take. Defaults to 1.
-            manual (bool): if True, does not automatically set ktl kws sampmode, itime, numfs, coadds
         """        
 
         cls._write_to_ktl('nsds', 'obstype', 'domeflat', logger, cfg)
-        if not manual:
-            cls._write_to_ktl('nsds', 'sampmode', 3, logger, cfg)
-            cls._write_to_ktl('nsds', 'itime', 100, logger, cfg)
-            cls._write_to_ktl('nsds', 'numfs', 1, logger, cfg)
-            cls._write_to_ktl('nsds', 'coadds', 1, logger, cfg)
-
 
         tdl.execute({'status': 'off'})
         tdl.execute({'status': 'spec'})
@@ -55,8 +48,7 @@ class TakeFlats(NIRESTranslatorFunction):
     @classmethod
     def perform(cls, args, logger, cfg):
         nFrames = args.get('nFrames', 1)
-        manual = args.get('manual', False)
-        cls._take_flats(logger=logger, cfg=cfg, nFrames=nFrames, manual=manual)
+        cls._take_flats(logger=logger, cfg=cfg, nFrames=nFrames)
 
     @classmethod
     def post_condition(cls, args, logger, cfg):

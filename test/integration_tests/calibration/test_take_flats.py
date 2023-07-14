@@ -36,7 +36,7 @@ class TestTakeFlats(unittest.TestCase):
         ktl.wait(f'${service}.coadds=={1}', timeout=2)
 
         framenumBefore1 = ktl.read(service, 'framenum')
-        tf._take_flats(logger=self.logger, cfg=self.cfg, nFrames=1, manual=True)
+        tf._take_flats(logger=self.logger, cfg=self.cfg, nFrames=1)
         framenumAfter1 = ktl.read(service, 'framenum')
         self.assertEqual(framenumAfter1, framenumBefore1+1)
 
@@ -45,7 +45,7 @@ class TestTakeFlats(unittest.TestCase):
 
 
         framenumBefore3 = ktl.read(service, 'framenum')
-        tf._take_flats(logger=self.logger, cfg=self.cfg, nFrames=3, manual=True)
+        tf._take_flats(logger=self.logger, cfg=self.cfg, nFrames=3)
         framenumAfter3 = ktl.read(service, 'framenum')
         self.assertEqual(framenumAfter3, framenumBefore3+3)
 
@@ -67,7 +67,6 @@ class TestTakeFlats(unittest.TestCase):
 
         args = {
             'nFrames': 1,
-            'manual': True
         }
         tf.execute( args=args, logger=self.logger, cfg=self.cfg )
         framenumAfter1 = ktl.read(service, 'framenum')
@@ -77,7 +76,7 @@ class TestTakeFlats(unittest.TestCase):
         self.assertTrue(os.path.exists(filename))
 
         framenumBefore3 = ktl.read(service, 'framenum')
-        tf._take_flats(logger=self.logger, cfg=self.cfg, nFrames=3, manual=True)
+        tf._take_flats(logger=self.logger, cfg=self.cfg, nFrames=3)
         framenumAfter3 = ktl.read(service, 'framenum')
         self.assertEqual(framenumAfter3, framenumBefore3+3)
         

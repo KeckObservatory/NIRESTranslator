@@ -1,5 +1,5 @@
 from nires.shared.take_exposures import TakeExposures as te 
-from nires.shared.take_exposure import SetDetectorConfig as sdc
+from nires.shared.set_detector_configuration import SetDetectorConfig as sdc
 import unittest
 from unittest.mock import Mock, patch, MagicMock
 import ktl

@@ -24,11 +24,12 @@ class TestToggleDomeLamps(unittest.TestCase):
         }
     
     def test_toggle_dome_lamps(self):
-        sts = 'off'
+
+        sts = 'both'
         tdl._toggle_dome_lamps(sts, logger=self.logger, cfg=self.cfg)
         status = tdl._show_lamp_status(self.logger)
         self.assertEqual(sts, status)
-        sts = 'both'
+        sts = 'off'
         tdl._toggle_dome_lamps(sts, logger=self.logger, cfg=self.cfg)
         status = tdl._show_lamp_status(self.logger)
         self.assertEqual(sts, status)
