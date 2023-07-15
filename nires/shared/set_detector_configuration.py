@@ -90,6 +90,7 @@ class SetDetectorConfig(NIRESTranslatorFunction):
             sv (int): spec 's' or imager 'v'
             logger (class): Logger object
             cfg (class): Config object
+            nSamp (int): number of Fowler samples
         """
         service = cls._determine_nires_service(sv) 
 
