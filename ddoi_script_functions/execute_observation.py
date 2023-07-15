@@ -2,15 +2,15 @@ import ktl
 
 from nires.shared.take_exposures import TakeExposures as te 
 from nires.calibration.take_arcs import TakeArcs
+from nires.calibration.take_darks import TakeDarks
+from nires.calibration.take_flats import TakeFlats
+from nires.calibration.take_flats_on_off import TakeFlatsOnOff
 from ddoitranslatormodule.KPFTranslatorFunction import KPFTranslatorFunction
 
 
 class ExecuteObservation(KPFTranslatorFunction):
     '''
     '''
-    @classmethod
-    def pre_condition(cls, args, logger, cfg):
-        return True
 
     @classmethod
     def single_exposure(cls, args, logger, cfg):
@@ -37,16 +37,8 @@ class ExecuteObservation(KPFTranslatorFunction):
         te.execute(args, logger, cfg)
 
     @classmethod
-    def arcs_exposure(cls, args, logger, cfg):
-
-        sequence = args.get('sequence')
-        params = sequence.get('parameters')
-        nFrames = params.get('det_exp_number')
-        args = {
-            'nFrames': nFrames,
-            'manuel': False 
-        }
-        TakeArcs.execute(args, logger, cfg)
+    def pre_condition(cls, args, logger, cfg):
+        return True
 
     @classmethod
     def perform(cls, args, logger, cfg):
@@ -61,14 +53,27 @@ class ExecuteObservation(KPFTranslatorFunction):
             cls.single_exposure(args, logger, cfg)
         elif 'nires_dither_sci' in seqName:
             raise NotImplementedError 
-        elif 'nires_arcs' in seqName:
-            cls.arcs_exposure(args, logger, cfg)
+        elif 'nires_cals' in seqName:
+            parameters = sequence.get('parameters')
+            calType = parameters.get('det_cal_type')
+
+            nFrames = parameters.get('det_exp_number')
+            args = {
+                'nFrames': nFrames,
+            }
+            if 'arcs' in calType.lower():
+                TakeArcs.execute(args, logger, cfg)
+            elif 'darks' in calType.lower():
+                TakeDarks.execute(args, logger, cfg)
+            elif 'flats on flats off' in calType.lower():
+                TakeFlatsOnOff.execute(args, logger, cfg)
+            elif 'flats' == calType.lower():
+                TakeFlats.execute(args, logger, cfg)
+            else:
+                raise NotImplementedError
         else:
             raise NotImplementedError
             
-        
-
-
     @classmethod
     def post_condition(cls, args, logger, cfg):
         return True
