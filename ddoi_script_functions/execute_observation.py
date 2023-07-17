@@ -53,6 +53,8 @@ class ExecuteObservation(KPFTranslatorFunction):
             cls.single_exposure(args, logger, cfg)
         elif 'nires_dither_sci' in seqName:
             raise NotImplementedError 
+        elif 'nires_slit_scan_sci' in seqName:
+            raise NotImplementedError
         elif 'nires_cals' in seqName:
             parameters = sequence.get('parameters')
             calType = parameters.get('det_cal_type')
