@@ -3,7 +3,7 @@ import ktl
 from kpf.KPFTranslatorFunction import KPFTranslatorFunction
 
 
-class ConfigureForAcquisition(KPFTranslatorFunction):
+class ConfigureAcquisition(KPFTranslatorFunction):
     '''
     '''
     @classmethod
