@@ -1,9 +1,9 @@
 import ktl
 
-from ddoitranslatormodule.KPFTranslatorFunction import KPFTranslatorFunction
+from kpf.KPFTranslatorFunction import KPFTranslatorFunction
 
 
-class WaitForConfigureAcquisition(KPFTranslatorFunction):
+class waitfor_configure_acquisition(KPFTranslatorFunction):
     '''
     '''
     @classmethod

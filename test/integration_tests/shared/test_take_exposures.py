@@ -42,13 +42,13 @@ class TestTakeExposures(unittest.TestCase):
 
         args = {}
         # config detector for exposures
-        args['det_exp_number'] = 1 # coadds
-        args['det_exp_read_pairs'] = 1 # numreads
-        args['det_samp_mode'] = 4 # sampmode
-        args['det_exp_time'] = 3 # itime
+        args['nCoadds'] = 1 
+        args['numreads'] = 1 
+        args['sampmode'] = 4 
+        args['itime'] = 3 
         args['sv'] = 's'
         service = 'nsds'
-        sdc.perform(args=args, logger=self.logger, cfg=self.cfg)
+        sdc.execute(args=args, logger=self.logger, cfg=self.cfg)
 
         # check that one file was created
         framenumBeginning = ktl.read(service, 'framenum')
@@ -68,23 +68,34 @@ class TestTakeExposures(unittest.TestCase):
 
 
         # Check that sv mode creates 2 files
-        framenumBeginning = ktl.read(service, 'framenum')
+        framenumSBeginning = ktl.read(service, 'framenum')
+        framenumIBeginning = ktl.read('nids', 'framenum')
         te._take_an_exposure(logger=self.logger, cfg=self.cfg, nFrames=1, sv='sv')
-        framenumAfter = ktl.read(service, 'framenum')
-        self.assertEqual(framenumBeginning + 2, framenumAfter)
-        filename= ktl.read(service, 'filename')
-        self.assertTrue(os.path.exists(filename))
+        framenumSAfter = ktl.read(service, 'framenum')
+        self.assertEqual(framenumSBeginning + 1, framenumSAfter)
+        filenameS = ktl.read(service, 'filename')
+        self.assertTrue(os.path.exists(filenameS))
+        framenumIAfter = ktl.read('nids', 'framenum')
+        self.assertEqual(framenumIBeginning + 1, framenumIAfter)
+        filenameI = ktl.read('nids', 'filename')
+        self.assertTrue(os.path.exists(filenameI))
 
     def test_execute(self):
         nFrames = 1 
         sv = 's' 
+        service = 'nsds'
         args = {
             'nFrames': nFrames,
             'sv': sv
         }
 
+        framenumBeginning = ktl.read(service, 'framenum')
         te.execute( args=args, logger=self.logger, cfg=self.cfg )
+        framenumAfter = ktl.read(service, 'framenum')
 
+        self.assertEqual(framenumBeginning + 1, framenumAfter)
+        filename = ktl.read(service, 'filename')
+        self.assertTrue(os.path.exists(filename))
 
 if __name__ == "__main__":
     unittest.main()

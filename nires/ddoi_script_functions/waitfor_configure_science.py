@@ -1,9 +1,9 @@
 import ktl
 
-from ddoitranslatormodule.KPFTranslatorFunction import KPFTranslatorFunction
+from kpf.KPFTranslatorFunction import KPFTranslatorFunction
 
 
-class ConfigureForScience(KPFTranslatorFunction):
+class waitfor_configure_science(KPFTranslatorFunction):
     '''
     '''
     @classmethod

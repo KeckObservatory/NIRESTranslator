@@ -22,12 +22,11 @@ from ..shared.wait_for_exposure import WaitForExposure
 class TakeArcs(NIRESTranslatorFunction):
 
     @classmethod
-    def _take_arcs(cls, logger, cfg, nFrames=None, manual=False):
+    def _take_arcs(cls, logger, cfg, nFrames=None):
         """take nFrames arcs using the NIRES spec server.
 
         Args:
             nFrames (int): number of frames 
-            manual (bool): if True, does not automatically set ktl kws sampmode, itime, numfs, coadds
             sv (int): spec 's' or imager 'v'
             cfg (class): Config object
             logger (class): Logger object
@@ -38,11 +37,6 @@ class TakeArcs(NIRESTranslatorFunction):
 
         isoperational = cfg['operation_mode']['operation_mode'] == 'operational'
         cls._write_to_ktl('nsds', 'obstype', 'domearc', logger, cfg)
-        if not manual:
-            cls._write_to_ktl('nsds', 'sampmode', 3, logger, cfg)
-            cls._write_to_ktl('nsds', 'itime', 120, logger, cfg)
-            cls._write_to_ktl('nsds', 'numfs', 1, logger, cfg)
-            cls._write_to_ktl('nsds', 'coadds', 1, logger, cfg)
 
         if isoperational:
             userserver = cfg['operation_mode']['arclamp_user_server']
@@ -75,8 +69,7 @@ class TakeArcs(NIRESTranslatorFunction):
     @classmethod
     def perform(cls, args, logger, cfg):
         nFrames = args.get('nFrames', None)
-        manual = args.get('manual', False)
-        cls._take_arcs(logger, cfg, nFrames, manual)
+        cls._take_arcs(logger, cfg, nFrames)
 
     @classmethod
     def post_condition(cls, args, logger, cfg):

@@ -41,8 +41,8 @@ class TestTakeFlats(unittest.TestCase):
         mock_ktl.read = Mock()
         mock_ktl.read.side_effect = ktl_side_effects
 
-        tf._take_flats(logger=self.logger, cfg=self.cfg, nFrames=1, manual=False)
-        tf._take_flats(logger=self.logger, cfg=self.cfg, nFrames=3, manual=True)
+        tf._take_flats(logger=self.logger, cfg=self.cfg, nFrames=1)
+        tf._take_flats(logger=self.logger, cfg=self.cfg, nFrames=3)
 
 if __name__ == "__main__":
     unittest.main()

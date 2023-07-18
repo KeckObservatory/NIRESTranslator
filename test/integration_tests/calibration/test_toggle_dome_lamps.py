@@ -24,11 +24,12 @@ class TestToggleDomeLamps(unittest.TestCase):
         }
     
     def test_toggle_dome_lamps(self):
-        sts = 'off'
+
+        sts = 'both'
         tdl._toggle_dome_lamps(sts, logger=self.logger, cfg=self.cfg)
         status = tdl._show_lamp_status(self.logger)
         self.assertEqual(sts, status)
-        sts = 'both'
+        sts = 'off'
         tdl._toggle_dome_lamps(sts, logger=self.logger, cfg=self.cfg)
         status = tdl._show_lamp_status(self.logger)
         self.assertEqual(sts, status)
@@ -40,6 +41,9 @@ class TestToggleDomeLamps(unittest.TestCase):
         tdl._toggle_dome_lamps(sts, logger=self.logger, cfg=self.cfg)
         status = tdl._show_lamp_status(logger=self.logger)
         self.assertEqual(sts, status)
+
+        ktl.write('dcs2', 'flimagin', 0)
+        ktl.write('dcs2', 'flspectr', 0)
 
 
     def test_execute(self):

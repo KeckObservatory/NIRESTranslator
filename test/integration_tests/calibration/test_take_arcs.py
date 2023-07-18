@@ -1,6 +1,7 @@
 from nires.calibration.take_arcs import TakeArcs as ta 
 import unittest
 from unittest.mock import MagicMock
+import os
 import ktl
 
 
@@ -34,9 +35,11 @@ class TestTakeArcs(unittest.TestCase):
         ktl.write(service, 'coadds', 1)
         ktl.wait(f'${service}.coadds=={1}', timeout=2)
         framenumBefore = ktl.read(service, 'framenum')
-        ta._take_arcs(logger=self.logger, cfg=self.cfg, nFrames=1, manual=True)
+        ta._take_arcs(logger=self.logger, cfg=self.cfg, nFrames=1)
         framenumAfter = ktl.read(service, 'framenum')
         self.assertEqual(framenumAfter, framenumBefore+1)
+        filename = ktl.read(service, 'filename')
+        self.assertTrue(os.path.exists(filename))
 
     def test_execute(self):
         service = 'nsds'
@@ -52,12 +55,14 @@ class TestTakeArcs(unittest.TestCase):
 
         args = {
             'nFrames': 1,
-            'manual': True
         }
         ta.execute(args=args, logger=self.logger, cfg=self.cfg)
 
         framenumAfter = ktl.read(service, 'framenum')
         self.assertEqual(framenumAfter, framenumBefore+1)
+
+        filename = ktl.read(service, 'filename')
+        self.assertTrue(os.path.exists(filename))
 
 if __name__ == "__main__":
     unittest.main()

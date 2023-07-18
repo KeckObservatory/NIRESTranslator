@@ -45,8 +45,8 @@ class TestTakeArcs(unittest.TestCase):
     def test_take_arcs(self, mock_ktl):
         ktl.read = Mock()
         ktl.read.side_effect = ktl_side_effects
-        ta._take_arcs(logger=self.logger, cfg=self.cfg, nFrames=1, manual=False)
-        ta._take_arcs(logger=self.logger, cfg=self.cfg, nFrames=1, manual=True)
+        ta._take_arcs(logger=self.logger, cfg=self.cfg, nFrames=1)
+        ta._take_arcs(logger=self.logger, cfg=self.cfg, nFrames=1)
 
 
 
