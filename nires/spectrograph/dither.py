@@ -87,11 +87,9 @@ class Dither(NIRESTranslatorFunction):
             logger.error("Unknown pattern entered.")
             raise ValueError
 
-        net_move = sum(args.pattern[:-1]) + args.pattern[-1]
-
         # Raise an error if the whole pattern leaves the telescope in a new position
-        if net_move != 0:
-            net_offset = net_move * args.offset
+        if sum(args.pattern) != 0:
+            net_offset = sum(args.pattern) * args.offset
             logger.error(f"Invalid pattern: {','.join(args.pattern)} results in offset of {net_offset} arcseconds!")
             raise ValueError
         
