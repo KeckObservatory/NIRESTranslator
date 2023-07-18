@@ -1,9 +1,9 @@
 import ktl
 
-from kpf.KPFTranslatorFunction import KPFTranslatorFunction
+from nires.NIRESTranslatorFunction import NIRESTranslatorFunction
 
 
-class test_function(KPFTranslatorFunction):
+class test_function(NIRESTranslatorFunction):
     '''
     '''
     @classmethod

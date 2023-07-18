@@ -1,9 +1,9 @@
 import ktl
 
-from kpf.KPFTranslatorFunction import KPFTranslatorFunction
+from nires.NIRESTranslatorFunction import NIRESTranslatorFunction
 
 
-class waitfor_configure_science(KPFTranslatorFunction):
+class waitfor_configure_science(NIRESTranslatorFunction):
     '''
     '''
     @classmethod

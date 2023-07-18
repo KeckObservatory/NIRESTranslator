@@ -1,9 +1,9 @@
 import ktl
 
-from kpf.KPFTranslatorFunction import KPFTranslatorFunction
+from nires.NIRESTranslatorFunction import NIRESTranslatorFunction
 
 
-class post_observation_cleanup(KPFTranslatorFunction):
+class post_observation_cleanup(NIRESTranslatorFunction):
     '''
     '''
     @classmethod
