@@ -8,7 +8,7 @@ from nires.calibration.take_flats_on_off import TakeFlatsOnOff
 from kpf.KPFTranslatorFunction import KPFTranslatorFunction
 
 
-class ExecuteObservation(KPFTranslatorFunction):
+class execute_observation(KPFTranslatorFunction):
     '''
     '''
 

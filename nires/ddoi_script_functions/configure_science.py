@@ -4,7 +4,7 @@ from kpf.KPFTranslatorFunction import KPFTranslatorFunction
 from nires.shared.set_detector_configuration import SetDetectorConfig 
 
 
-class ConfigureScience(KPFTranslatorFunction):
+class configure_science(KPFTranslatorFunction):
     '''
     '''
 
