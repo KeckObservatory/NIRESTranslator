@@ -15,11 +15,13 @@ class configure_science(KPFTranslatorFunction):
         nFrames = params.get('det_exp_number')
         itime = params.get('det_exp_time')
         readoutMode = params.get('det_samp_mode')
+        readPairs = params.get('det_exp_read_pairs')
         nSamp = params.get('det_num_fs')
         args = {
             'nFrames': nFrames,
             'itime': itime,
             'readoutMode': readoutMode,
+            'numreads': readPairs,
             'nSamp': nSamp,
             'sv': sv
         }
