@@ -2,7 +2,6 @@ import ktl
 
 from nires.NIRESTranslatorFunction import NIRESTranslatorFunction
 
-
 class configure_acquisition(NIRESTranslatorFunction):
     '''
     '''
