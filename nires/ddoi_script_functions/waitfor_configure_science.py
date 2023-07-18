@@ -3,7 +3,7 @@ try:
 except ImportError as err:
     ktl = ""
 
-from nires.shared.NiresTranslatorFunction import NiresTranslatorFunction
+from nires.NiresTranslatorFunction import NiresTranslatorFunction
 
 
 class waitfor_configure_science(NiresTranslatorFunction):
