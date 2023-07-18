@@ -5,7 +5,7 @@ from nires.calibration.take_arcs import TakeArcs
 from nires.calibration.take_darks import TakeDarks
 from nires.calibration.take_flats import TakeFlats
 from nires.calibration.take_flats_on_off import TakeFlatsOnOff
-from ddoitranslatormodule.KPFTranslatorFunction import KPFTranslatorFunction
+from kpf.KPFTranslatorFunction import KPFTranslatorFunction
 
 
 class ExecuteObservation(KPFTranslatorFunction):
