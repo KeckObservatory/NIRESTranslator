@@ -1,10 +1,10 @@
 import ktl
 
-from kpf.KPFTranslatorFunction import KPFTranslatorFunction
+from nires.NIREStranslatorFunction import NIRESTranslatorFunction
 from nires.shared.set_detector_configuration import SetDetectorConfig 
 
 
-class configure_science(KPFTranslatorFunction):
+class configure_science(NIRESTranslatorFunction):
     '''
     '''
 
