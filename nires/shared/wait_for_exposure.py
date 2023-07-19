@@ -30,9 +30,9 @@ class WaitForExposure(NIRESTranslatorFunction):
             cfg (class): cfg object
         """
         service = cls._determine_nires_service(sv)
-        itime = ktl.read(service, 'itime')
-        coadds = ktl.read(service, 'coadds')
-        nread = ktl.read(service, 'numreads')
+        itime = float(ktl.read(service, 'itime'))
+        coadds = int(ktl.read(service, 'coadds'))
+        nread = int(ktl.read(service, 'numreads'))
         waitForEndReads = cfg['ob_keys']['n_read_padding'] * nread
         extra = cfg['ob_keys']['extra_wait'] # add some extra to "wait" to allow for miscalculations
         wait = int(itime) * waitForEndReads * int(coadds) + extra
@@ -41,11 +41,11 @@ class WaitForExposure(NIRESTranslatorFunction):
 
         logger.info('wait_for_exposure: Waiting for exposure to end.')
         count = 0
-        imageDone = ktl.read(service, 'imagedone')
+        imageDone = int(ktl.read(service, 'imagedone'))
         while (imageDone != 1) or (count <= wait):
             count = count + 1
             time.sleep(1)
-            imageDone = ktl.read(service, 'imagedone')
+            imageDone = int(ktl.read(service, 'imagedone'))
         if imageDone: logger.info('image done: OK')
         else:
             logger.info('wait_for_exposure: exposure timed out.')

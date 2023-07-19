@@ -34,11 +34,11 @@ class TestTakeArcs(unittest.TestCase):
         ktl.wait(f'${service}.numfs=={1}', timeout=2)
         ktl.write(service, 'coadds', 1)
         ktl.wait(f'${service}.coadds=={1}', timeout=2)
-        framenumBefore = ktl.read(service, 'framenum')
+        framenumBefore = int(ktl.read(service, 'framenum'))
         ta._take_arcs(logger=self.logger, cfg=self.cfg, nFrames=1)
-        framenumAfter = ktl.read(service, 'framenum')
+        framenumAfter = int(ktl.read(service, 'framenum'))
         self.assertEqual(framenumAfter, framenumBefore+1)
-        filename = ktl.read(service, 'filename')
+        filename = int(ktl.read(service, 'filename'))
         self.assertTrue(os.path.exists(filename))
 
     def test_execute(self):
@@ -51,14 +51,14 @@ class TestTakeArcs(unittest.TestCase):
         ktl.wait(f'${service}.numfs=={1}', timeout=2)
         ktl.write(service, 'coadds', 1)
         ktl.wait(f'${service}.coadds=={1}', timeout=2)
-        framenumBefore = ktl.read(service, 'framenum')
+        framenumBefore = int(ktl.read(service, 'framenum'))
 
         args = {
             'nFrames': 1,
         }
         ta.execute(args=args, logger=self.logger, cfg=self.cfg)
 
-        framenumAfter = ktl.read(service, 'framenum')
+        framenumAfter = int(ktl.read(service, 'framenum'))
         self.assertEqual(framenumAfter, framenumBefore+1)
 
         filename = ktl.read(service, 'filename')

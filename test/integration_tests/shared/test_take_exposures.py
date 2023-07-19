@@ -51,31 +51,31 @@ class TestTakeExposures(unittest.TestCase):
         sdc.execute(args=args, logger=self.logger, cfg=self.cfg)
 
         # check that one file was created
-        framenumBeginning = ktl.read(service, 'framenum')
+        framenumBeginning = int(ktl.read(service, 'framenum'))
         te._take_an_exposure(logger=self.logger, cfg=self.cfg)
-        framenumAfter = ktl.read(service, 'framenum')
+        framenumAfter = int(ktl.read(service, 'framenum'))
         self.assertEqual(framenumBeginning + 1, framenumAfter)
         filename= ktl.read(service, 'filename')
         self.assertTrue(os.path.exists(filename))
 
         # check that 3 files were created
-        framenumBeginning = ktl.read(service, 'framenum')
+        framenumBeginning = int(ktl.read(service, 'framenum'))
         te._take_an_exposure(logger=self.logger, cfg=self.cfg, nFrames=3)
-        framenumAfter = ktl.read(service, 'framenum')
+        framenumAfter = int(ktl.read(service, 'framenum'))
         self.assertEqual(framenumBeginning + 3, framenumAfter)
         filename= ktl.read(service, 'filename')
         self.assertTrue(os.path.exists(filename))
 
 
         # Check that sv mode creates 2 files
-        framenumSBeginning = ktl.read(service, 'framenum')
-        framenumIBeginning = ktl.read('nids', 'framenum')
+        framenumSBeginning = int(ktl.read(service, 'framenum'))
+        framenumIBeginning = int(ktl.read('nids', 'framenum'))
         te._take_an_exposure(logger=self.logger, cfg=self.cfg, nFrames=1, sv='sv')
-        framenumSAfter = ktl.read(service, 'framenum')
+        framenumSAfter = int(ktl.read(service, 'framenum'))
         self.assertEqual(framenumSBeginning + 1, framenumSAfter)
         filenameS = ktl.read(service, 'filename')
         self.assertTrue(os.path.exists(filenameS))
-        framenumIAfter = ktl.read('nids', 'framenum')
+        framenumIAfter = int(ktl.read('nids', 'framenum'))
         self.assertEqual(framenumIBeginning + 1, framenumIAfter)
         filenameI = ktl.read('nids', 'filename')
         self.assertTrue(os.path.exists(filenameI))
@@ -89,9 +89,9 @@ class TestTakeExposures(unittest.TestCase):
             'sv': sv
         }
 
-        framenumBeginning = ktl.read(service, 'framenum')
+        framenumBeginning = int(ktl.read(service, 'framenum'))
         te.execute( args=args, logger=self.logger, cfg=self.cfg )
-        framenumAfter = ktl.read(service, 'framenum')
+        framenumAfter = int(ktl.read(service, 'framenum'))
 
         self.assertEqual(framenumBeginning + 1, framenumAfter)
         filename = ktl.read(service, 'filename')

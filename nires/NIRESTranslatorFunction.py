@@ -48,10 +48,11 @@ class NIRESTranslatorFunction(TranslatorModuleFunction):
             int: minimum integration time for NIRES 
         """        
         service = cls._determine_nires_service(sv)
-        sampmode = ktl.read(service, 'sampmode')
-        readtime = ktl.read(service, 'readtime')
+        sampmode = int(ktl.read(service, 'sampmode'))
+             
+        readtime = float(ktl.read(service, 'readtime'))
         if sampmode==1 or sampmode==2:
-            nsamp = ktl.read(service, 'numreads')
+            nsamp = int(ktl.read(service, 'numreads'))
         else:
             nsamp = 1
         minTime = nsamp * readtime

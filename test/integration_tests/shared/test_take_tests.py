@@ -46,9 +46,9 @@ class TestTakeTests(unittest.TestCase):
         sdc.perform(args=args, logger=self.logger, cfg=self.cfg)
 
         # check that file is not created
-        framenumBeginning = ktl.read('nids', 'framenum')
+        framenumBeginning = int(ktl.read('nids', 'framenum'))
         tt.execute(args, logger=self.logger, cfg=self.cfg)
-        framenumAfter = ktl.read('nids', 'framenum')
+        framenumAfter = int(ktl.read('nids', 'framenum'))
         self.assertEqual(framenumBeginning, framenumAfter)
 
 

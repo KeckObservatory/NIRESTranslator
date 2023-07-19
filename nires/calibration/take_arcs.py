@@ -32,7 +32,7 @@ class TakeArcs(NIRESTranslatorFunction):
             logger (class): Logger object
         """
 
-        framenum = ktl.read('nsds', 'framenum')
+        framenum = int(ktl.read('nsds', 'framenum'))
         logger.info(f'taking frame # {framenum}')
 
         isoperational = cfg['operation_mode']['operation_mode'] == 'operational'

@@ -35,18 +35,18 @@ class TestTakeFlats(unittest.TestCase):
         ktl.write(service, 'coadds', 1)
         ktl.wait(f'${service}.coadds=={1}', timeout=2)
 
-        framenumBefore1 = ktl.read(service, 'framenum')
+        framenumBefore1 = int(ktl.read(service, 'framenum'))
         tf._take_flats(logger=self.logger, cfg=self.cfg, nFrames=1)
-        framenumAfter1 = ktl.read(service, 'framenum')
+        framenumAfter1 = int(ktl.read(service, 'framenum'))
         self.assertEqual(framenumAfter1, framenumBefore1+1)
 
         filename = ktl.read(service, 'filename')
         self.assertTrue(os.path.exists(filename))
 
 
-        framenumBefore3 = ktl.read(service, 'framenum')
+        framenumBefore3 = int(ktl.read(service, 'framenum'))
         tf._take_flats(logger=self.logger, cfg=self.cfg, nFrames=3)
-        framenumAfter3 = ktl.read(service, 'framenum')
+        framenumAfter3 = int(ktl.read(service, 'framenum'))
         self.assertEqual(framenumAfter3, framenumBefore3+3)
 
         filename = ktl.read(service, 'filename')
@@ -63,21 +63,21 @@ class TestTakeFlats(unittest.TestCase):
         ktl.write(service, 'coadds', 1)
         ktl.wait(f'${service}.coadds=={1}', timeout=2)
 
-        framenumBefore1 = ktl.read(service, 'framenum')
+        framenumBefore1 = int(ktl.read(service, 'framenum'))
 
         args = {
             'nFrames': 1,
         }
         tf.execute( args=args, logger=self.logger, cfg=self.cfg )
-        framenumAfter1 = ktl.read(service, 'framenum')
+        framenumAfter1 = int(ktl.read(service, 'framenum'))
         self.assertEqual(framenumAfter1, framenumBefore1+1)
 
         filename = ktl.read(service, 'filename')
         self.assertTrue(os.path.exists(filename))
 
-        framenumBefore3 = ktl.read(service, 'framenum')
+        framenumBefore3 = int(ktl.read(service, 'framenum'))
         tf._take_flats(logger=self.logger, cfg=self.cfg, nFrames=3)
-        framenumAfter3 = ktl.read(service, 'framenum')
+        framenumAfter3 = int(ktl.read(service, 'framenum'))
         self.assertEqual(framenumAfter3, framenumBefore3+3)
         
         filename = ktl.read(service, 'filename')

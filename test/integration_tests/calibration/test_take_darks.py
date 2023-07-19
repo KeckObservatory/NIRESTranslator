@@ -36,9 +36,9 @@ class TestTakeDarks(unittest.TestCase):
         ktl.write(service, 'coadds', 1)
         ktl.wait(f'${service}.coadds=={1}', timeout=2)
 
-        framenumBefore = ktl.read(service, 'framenum')
+        framenumBefore = int(ktl.read(service, 'framenum'))
         td._take_darks(1, logger=self.logger, cfg=self.cfg)
-        framenumAfter = ktl.read(service, 'framenum')
+        framenumAfter = int(ktl.read(service, 'framenum'))
         self.assertEqual(framenumAfter, framenumBefore+1)
 
         filename = ktl.read(service, 'filename')
@@ -56,12 +56,12 @@ class TestTakeDarks(unittest.TestCase):
         ktl.write(service, 'coadds', 1)
         ktl.wait(f'${service}.coadds=={1}', timeout=2)
 
-        framenumBefore = ktl.read(service, 'framenum')
+        framenumBefore = int(ktl.read(service, 'framenum'))
         args = {
             'nFrames': 1
         }
         td.execute(args=args, logger=self.logger, cfg=self.cfg)
-        framenumAfter = ktl.read(service, 'framenum')
+        framenumAfter = int(ktl.read(service, 'framenum'))
         self.assertEqual(framenumAfter, framenumBefore+1)
 
         filename = ktl.read(service, 'filename')
