@@ -122,7 +122,7 @@ class SetDetectorConfig(NIRESTranslatorFunction):
             logger.info(f'Setting number of Fowler mode samples to {nSamp}')
             cls.set_number_of_samples(nSamp, sv, logger, cfg, readoutMode)
 
-        cls.check_integration_time(sv, logger)
+        cls.check_integration_time(sv, logger, cfg)
 
     @classmethod
     def log_readout_mode(cls, readoutMode, logger):
