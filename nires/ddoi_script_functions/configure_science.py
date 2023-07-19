@@ -1,6 +1,6 @@
 import ktl
 
-from nires.NIREStranslatorFunction import NIRESTranslatorFunction
+from nires.NIRESTranslatorFunction import NIRESTranslatorFunction
 from nires.shared.set_detector_configuration import SetDetectorConfig 
 
 
