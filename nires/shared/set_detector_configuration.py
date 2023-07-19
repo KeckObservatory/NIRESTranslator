@@ -192,6 +192,11 @@ class SetDetectorConfig(NIRESTranslatorFunction):
             keyword = 'numfs' if readoutMode==3 else 'numreads'
             nSamp = ktl.read(service, keyword)
             logger.info(f'{service} {keyword}: {nSamp}')
+
+    @classmethod
+    def set_numreads(cls, numreads, sv, logger, cfg):
+        service = cls._determine_nires_service(sv) 
+        cls._write_to_ktl(service, 'numreads', numreads, logger, cfg)
              
     @classmethod
     def pre_condition(cls, args, logger, cfg):
@@ -204,15 +209,19 @@ class SetDetectorConfig(NIRESTranslatorFunction):
         numreads = args['numreads'] # numreads 
         readoutMode = args['readoutMode'] # sampmode
         requestTime = args['itime'] # itime
-
+        nSamp = args['nSamp'] # fowler sampling
         sv = args['sv']
-        logger.info('setting coadds')
+
+        logger.info(f'setting coadds: {nCoadd}')
         cls.set_coadd(nCoadd, sv, logger, cfg)
-        logger.info('setting integration time')
+        logger.info(f'setting integration time: {requestTime}')
         cls.set_integration_time(requestTime, sv, logger, cfg)
-        logger.info('setting readout mode')
-        cls.set_readout_mode(readoutMode, sv, logger, cfg, numreads) 
+        logger.info(f'setting readout mode: {readoutMode}')
+        cls.set_readout_mode(readoutMode, sv, logger, cfg, nSamp) 
+        logger.info(f'setting num reads: {numreads}')
+        cls.set_numreads(numreads, sv, logger, cfg)
         logger.info('set_dectector_configuration complete')
+
         
 
     @classmethod

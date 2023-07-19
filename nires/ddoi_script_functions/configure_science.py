@@ -12,16 +12,14 @@ class configure_science(NIRESTranslatorFunction):
     def set_detector_config(cls, args, logger, cfg, sv):
         sequence = args.get('sequence')
         params = sequence.get('parameters')
-        nFrames = params.get('det_exp_number')
         coadds = params.get('det_coadd_number')
         itime = params.get('det_exp_time')
         readoutMode = params.get('det_samp_mode')
         readPairs = params.get('det_exp_read_pairs')
         nSamp = params.get('det_num_fs')
         args = {
-            'nFrames': nFrames,
             'itime': itime,
-            'coadds': coadds,
+            'nCoadd': coadds,
             'readoutMode': readoutMode,
             'numreads': readPairs,
             'nSamp': nSamp,
