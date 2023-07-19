@@ -1,10 +1,10 @@
 import ktl
 
-from nires.NIRESTranslatorFunction import NIRESTranslatorFunction
+from kpf.KPFTranslatorFunction import KPFTranslatorFunction
 from nires.shared.set_detector_configuration import SetDetectorConfig 
 
 
-class configure_science(NIRESTranslatorFunction):
+class configure_science(KPFTranslatorFunction):
     '''
     '''
 
@@ -13,6 +13,7 @@ class configure_science(NIRESTranslatorFunction):
         sequence = args.get('sequence')
         params = sequence.get('parameters')
         nFrames = params.get('det_exp_number')
+        coadds = params.get('det_coadd_number')
         itime = params.get('det_exp_time')
         readoutMode = params.get('det_samp_mode')
         readPairs = params.get('det_exp_read_pairs')
@@ -20,6 +21,7 @@ class configure_science(NIRESTranslatorFunction):
         args = {
             'nFrames': nFrames,
             'itime': itime,
+            'coadds': coadds,
             'readoutMode': readoutMode,
             'numreads': readPairs,
             'nSamp': nSamp,

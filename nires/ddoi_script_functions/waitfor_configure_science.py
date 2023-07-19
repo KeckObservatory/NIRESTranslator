@@ -26,7 +26,8 @@ class waitfor_configure_science(NIRESTranslatorFunction):
         params = sequence.get('parameters')
         detType = params.get('det_type_mode')
 
-        coadds = params.get('det_exp_number')
+        nframes = params.get('det_exp_number')
+        coadds = params.get('det_coadd_number')
         itime = params.get('det_exp_time')
         sampmode = params.get('det_samp_mode')
         numreads = params.get('det_exp_read_pairs')

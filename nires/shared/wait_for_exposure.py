@@ -31,11 +31,11 @@ class WaitForExposure(NIRESTranslatorFunction):
         """
         service = cls._determine_nires_service(sv)
         itime = ktl.read(service, 'itime')
-        coadd = ktl.read(service, 'coadds')
+        coadds = ktl.read(service, 'coadds')
         nread = ktl.read(service, 'numreads')
         waitForEndReads = cfg['ob_keys']['n_read_padding'] * nread
         extra = cfg['ob_keys']['extra_wait'] # add some extra to "wait" to allow for miscalculations
-        wait = int(itime) * waitForEndReads * int(coadd) + extra
+        wait = int(itime) * waitForEndReads * int(coadds) + extra
 
         logger.info(f'wait_for_exposure: Time estimate: {wait} seconds (includes {extra} seconds for overhead)')
 

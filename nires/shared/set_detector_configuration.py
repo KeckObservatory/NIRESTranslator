@@ -206,7 +206,7 @@ class SetDetectorConfig(NIRESTranslatorFunction):
         requestTime = args['itime'] # itime
 
         sv = args['sv']
-        logger.info('setting coadd')
+        logger.info('setting coadds')
         cls.set_coadd(nCoadd, sv, logger, cfg)
         logger.info('setting integration time')
         cls.set_integration_time(requestTime, sv, logger, cfg)
