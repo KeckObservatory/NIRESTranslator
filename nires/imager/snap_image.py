@@ -23,11 +23,12 @@ class SnapImage(NIRESTranslatorFunction):
 
     @classmethod
     def pre_condition(cls, args, logger, cfg):
-        # Check if we are able to read/write to sdata
-        date_dir = datetime.today().strftime("%y%b%d").lower()
-        if not os.path.exists(f"{cfg['sdata_path']}/{date_dir}"):
-            pass
-        return
+
+        outdir = ktl.read('nids', 'OUTDIR')
+        if not os.path.exists(outdir):
+            logger.error(f'Cannot access data out directory: {outdir}')
+            raise FileNotFoundError
+        pass
 
     @classmethod
     def perform(cls, args, logger, cfg):
@@ -43,8 +44,8 @@ class SnapImage(NIRESTranslatorFunction):
 
         # Offset
 
-        nod_east = ktl.read('nires', 'node')
-        nod_north = ktl.read('nires', 'nodn')
+        nod_east = float(ktl.read('nires', 'node'))
+        nod_north = float(ktl.read('nires', 'nodn'))
         cls._write_to_ktl('dcs', 'raoff', nod_east, logger, cfg)
         cls._write_to_ktl('dcs', 'decoff', nod_north, logger, cfg)
         cls._write_to_ktl('dcs', 'rel2curr', 't', logger, cfg)
