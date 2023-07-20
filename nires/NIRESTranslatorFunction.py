@@ -19,7 +19,7 @@ class NIRESTranslatorFunction(TranslatorModuleFunction):
 
 
         cls._write_to_ktl(service='nids', keyword='dispname2', value=fitspath, logger=logger, cfg=cfg)
-        time.sleep(cfg['ob_keys']['display_sleep_time'])
+        time.sleep(cfg['image_display']['display_sleep_time'])
         cls._write_to_ktl(service='nids', keyword='display2', value=0, logger=logger, cfg=cfg)
         cls._write_to_ktl(service='nids', keyword='display2', value=1, logger=logger, cfg=cfg)
         cls._write_to_ktl(service='nids', keyword='comment', value=" ", logger=logger, cfg=cfg)

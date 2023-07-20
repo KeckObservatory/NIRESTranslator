@@ -38,8 +38,8 @@ class SnapImage(NIRESTranslatorFunction):
         WaitForExposure.execute({'sv' : 'v'})
         # Get lastfile
         object_file = ktl.read('nids', 'lastfile')
-        shutil.copyfile(object_file, cfg['ob_keys']['object_temp_path'])
-        os.chmod(cfg['ob_keys']['object_temp_path'], 666)
+        shutil.copyfile(object_file, cfg['image_display']['object_temp_path'])
+        os.chmod(cfg['image_display']['object_temp_path'], 666)
 
         # Offset
 
@@ -57,10 +57,10 @@ class SnapImage(NIRESTranslatorFunction):
         WaitForExposure.execute({'sv' : 'v'})
         # Get lastfile
         sky_file = ktl.read('nids', 'lastfile')
-        shutil.copyfile(sky_file, cfg['ob_keys']['sky_temp_path'])
-        os.chmod(cfg['ob_keys']['sky_temp_path'], 666)
+        shutil.copyfile(sky_file, cfg['image_display']['sky_temp_path'])
+        os.chmod(cfg['image_display']['sky_temp_path'], 666)
         # Use the lastfiles to generate subtracted image, save to tempdr
-        cls.subtract_fits(cfg['ob_keys']['object_temp_path'], cfg['ob_keys']['sky_temp_path'])
+        cls.subtract_fits(cfg['image_display']['object_temp_path'], cfg['image_display']['sky_temp_path'])
 
         # move back
         nod_east = ktl.read('nires', 'node') * -1
@@ -70,7 +70,7 @@ class SnapImage(NIRESTranslatorFunction):
         cls._write_to_ktl('dcs', 'rel2curr', 't', logger, cfg)
         cls.wait_for_tel(cfg, logger)
 
-        cls.display_subtracted_image(cfg['ob_keys']['object_temp_path'], cfg['ob_keys']['sky_temp_path'], cfg, logger)
+        cls.display_subtracted_image(cfg['image_display']['object_temp_path'], cfg['image_display']['sky_temp_path'], cfg, logger)
 
 
     @classmethod
@@ -80,7 +80,7 @@ class SnapImage(NIRESTranslatorFunction):
     def display_subtracted_image(cls, file1, file2, cfg, logger, outfile=None):
 
         if outfile == None:
-            outfile = cfg['ob_keys']['default_snapi']
+            outfile = cfg['image_display']['default_snapi']
 
         with fits.open(file1) as f1:
             with fits.open(file2) as f2:
