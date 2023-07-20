@@ -39,7 +39,7 @@ class TakeExposures(NIRESTranslatorFunction):
             # run take an exposure on both in parallel
             return
         service = cls._determine_nires_service(sv)
-        framenum = ktl.read(service, 'framenum')
+        framenum = int(ktl.read(service, 'framenum'))
         logger.info(f'Taking {nFrames} using service {service}. Starting on frame # {framenum}')
 
         maxFrames = nFrames

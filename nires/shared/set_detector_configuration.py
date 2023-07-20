@@ -40,7 +40,7 @@ class SetDetectorConfig(NIRESTranslatorFunction):
         """
         service = cls._determine_nires_service(sv) 
         if not requestTime:
-            iTime = ktl.read(service, 'itime')
+            iTime = float(ktl.read(service, 'itime'))
             logger.info(f'{service} itime set to: {iTime}')
         else:
             minimumTime = cls._minimum_integration_time(sv=sv)
@@ -66,7 +66,7 @@ class SetDetectorConfig(NIRESTranslatorFunction):
 
         service = cls._determine_nires_service(sv) 
         if not nCoadd:
-            nCoadd = ktl.read(service, 'coadds')
+            nCoadd = int(ktl.read(service, 'coadds'))
             logger.info(f'{service} coadds set to: {nCoadd}')
             return
 
@@ -95,7 +95,7 @@ class SetDetectorConfig(NIRESTranslatorFunction):
         service = cls._determine_nires_service(sv) 
 
         if not readoutMode: # reading out keyword
-            readoutMode = ktl.read(service, 'sampmode')
+            readoutMode = int(ktl.read(service, 'sampmode'))
             cls.log_readout_mode(readoutMode, logger)
             return
 
@@ -120,9 +120,9 @@ class SetDetectorConfig(NIRESTranslatorFunction):
 
         if readoutMode==3 and nSamp:
             logger.info(f'Setting number of Fowler mode samples to {nSamp}')
-            cls.set_number_of_samples(nSamp, sv, logger, readoutMode)
+            cls.set_number_of_samples(nSamp, sv, logger, cfg, readoutMode)
 
-        cls.check_integration_time(sv, logger)
+        cls.check_integration_time(sv, logger, cfg)
 
     @classmethod
     def log_readout_mode(cls, readoutMode, logger):
@@ -150,7 +150,7 @@ class SetDetectorConfig(NIRESTranslatorFunction):
             cfg (dict): Config object
         """
         service = cls._determine_nires_service(sv) 
-        integrationTime = ktl.read(service, 'itime')
+        integrationTime = float(ktl.read(service, 'itime'))
         minimumTime = cls._minimum_integration_time(sv)
         iTimeTooSmall = integrationTime - minimumTime < 0
         if iTimeTooSmall:
@@ -179,7 +179,7 @@ class SetDetectorConfig(NIRESTranslatorFunction):
 
         if nSamp:
             if not readoutMode:
-                readoutMode = ktl.read(service, 'sampmode')
+                readoutMode = int(ktl.read(service, 'sampmode'))
 
             if readoutMode==3: # Fowler mode
                 cls._write_to_ktl(service, 'numfs', nSamp, logger, cfg)
@@ -190,7 +190,7 @@ class SetDetectorConfig(NIRESTranslatorFunction):
             cls.check_integration_time(sv, logger, cfg) 
         else: # If nSamp is not included
             keyword = 'numfs' if readoutMode==3 else 'numreads'
-            nSamp = ktl.read(service, keyword)
+            nSamp = int(ktl.read(service, keyword))
             logger.info(f'{service} {keyword}: {nSamp}')
 
     @classmethod
