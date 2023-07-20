@@ -70,6 +70,9 @@ class SnapImage(NIRESTranslatorFunction):
         cls._write_to_ktl('dcs', 'rel2curr', 't', logger, cfg)
         cls.wait_for_tel(cfg, logger)
 
+        cls.display_subtracted_image(cfg['ob_keys']['object_temp_path'], cfg['ob_keys']['sky_temp_path'], cfg, logger)
+
+
     @classmethod
     def post_condition(cls, args, logger, cfg):
         pass
