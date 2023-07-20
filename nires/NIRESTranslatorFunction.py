@@ -6,9 +6,23 @@ try:
     import ktl
 except ImportError:
     ktl = ''
-
+import time
 
 class NIRESTranslatorFunction(TranslatorModuleFunction):
+
+    @classmethod
+    def send_fits_to_display(cls, fitspath, logger, cfg):
+        
+        # Keeping this here because it is in the original script.
+        # Not sure if it is actually needed
+        cls._write_to_ktl(service='nids', keyword='display2', value=0, logger=logger, cfg=cfg)
+
+
+        cls._write_to_ktl(service='nids', keyword='dispname2', value=fitspath, logger=logger, cfg=cfg)
+        time.sleep(cfg['ob_keys']['display_sleep_time'])
+        cls._write_to_ktl(service='nids', keyword='display2', value=0, logger=logger, cfg=cfg)
+        cls._write_to_ktl(service='nids', keyword='display2', value=1, logger=logger, cfg=cfg)
+        cls._write_to_ktl(service='nids', keyword='comment', value=" ", logger=logger, cfg=cfg)
 
     @classmethod
     def _write_to_ktl(cls, service, keyword, value, logger, cfg, wait=None, timeout=None):
@@ -87,3 +101,57 @@ class NIRESTranslatorFunction(TranslatorModuleFunction):
     # @classmethod
     # def post_condition(cls, args, logger, cfg):
     #     pass
+
+    @classmethod
+    def wait_for_tel(cls, cfg, logger):
+        # wait for slew to end...
+        ktl.waitfor('dcs', 'axestat=tracking')
+        # waitfor -s dcs axestat=tracking
+
+        # check whether autoguider is active...
+        if ktl.read('dcs' 'AUTACTIV') == "no":
+            logger.error(f"Wait for telescope (wftel): guider not currently active")
+            raise Exception
+        
+        # wait for AUTPAUSE to increment...
+
+        initial_autresum = ktl.read('dcs', 'autresum')
+
+        count = 0
+        timeout = 20 # max guider exposure time
+
+        while(True):
+            new_autresum = ktl.read('dcs', 'autresum')
+            if initial_autresum != new_autresum:
+                break
+            
+            count += 1
+
+            if count >= timeout:
+                logger.error(f"Wait for telescope (wftel): timeout waiting for AUTRESUM to increment")
+                break
+
+            time.sleep(1)
+
+          
+        # monitor the keyword AUTGO to change to RESUMEACK, which is issued by the guider 
+
+        count = 0
+        timeout = 20 # max guider exposure time
+
+        autgo_desired_values = ["RESUMEACK", "GUIDE"]
+
+
+        while(True):
+            autgo = str(ktl.read('dcs', 'autgo')).upper()
+
+            if autgo in autgo_desired_values:
+                break
+
+            count += 1
+            
+            if count >= timeout:
+                logger.error(f"Wait for telescope (wftel): timeout waiting for AUTGO to be [{','.join(autgo_desired_values)}]")
+                break
+
+            time.sleep(1)
