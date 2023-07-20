@@ -79,15 +79,16 @@ class SnapImage(NIRESTranslatorFunction):
 
     def display_subtracted_image(cls, file1, file2, cfg, logger, outfile=None):
 
-        
         if outfile == None:
             outfile = cfg['ob_keys']['default_snapi']
 
         with fits.open(file1) as f1:
             with fits.open(file2) as f2:
                 outdata = f1[0].data - f2[0].data
-                hdu = fits.PrimaryHDU(outdata)
-                hdu.writeto(outfile, overwrite=True)
+                # Overwrite f1's header info with the subtracted data and save it
+                # We cannot create a new HDU, since we need the headers.
+                f1[0].data = outdata
+                f1.writeto(outfile, overwrite=True)
                 os.chmod(outfile, 666)
                 cls.send_fits_to_display(outfile, logger, cfg)
 
