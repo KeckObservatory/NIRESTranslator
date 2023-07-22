@@ -207,7 +207,7 @@ class SetDetectorConfig(NIRESTranslatorFunction):
         # numreads
         nCoadd = args['nCoadd'] # coadds
         numreads = args['numreads'] # numreads 
-        readoutMode = args['readoutMode'] # sampmode
+        readoutMode = args['sampmode'] # sampmode
         requestTime = args['itime'] # itime
         nSamp = args['nSamp'] # fowler sampling
         sv = args['sv']
