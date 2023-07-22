@@ -30,7 +30,9 @@ class TestTakeTests(unittest.TestCase):
         self.cfg = {
             'ob_keys': {
                 'n_read_padding': 1.5,
-                'extra_wait': 1
+                'extra_wait': 1,
+                'ktl_wait': False,
+                'ktl_timeout': 2,
             },
             'operation_mode': {
                 'operation_mode': 'operational'
@@ -47,7 +49,7 @@ class TestTakeTests(unittest.TestCase):
         args['itime'] = 3 
         args['nSamp'] = None 
         args['sv'] = 'v'
-        service = 'nsds'
+        service = 'nids'
         sdc.perform(args=args, logger=self.logger, cfg=self.cfg)
 
         # check that file is not created
