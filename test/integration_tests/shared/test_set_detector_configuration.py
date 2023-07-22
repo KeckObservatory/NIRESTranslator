@@ -29,13 +29,14 @@ class TestSetDetectorConfiguration(unittest.TestCase):
         self.cfg = {
             'ob_keys': {
                 'n_read_padding': 1.5,
-                'extra_wait': 1
+                'extra_wait': 1,
+                'ktl_wait': False,
+                'ktl_timeout': 2,
             },
             'operation_mode': {
                 'operation_mode': 'operational'
             }
         }
-        self.cfg_path = './../integration_test_cfg.ini'
 
     def test_set_integration_time(self):
 
@@ -159,7 +160,7 @@ class TestSetDetectorConfiguration(unittest.TestCase):
         sv = 's'
         sampmode = 3 # Fowler
         ktl.write(service, 'sampmode', sampmode)
-        ktl.wait(f'$nsds.sampmode=={sampmode}', timeout=2)
+        ktl.wait(f'${service}.sampmode=={sampmode}', timeout=2)
 
         sdc.set_number_of_samples(11, sv=sv, logger=self.logger, cfg=self.cfg, readoutMode=3)
         numfs = int(ktl.read(service, 'numfs'))
