@@ -36,12 +36,12 @@ class TakeTests(NIRESTranslatorFunction):
             while nFrames > 0:
                 cls._write_to_ktl(service, 'test', 0, logger, cfg)
                 cls._write_to_ktl(service, 'test', 1, logger, cfg)
-                WaitForExposure.execute({'sv', sv}, logger, cfg)
+                WaitForExposure.execute({'sv': sv}, logger, cfg)
                 nFrames = nFrames - 1
                 logger.info(f"nFrames left: {nFrames}")
         else:
             cls._write_to_ktl(service, 'test', 1, logger, cfg)
-            WaitForExposure.execute({'sv', sv}, logger, cfg)
+            WaitForExposure.execute({'sv': sv}, logger, cfg)
             cls._write_to_ktl(service, 'test', 0, logger, cfg)
 
     @classmethod

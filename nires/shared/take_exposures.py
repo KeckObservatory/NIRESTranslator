@@ -84,7 +84,7 @@ class TakeExposures(NIRESTranslatorFunction):
             fileNames = ktl.read('nsds', 'filename')
             fileNamev = ktl.read('nids', 'filename')
 
-            WaitForExposure.execute({'sv', 's'}, logger, cfg)
+            WaitForExposure.execute({'sv': 's'}, logger, cfg)
 
             cls._write_to_ktl('nsds', 'GO', 0, logger, cfg)
             cls._write_to_ktl('nids', 'GO', 0, logger, cfg)
