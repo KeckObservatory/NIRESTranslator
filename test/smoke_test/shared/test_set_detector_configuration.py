@@ -111,6 +111,7 @@ class TestSetDetectorConfiguration(unittest.TestCase):
         args['readoutMode'] = 1 
         args['itime'] = 10 
         args['sv'] = 's'
+        args['nSamp'] = 1
         sdc.perform(args=args, logger=self.logger, cfg=self.cfg)
 
 if __name__ == "__main__":

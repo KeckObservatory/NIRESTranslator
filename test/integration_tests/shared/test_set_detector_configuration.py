@@ -35,6 +35,7 @@ class TestSetDetectorConfiguration(unittest.TestCase):
                 'operation_mode': 'operational'
             }
         }
+        self.cfg_path = './../integration_test_cfg.ini'
 
     def test_set_integration_time(self):
 
@@ -180,6 +181,7 @@ class TestSetDetectorConfiguration(unittest.TestCase):
         args['numreads'] = 2 
         args['readoutMode'] = 1 
         args['itime'] = 10 
+        args['nSamp'] = 1
         args['sv'] = 's'
         service = 'nsds'
         sdc.execute(args=args, logger=self.logger, cfg=self.cfg)
