@@ -45,6 +45,7 @@ class TestTakeTests(unittest.TestCase):
         args['numreads'] = 1 
         args['sampmode'] = 4 
         args['itime'] = 3 
+        args['nSamp'] = None 
         args['sv'] = 'v'
         service = 'nsds'
         sdc.perform(args=args, logger=self.logger, cfg=self.cfg)
