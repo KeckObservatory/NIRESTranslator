@@ -13,10 +13,13 @@ class TestToggleDomeLamps(unittest.TestCase):
         self.logger = MagicMock(side_effect=logger_side_effect)
         self.logger.info.side_effect = logger_side_effect
         self.logger.debug.side_effect = logger_side_effect
+
         self.cfg = {
             'ob_keys': {
                 'n_read_padding': 1.5,
-                'extra_wait': 1
+                'extra_wait': 1,
+                'ktl_wait': False,
+                'ktl_timeout': 2,
             },
             'operation_mode': {
                 'operation_mode': 'operational'

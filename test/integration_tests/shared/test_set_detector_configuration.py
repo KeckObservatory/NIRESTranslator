@@ -78,6 +78,7 @@ class TestSetDetectorConfiguration(unittest.TestCase):
     def test_set_readout_mode(self):
         service = 'nsds'
         ktl.write(service, 'sampmode', 2)
+        print(ktl.read(service, 'sampmode'))
         ktl.wait(f'${service}.sampmode==2', timeout=2)
         ktl.write(service, 'numfs', 1)
         ktl.wait(f'${service}.numfs=={1}', timeout=2)
