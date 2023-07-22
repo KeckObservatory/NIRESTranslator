@@ -40,13 +40,21 @@ class TestTakeTests(unittest.TestCase):
     def test_execute(self):
 
         args = {}
-        args['nFrames'] = 1
-        args['sv'] = 'v'
-        args = {}
+        # config detector for exposures
+        args['nCoadd'] = 1 
+        args['numreads'] = 1 
+        args['sampmode'] = 4 
+        args['itime'] = 3 
+        args['sv'] = 's'
+        service = 'nsds'
         sdc.perform(args=args, logger=self.logger, cfg=self.cfg)
 
         # check that file is not created
         framenumBeginning = int(ktl.read('nids', 'framenum'))
+
+        args = {}
+        args['nFrames'] = 1
+        args['sv'] = 'v'
         tt.execute(args, logger=self.logger, cfg=self.cfg)
         framenumAfter = int(ktl.read('nids', 'framenum'))
         self.assertEqual(framenumBeginning, framenumAfter)
