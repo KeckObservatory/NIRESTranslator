@@ -22,7 +22,8 @@ class TestTakeArcs(unittest.TestCase):
                 'ktl_timeout': 2,
             },
             'operation_mode': {
-                'operation_mode': 'operational'
+                'operation_mode': 'operational',
+                 'arclamp_user_server': 'nireseng@niresserver1'
             }
         }
     
