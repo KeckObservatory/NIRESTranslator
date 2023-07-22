@@ -31,10 +31,12 @@ class TestTakeExposures(unittest.TestCase):
         self.cfg = {
             'ob_keys': {
                 'n_read_padding': 1.5,
-                'extra_wait': 1
+                'extra_wait': 1,
+                'ktl_wait': False,
+                'ktl_timeout': 2,
             },
             'operation_mode': {
-                'operation_mode': 'test'
+                'operation_mode': 'operational'
             }
         }
     
