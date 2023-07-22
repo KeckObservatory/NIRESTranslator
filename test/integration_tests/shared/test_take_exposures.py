@@ -9,7 +9,7 @@ import os
 
 def ktl_side_effects(service, value):
     if value == 'itime': return 1
-    if value == 'sampmode': return 4
+    if value == 'sampmode': return 3
     if value == 'numreads': return 1
     if value == 'coadds': return 1
     if value == 'readtime': return 1
@@ -31,7 +31,9 @@ class TestTakeExposures(unittest.TestCase):
         self.cfg = {
             'ob_keys': {
                 'n_read_padding': 1.5,
-                'extra_wait': 1
+                'extra_wait': 1,
+                'ktl_wait': False,
+                'ktl_timeout': 2,
             },
             'operation_mode': {
                 'operation_mode': 'operational'
@@ -44,7 +46,7 @@ class TestTakeExposures(unittest.TestCase):
         # config detector for exposures
         args['nCoadd'] = 1 
         args['numreads'] = 1 
-        args['sampmode'] = 4 
+        args['sampmode'] = 3 
         args['itime'] = 3 
         args['sv'] = 's'
         service = 'nsds'
