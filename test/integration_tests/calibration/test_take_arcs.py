@@ -30,30 +30,30 @@ class TestTakeArcs(unittest.TestCase):
     def test_take_arcs(self):
         service = 'nsds'
         ktl.write(service, 'sampmode', 3)
-        ktl.wait(f'${service}.sampmode=={3}', timeout=2)
+        ktl.waitfor(f'${service}.sampmode=={3}', timeout=2)
         ktl.write(service, 'itime', 5)
-        ktl.wait(f'${service}.itime=={5}', timeout=2)
+        ktl.waitfor(f'${service}.itime=={5}', timeout=2)
         ktl.write(service, 'numfs', 1)
-        ktl.wait(f'${service}.numfs=={1}', timeout=2)
+        ktl.waitfor(f'${service}.numfs=={1}', timeout=2)
         ktl.write(service, 'coadds', 1)
-        ktl.wait(f'${service}.coadds=={1}', timeout=2)
+        ktl.waitfor(f'${service}.coadds=={1}', timeout=2)
         framenumBefore = int(ktl.read(service, 'framenum'))
         ta._take_arcs(logger=self.logger, cfg=self.cfg, nFrames=1)
         framenumAfter = int(ktl.read(service, 'framenum'))
         self.assertEqual(framenumAfter, framenumBefore+1)
-        filename = int(ktl.read(service, 'filename'))
+        filename = ktl.read(service, 'filename')
         self.assertTrue(os.path.exists(filename))
 
     def test_execute(self):
         service = 'nsds'
         ktl.write(service, 'sampmode', 3)
-        ktl.wait(f'${service}.sampmode=={3}', timeout=2)
+        ktl.waitfor(f'${service}.sampmode=={3}', timeout=2)
         ktl.write(service, 'itime', 5)
-        ktl.wait(f'${service}.itime=={5}', timeout=2)
+        ktl.waitfor(f'${service}.itime=={5}', timeout=2)
         ktl.write(service, 'numfs', 1)
-        ktl.wait(f'${service}.numfs=={1}', timeout=2)
+        ktl.waitfor(f'${service}.numfs=={1}', timeout=2)
         ktl.write(service, 'coadds', 1)
-        ktl.wait(f'${service}.coadds=={1}', timeout=2)
+        ktl.waitfor(f'${service}.coadds=={1}', timeout=2)
         framenumBefore = int(ktl.read(service, 'framenum'))
 
         args = {

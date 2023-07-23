@@ -30,13 +30,13 @@ class TestTakeFlatsOnOff(unittest.TestCase):
     def test_take_flats_on_off(self):
         services = 'nsds'
         ktl.write(services, 'sampmode', 3)
-        ktl.wait(f'${services}.sampmode=={3}', timeout=2)
+        ktl.waitfor(f'${services}.sampmode=={3}', timeout=2)
         ktl.write(services, 'itime', 5)
-        ktl.wait(f'${services}.itime=={5}', timeout=2)
+        ktl.waitfor(f'${services}.itime=={5}', timeout=2)
         ktl.write(services, 'numfs', 1)
-        ktl.wait(f'${services}.numfs=={1}', timeout=2)
+        ktl.waitfor(f'${services}.numfs=={1}', timeout=2)
         ktl.write(services, 'coadds', 1)
-        ktl.wait(f'${services}.coadds=={1}', timeout=2)
+        ktl.waitfor(f'${services}.coadds=={1}', timeout=2)
         framenumBeforeSpec = int(ktl.read(services, 'framenum'))
         
         tfof._take_flats_on_off(logger=self.logger, cfg=self.cfg, nFrames=2)
@@ -51,13 +51,13 @@ class TestTakeFlatsOnOff(unittest.TestCase):
     def test_execute(self):
         services = 'nsds'
         ktl.write(services, 'sampmode', 3)
-        ktl.wait(f'${services}.sampmode=={3}', timeout=2)
+        ktl.waitfor(f'${services}.sampmode=={3}', timeout=2)
         ktl.write(services, 'itime', 5)
-        ktl.wait(f'${services}.itime=={5}', timeout=2)
+        ktl.waitfor(f'${services}.itime=={5}', timeout=2)
         ktl.write(services, 'numfs', 1)
-        ktl.wait(f'${services}.numfs=={1}', timeout=2)
+        ktl.waitfor(f'${services}.numfs=={1}', timeout=2)
         ktl.write(services, 'coadds', 1)
-        ktl.wait(f'${services}.coadds=={1}', timeout=2)
+        ktl.waitfor(f'${services}.coadds=={1}', timeout=2)
         framenumBeforeSpec = int(ktl.read(services, 'framenum'))
         
         args = {

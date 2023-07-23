@@ -30,13 +30,13 @@ class TestTakeDarks(unittest.TestCase):
 
         service = 'nsds'
         ktl.write(service, 'sampmode', 3)
-        ktl.wait(f'${service}.sampmode=={3}', timeout=2)
+        ktl.waitfor(f'${service}.sampmode=={3}', timeout=2)
         ktl.write(service, 'itime', 5)
-        ktl.wait(f'${service}.itime=={5}', timeout=2)
+        ktl.waitfor(f'${service}.itime=={5}', timeout=2)
         ktl.write(service, 'numfs', 1)
-        ktl.wait(f'${service}.numfs=={1}', timeout=2)
+        ktl.waitfor(f'${service}.numfs=={1}', timeout=2)
         ktl.write(service, 'coadds', 1)
-        ktl.wait(f'${service}.coadds=={1}', timeout=2)
+        ktl.waitfor(f'${service}.coadds=={1}', timeout=2)
 
         framenumBefore = int(ktl.read(service, 'framenum'))
         td._take_darks(1, logger=self.logger, cfg=self.cfg)
@@ -50,13 +50,13 @@ class TestTakeDarks(unittest.TestCase):
 
         service = 'nsds'
         ktl.write(service, 'sampmode', 3)
-        ktl.wait(f'${service}.sampmode=={3}', timeout=2)
+        ktl.waitfor(f'${service}.sampmode=={3}', timeout=2)
         ktl.write(service, 'itime', 5)
-        ktl.wait(f'${service}.itime=={5}', timeout=2)
+        ktl.waitfor(f'${service}.itime=={5}', timeout=2)
         ktl.write(service, 'numfs', 1)
-        ktl.wait(f'${service}.numfs=={1}', timeout=2)
+        ktl.waitfor(f'${service}.numfs=={1}', timeout=2)
         ktl.write(service, 'coadds', 1)
-        ktl.wait(f'${service}.coadds=={1}', timeout=2)
+        ktl.waitfor(f'${service}.coadds=={1}', timeout=2)
 
         framenumBefore = int(ktl.read(service, 'framenum'))
         args = {
