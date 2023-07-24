@@ -1,0 +1,11 @@
+# Smoke test
+Run all smoke tests
+```kpython3 test_all.py
+```
+Run test for one module (for example, set_detector_configuration)
+```kpython3 test_set_detector_configuration.py
+```
+# Integration tests
+Run test for one module (for example, take_arcs)
+```kpython3 test_take_arcs.py
+```
