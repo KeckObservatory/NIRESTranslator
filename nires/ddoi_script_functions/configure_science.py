@@ -19,7 +19,7 @@ class configure_science(NIRESTranslatorFunction):
         nSamp = params.get('det_num_fs')
         args = {
             'itime': itime,
-            'nCoadd': coadds,
+            'nCoadds': coadds,
             'readoutMode': readoutMode,
             'numreads': readPairs,
             'nSamp': nSamp,

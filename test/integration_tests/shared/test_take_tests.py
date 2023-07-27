@@ -43,7 +43,7 @@ class TestTakeTests(unittest.TestCase):
 
         args = {}
         # config detector for exposures
-        args['nCoadd'] = 1 
+        args['nCoadds'] = 1 
         args['numreads'] = 1 
         args['readoutMode'] = 4 
         args['itime'] = 3 
