@@ -29,8 +29,6 @@ class TestTakeExposures(unittest.TestCase):
                 'operation_mode': 'operational'
             }
         }
-    
-    def test_take_an_exposure(self):
 
         args = {}
         # config detector for exposures
@@ -39,9 +37,11 @@ class TestTakeExposures(unittest.TestCase):
         args['readoutMode'] = 3 
         args['itime'] = 3 
         args['sv'] = 's'
-        service = 'nsds'
         sdc.execute(args=args, logger=self.logger, cfg=self.cfg)
-
+    
+    def test_take_an_exposure(self):
+        
+        service = 'nsds'
         # check that one file was created
         framenumBeginning = int(ktl.read(service, 'framenum'))
         te._take_an_exposure(logger=self.logger, cfg=self.cfg)
@@ -80,14 +80,6 @@ class TestTakeExposures(unittest.TestCase):
             'nFrames': nFrames,
             'sv': sv
         }
-
-        sdc_args = {}
-        sdc_args['nCoadds'] = 2 
-        sdc_args['numreads'] = 1 
-        sdc_args['readoutMode'] = 3 
-        sdc_args['itime'] = 5 
-        sdc_args['sv'] = sv 
-        sdc.execute(args=sdc_args, logger=self.logger, cfg=self.cfg)
 
         framenumBeginning = int(ktl.read(service, 'framenum'))
         te.execute( args=args, logger=self.logger, cfg=self.cfg )
