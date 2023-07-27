@@ -36,6 +36,7 @@ class TestTakeExposures(unittest.TestCase):
         args['numreads'] = 1 
         args['readoutMode'] = 3 
         args['itime'] = 3 
+        args['nSamp'] = 1 
         args['sv'] = 's'
         sdc.execute(args=args, logger=self.logger, cfg=self.cfg)
     
