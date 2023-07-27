@@ -42,16 +42,16 @@ class TestSetDetectorConfiguration(unittest.TestCase):
 
         service = 'nsds'
         sdc.set_integration_time(5, sv="s", logger=self.logger, cfg=self.cfg)
-        itime = int(ktl.read(service, 'itime'))
+        itime = float(ktl.read(service, 'itime'))
         self.assertEqual(itime, 5)
         sdc.set_integration_time(4, sv="s", logger=self.logger, cfg=self.cfg)
-        itime = int(ktl.read(service, 'itime'))
+        itime = float(ktl.read(service, 'itime'))
         self.assertEqual(itime, 4)
 
         ktl.write(service, 'sampmode', 3)
         ktl.waitfor(f'${service}.sampmode=={3}', timeout=2)
         sdc.set_integration_time(0, sv="s", logger=self.logger, cfg=self.cfg)
-        itime = int(ktl.read(service, 'itime'))
+        itime = float(ktl.read(service, 'itime'))
         mintime = sdc._minimum_integration_time('s')
         self.assertEqual(itime, mintime)
 
@@ -108,11 +108,10 @@ class TestSetDetectorConfiguration(unittest.TestCase):
         ktl.write(service, 'sampmode', sampmode)
         ktl.waitfor(f'${service}.sampmode=={sampmode}', timeout=2)
         numreads = 2
-        readtime = 2
         ktl.write(service, 'numreads', numreads)
         ktl.waitfor(f'${service}.numreads=={numreads}', timeout=2)
-        ktl.write(service, 'readtime', readtime)
-        ktl.waitfor(f'${service}.readtime=={readtime}', timeout=2)
+
+        readtime = ktl.read(service, 'readtime')
 
         itime = sdc._minimum_integration_time('s')
         self.assertEqual(itime, numreads * readtime)
@@ -140,7 +139,7 @@ class TestSetDetectorConfiguration(unittest.TestCase):
 
         # integration time should be set by minimumTime 
         sdc.check_integration_time(sv='s', logger=self.logger, cfg=self.cfg)
-        itime = int(ktl.read(service, 'itime'))
+        itime = float(ktl.read(service, 'itime'))
 
         readtime = ktl.read(service, 'readtime') 
         self.assertEqual(itime, numreads * readtime)
@@ -150,7 +149,7 @@ class TestSetDetectorConfiguration(unittest.TestCase):
         ktl.write(service, 'itime', time)
         ktl.waitfor(f'${service}.itime == {time}', timeout=2)
         sdc.check_integration_time(sv='s', logger=self.logger, cfg=self.cfg)
-        itime = int(ktl.read(service, 'itime'))
+        itime = float(ktl.read(service, 'itime'))
         self.assertEqual(itime, time)
 
     def test_set_number_of_samples(self):
@@ -191,7 +190,7 @@ class TestSetDetectorConfiguration(unittest.TestCase):
         self.assertEqual(args['readoutMode'], sampmode)
         numreads = int(ktl.read(service, 'numreads'))
         self.assertEqual(args['numreads'], numreads)
-        itime = int(ktl.read(service, 'itime'))
+        itime = float(ktl.read(service, 'itime'))
         self.assertEqual(args['itime'], itime)
         coadds = int(ktl.read(service, 'coadds'))
         self.assertEqual(args['nCoadds'], coadds)
