@@ -45,7 +45,7 @@ class TestTakeTests(unittest.TestCase):
         # config detector for exposures
         args['nCoadd'] = 1 
         args['numreads'] = 1 
-        args['sampmode'] = 4 
+        args['readoutMode'] = 4 
         args['itime'] = 3 
         args['nSamp'] = None 
         args['sv'] = 'v'

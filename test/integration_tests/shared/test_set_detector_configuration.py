@@ -177,7 +177,7 @@ class TestSetDetectorConfiguration(unittest.TestCase):
     def test_execute(self):
         args = {}
 
-        args['nCoadd'] = 1 
+        args['nCoadds'] = 1 
         args['numreads'] = 2 
         args['readoutMode'] = 3 
         args['itime'] = 10 
