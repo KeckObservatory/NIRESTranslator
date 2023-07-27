@@ -205,7 +205,7 @@ class SetDetectorConfig(NIRESTranslatorFunction):
     @classmethod
     def perform(cls, args, logger, cfg):
         # numreads
-        nCoadd = args['nCoadd'] # coadds
+        nCoadd = args['nCoadds'] # coadds
         numreads = args['numreads'] # numreads 
         readoutMode = args['readoutMode'] # sampmode
         requestTime = args['itime'] # itime
