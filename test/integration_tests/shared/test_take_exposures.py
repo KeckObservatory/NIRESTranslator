@@ -5,6 +5,8 @@ from unittest.mock import Mock, patch, MagicMock
 import ktl
 import re
 import os
+import time
+
 
 
 def logger_side_effect(msg):
@@ -46,6 +48,7 @@ class TestTakeExposures(unittest.TestCase):
         # check that one file was created
         framenumBeginning = int(ktl.read(service, 'framenum'))
         te._take_an_exposure(logger=self.logger, cfg=self.cfg)
+        time.sleep(1)
         framenumAfter = int(ktl.read(service, 'framenum'))
         self.assertEqual(framenumBeginning + 1, framenumAfter)
         filename= ktl.read(service, 'filename')
@@ -54,6 +57,7 @@ class TestTakeExposures(unittest.TestCase):
         # check that 3 files were created
         framenumBeginning = int(ktl.read(service, 'framenum'))
         te._take_an_exposure(logger=self.logger, cfg=self.cfg, nFrames=3)
+        time.sleep(1)
         framenumAfter = int(ktl.read(service, 'framenum'))
         self.assertEqual(framenumBeginning + 3, framenumAfter)
         filename= ktl.read(service, 'filename')
@@ -64,6 +68,7 @@ class TestTakeExposures(unittest.TestCase):
         framenumSBeginning = int(ktl.read(service, 'framenum'))
         framenumIBeginning = int(ktl.read('nids', 'framenum'))
         te._take_an_exposure(logger=self.logger, cfg=self.cfg, nFrames=1, sv='sv')
+        time.sleep(1)
         framenumSAfter = int(ktl.read(service, 'framenum'))
         self.assertEqual(framenumSBeginning + 1, framenumSAfter)
         filenameS = ktl.read(service, 'filename')
@@ -89,6 +94,10 @@ class TestTakeExposures(unittest.TestCase):
         self.assertEqual(framenumBeginning + 1, framenumAfter)
         filename = ktl.read(service, 'filename')
         self.assertTrue(os.path.exists(filename))
+    
+    def tearDown(self):
+        time.sleep(1)
+        
 
 if __name__ == "__main__":
     unittest.main()
