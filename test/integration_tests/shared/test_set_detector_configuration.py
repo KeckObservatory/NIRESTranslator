@@ -48,12 +48,13 @@ class TestSetDetectorConfiguration(unittest.TestCase):
         itime = float(ktl.read(service, 'itime'))
         self.assertEqual(itime, 4)
 
+        # Minimum time should be set here
         ktl.write(service, 'sampmode', 3)
         ktl.waitfor(f'${service}.sampmode=={3}', timeout=2)
         sdc.set_integration_time(0, sv="s", logger=self.logger, cfg=self.cfg)
         itime = float(ktl.read(service, 'itime'))
         mintime = sdc._minimum_integration_time('s')
-        self.assertGreater(itime, mintime)
+        self.assertEqual(itime, mintime)
 
     def test_set_coadd(self):
         # should set coadds to value (1)

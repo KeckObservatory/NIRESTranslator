@@ -39,18 +39,14 @@ class SetDetectorConfig(NIRESTranslatorFunction):
             logger (class): Logger object
         """
         service = cls._determine_nires_service(sv) 
-        if not requestTime:
-            iTime = float(ktl.read(service, 'itime'))
-            logger.info(f'{service} itime set to: {iTime}')
-        else:
-            minimumTime = cls._minimum_integration_time(sv=sv)
-            timeTooSmall = requestTime-minimumTime < 0
-            
-            time = minimumTime if (timeTooSmall) else requestTime
-            if timeTooSmall: logger.debug(f'Request for integration less than the minimum {minimumTime}')
-            cls._write_to_ktl(service, 'itime', time, logger, cfg)
-            msg = f'Integration time set to {time}'
-            logger.info(msg)
+        minimumTime = cls._minimum_integration_time(sv=sv)
+        timeTooSmall = requestTime-minimumTime < 0
+        
+        time = minimumTime if timeTooSmall else requestTime
+        if timeTooSmall: logger.debug(f'Request for integration less than the minimum {minimumTime}')
+        cls._write_to_ktl(service, 'itime', time, logger, cfg)
+        msg = f'Integration time set to {time}'
+        logger.info(msg)
 
     @classmethod
     def set_coadd(cls, nCoadd, sv, logger, cfg):
