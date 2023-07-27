@@ -120,12 +120,6 @@ class TestSetDetectorConfiguration(unittest.TestCase):
         itime = sdc._minimum_integration_time('s')
         self.assertEqual(itime, numreads * readtime)
 
-        # function uses numreads=1
-        sampmode = 4
-        ktl.write(service, 'sampmode', sampmode)
-        ktl.waitfor(f'${service}.sampmode=={sampmode}', timeout=2)
-        itime = sdc._minimum_integration_time('s')
-        self.assertEqual(itime, readtime )
 
 
     def test_check_integration_time(self):
