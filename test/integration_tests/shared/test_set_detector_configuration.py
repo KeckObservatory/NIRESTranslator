@@ -59,9 +59,9 @@ class TestSetDetectorConfiguration(unittest.TestCase):
         service = 'nsds'
         ktl.write(service, 'coadds', 2)
         ktl.waitfor(f'${service}.coadds=={2}', timeout=2)
-        sdc.set_coadd(1, sv='s', logger=self.logger, cfg=self.cfg)
+        sdc.set_coadd(4, sv='s', logger=self.logger, cfg=self.cfg)
         coadds = int(ktl.read(service, 'coadds'))
-        self.assertEqual(coadds, 1)
+        self.assertEqual(coadds, 4)
 
         ktl.write(service, 'coadds', 2)
         ktl.waitfor(f'${service}.coadds=={2}', timeout=2)
