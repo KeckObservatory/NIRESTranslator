@@ -65,10 +65,6 @@ class SetDetectorConfig(NIRESTranslatorFunction):
         """
 
         service = cls._determine_nires_service(sv) 
-        if not nCoadd:
-            nCoadd = int(ktl.read(service, 'coadds'))
-            logger.info(f'{service} coadds set to: {nCoadd}')
-            return
 
         if nCoadd<1:
             nCoadd=1

@@ -56,20 +56,23 @@ class TestSetDetectorConfiguration(unittest.TestCase):
         self.assertEqual(itime, mintime)
 
     def test_set_coadd(self):
+        # should set coadds to value (1)
         service = 'nsds'
-        ktl.write(service, 'coadds', 2)
+        ktl.write(service, 'coadds', 12)
         ktl.waitfor(f'${service}.coadds=={2}', timeout=2)
         sdc.set_coadd(4, sv='s', logger=self.logger, cfg=self.cfg)
         coadds = int(ktl.read(service, 'coadds'))
         self.assertEqual(coadds, 4)
 
-        ktl.write(service, 'coadds', 2)
+        # should set coadds to default value (1)
+        ktl.write(service, 'coadds', 12)
         ktl.waitfor(f'${service}.coadds=={2}', timeout=2)
         sdc.set_coadd(0, sv='s', logger=self.logger, cfg=self.cfg)
         coadds = int(ktl.read(service, 'coadds'))
         self.assertEqual(coadds, 1)
 
-        ktl.write(service, 'coadds', 2)
+        # should set coadds to default value (1)
+        ktl.write(service, 'coadds', 12)
         ktl.waitfor(f'${service}.coadds=={2}', timeout=2)
         sdc.set_coadd(-1, sv='s', logger=self.logger, cfg=self.cfg)
         coadds = int(ktl.read(service, 'coadds'))
