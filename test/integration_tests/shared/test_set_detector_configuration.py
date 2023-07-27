@@ -5,14 +5,6 @@ from unittest.mock import MagicMock, Mock
 import time
 import ktl
 
-
-def ktl_side_effects(service, value):
-    if value == 'itime': return 6
-    if value == 'sampmode': return 2
-    if value == 'numreads': return 3
-    if value == 'readtime': return 4
-    return 0
-
 def logger_side_effect(msg):
     print(msg)
 
@@ -25,7 +17,6 @@ class TestSetDetectorConfiguration(unittest.TestCase):
         self.logger = MagicMock(side_effect=logger_side_effect)
         self.logger.info.side_effect = logger_side_effect
         self.logger.debug.side_effect = logger_side_effect
-        sdc._minimum_integration_time = Mock(return_value=1)
         self.cfg = {
             'ob_keys': {
                 'n_read_padding': 1.5,
