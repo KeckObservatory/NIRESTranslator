@@ -7,27 +7,17 @@ import re
 import os
 
 
-def ktl_side_effects(service, value):
-    if value == 'itime': return 1
-    if value == 'sampmode': return 3
-    if value == 'numreads': return 1
-    if value == 'coadds': return 1
-    if value == 'readtime': return 1
-    if value == 'readtime': return 1
-    if value == 'imagedone': return 1
-    return 0
-
 def logger_side_effect(msg):
     print(msg)
 
 class TestTakeExposures(unittest.TestCase):
 
     def setUp(self):
-        ktl.read = Mock()
-        ktl.read.side_effect = ktl_side_effects
         self.logger = MagicMock(side_effect=logger_side_effect)
         self.logger.info.side_effect = logger_side_effect
         self.logger.debug.side_effect = logger_side_effect
+        self.logger.warning.side_effect = logger_side_effect
+        self.logger.error.side_effect = logger_side_effect
         self.cfg = {
             'ob_keys': {
                 'n_read_padding': 1.5,
@@ -44,7 +34,7 @@ class TestTakeExposures(unittest.TestCase):
 
         args = {}
         # config detector for exposures
-        args['nCoadds'] = 1 
+        args['nCoadds'] = 2 
         args['numreads'] = 1 
         args['readoutMode'] = 3 
         args['itime'] = 3 
@@ -90,6 +80,14 @@ class TestTakeExposures(unittest.TestCase):
             'nFrames': nFrames,
             'sv': sv
         }
+
+        sdc_args = {}
+        sdc_args['nCoadds'] = 2 
+        sdc_args['numreads'] = 1 
+        sdc_args['readoutMode'] = 3 
+        sdc_args['itime'] = 5 
+        sdc_args['sv'] = sv 
+        sdc.execute(args=sdc_args, logger=self.logger, cfg=self.cfg)
 
         framenumBeginning = int(ktl.read(service, 'framenum'))
         te.execute( args=args, logger=self.logger, cfg=self.cfg )
