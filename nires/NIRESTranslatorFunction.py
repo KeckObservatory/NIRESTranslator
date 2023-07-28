@@ -25,11 +25,13 @@ class NIRESTranslatorFunction(TranslatorModuleFunction):
         cls._write_to_ktl(service='nids', keyword='comment', value=" ", logger=logger, cfg=cfg)
 
     @classmethod
-    def _write_to_ktl(cls, service, keyword, value, logger, cfg, wait=None, timeout=None):
+    def _write_to_ktl(cls, service, keyword, value, logger, cfg, wait=None, timeout=None, waitfor=False):
         if cfg['operation_mode']['operation_mode'].lower()=='operational':
             wait = wait if wait is not None else cfg['ob_keys']['ktl_wait']
             timeout = timeout if timeout is not None else cfg['ob_keys']['ktl_timeout']
             ktl.write(service, keyword, value, wait=wait, timeout=timeout)
+            if waitfor:
+                ktl.waitfor(f"{service}.{keyword}=={value}", timeout=timeout)
         else:
             logger.debug(f'testing ktl.write({service}, {keyword}, {value})')
     
