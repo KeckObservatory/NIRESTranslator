@@ -55,7 +55,7 @@ class TakeExposures(NIRESTranslatorFunction):
     def expose(cls, service, sv, logger, cfg):
         cls._write_to_ktl(service, 'GO', 0, logger, cfg, wait=True, waitfor=True)
         cls._write_to_ktl(service, 'GO', 1, logger, cfg, wait=True, waitfor=True)
-        WaitForExposure.execute({'sv': sv}, logger, cfg, wait=True)
+        WaitForExposure.execute({'sv': sv}, logger, cfg)
         cls._write_to_ktl(service, 'GO', 0, logger, cfg, waitfor=True)
 
 
