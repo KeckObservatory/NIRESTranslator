@@ -88,8 +88,9 @@ class Dither(NIRESTranslatorFunction):
             raise ValueError
 
         # Raise an error if the whole pattern leaves the telescope in a new position
-        if sum(args['pattern']) != 0:
-            net_offset = sum(args['pattern']) * args['offset']
+        pattern_sum = sum(cls.known_dithers[args['pattern']])
+        if pattern_sum != 0:
+            net_offset = pattern_sum * args['offset']
             logger.error(f"Invalid pattern: {','.join(args['pattern'])} results in offset of {net_offset} arcseconds!")
             raise ValueError
         
@@ -97,7 +98,7 @@ class Dither(NIRESTranslatorFunction):
         min = 0
         max = 0
         absolute_location = 0
-        for location in args['pattern']:
+        for location in cls.known_dithers[args['pattern']]:
             absolute_location += location
             if absolute_location > max   : max = absolute_location
             elif absolute_location < min : min = absolute_location
@@ -106,7 +107,7 @@ class Dither(NIRESTranslatorFunction):
             logger.warning(f"Target will not always be in slit.")
         pass
 
-        starting_pos = MarkBase() # This isn't actually mark base -> need to add?
+        starting_pos = MarkBase.execute({})
         args.starting_pos = starting_pos
         return args
 
@@ -126,11 +127,11 @@ class Dither(NIRESTranslatorFunction):
 
     @classmethod
     def execute_dither(cls, args, logger, cfg):
-        offset, pattern = args['offset'], args['pattern']
+        offset, pattern = args['offset'], cls.known_dithers[args['pattern']]
         teArgs = {'nFrames': 1, 'sv': args['sv']}
         for location in pattern:
             local_offset = location * offset # How far to move this time
-            SlitMove(local_offset)
+            SlitMove.execute({'inst_offset_y' : local_offset})
             TakeExposures.execute(teArgs, logger, cfg)
 
         reset_offset = sum(pattern) * offset * -1 # How far to get back to where we started
