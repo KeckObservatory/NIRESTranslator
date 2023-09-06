@@ -88,20 +88,20 @@ class Dither(NIRESTranslatorFunction):
             raise ValueError
 
         # Raise an error if the whole pattern leaves the telescope in a new position
-        if sum(args.pattern) != 0:
-            net_offset = sum(args.pattern) * args.offset
-            logger.error(f"Invalid pattern: {','.join(args.pattern)} results in offset of {net_offset} arcseconds!")
+        if sum(args['pattern']) != 0:
+            net_offset = sum(args['pattern']) * args['offset']
+            logger.error(f"Invalid pattern: {','.join(args['pattern'])} results in offset of {net_offset} arcseconds!")
             raise ValueError
         
         # Raise a warning if the total range > slit length
         min = 0
         max = 0
         absolute_location = 0
-        for location in args.pattern:
+        for location in args['pattern']:
             absolute_location += location
             if absolute_location > max   : max = absolute_location
             elif absolute_location < min : min = absolute_location
-        total_range = (max - min) * args.offset
+        total_range = (max - min) * args['offset']
         if total_range > cfg.slit_length:
             logger.warning(f"Target will not always be in slit.")
         pass
@@ -112,23 +112,26 @@ class Dither(NIRESTranslatorFunction):
 
     @classmethod
     def perform(cls, args, logger, cfg):
-        cls.execute_dither(args['offset'], args['pattern'])
+        cls.execute_dither(args, logger, cfg)
 
     @classmethod
     def post_condition(cls, args, logger, cfg):
 
         current_location = MarkBase()
-        if current_location.ra - args.starting_pos.ra > cfg['dither_delta'] or current_location.dec - args.starting_pos.dec > cfg['dither_delta']:
-            logger.error(f"Dither did not return to starting position of {args.starting_pos.ra}:{args.starting_pos.dec}")
+        dra = current_location.ra - args['starting_pos'].ra
+        ddec = current_location.dec - args['starting_pos'].dec
+        if dra > cfg['dither_delta'] or ddec > cfg['dither_delta']:
+            logger.error(f"Dither did not return to starting position of {args['starting_pos'].ra}:{args['starting_pos'].dec}")
         return args
 
     @classmethod
-    def execute_dither(cls, offset, pattern):
-
+    def execute_dither(cls, args, logger, cfg):
+        offset, pattern = args['offset'], args['pattern']
+        teArgs = {'nFrames': 1, 'sv': args['sv']}
         for location in pattern:
             local_offset = location * offset # How far to move this time
             SlitMove(local_offset)
-            TakeExposures(1)
+            TakeExposures.execute(teArgs, logger, cfg)
 
         reset_offset = sum(pattern) * offset * -1 # How far to get back to where we started
         SlitMove(reset_offset)
