@@ -35,12 +35,17 @@ do that list num_repeats times
 
 # TODO: Update args keys to match OB keys
 
+import pdb
+from unittest.mock import Mock 
+try:
+    from TelescopeTranslator.SlitMove import SlitMove
+    from TelescopeTranslator.MarkBase import MarkBase
+except ImportError:
+    SlitMove = Mock()
+    MarkBase = Mock()
+from nires.shared.take_exposures import TakeExposures
 
-from TelescopeTranslator.SlitMove import SlitMove
-from TelescopeTranslator.MarkBase import MarkBase
-from shared.take_exposures import TakeExposures
-
-from NIRESTranslatorFunction import NIRESTranslatorFunction
+from nires.NIRESTranslatorFunction import NIRESTranslatorFunction
 
 class Dither(NIRESTranslatorFunction):
 
@@ -88,7 +93,7 @@ class Dither(NIRESTranslatorFunction):
             raise ValueError
 
         # Raise an error if the whole pattern leaves the telescope in a new position
-        pattern_sum = sum(cls.known_dithers[args['pattern']])
+        pattern_sum = sum(cls.known_dithers[args['pattern']]['offsets'])
         if pattern_sum != 0:
             net_offset = pattern_sum * args['offset']
             logger.error(f"Invalid pattern: {','.join(args['pattern'])} results in offset of {net_offset} arcseconds!")
@@ -98,17 +103,17 @@ class Dither(NIRESTranslatorFunction):
         min = 0
         max = 0
         absolute_location = 0
-        for location in cls.known_dithers[args['pattern']]:
+        for location in cls.known_dithers[args['pattern']]['offsets']:
             absolute_location += location
             if absolute_location > max   : max = absolute_location
             elif absolute_location < min : min = absolute_location
         total_range = (max - min) * args['offset']
-        if total_range > cfg.slit_length:
+        if total_range > cfg['slit_length']['slit_length']:
             logger.warning(f"Target will not always be in slit.")
         pass
 
         starting_pos = MarkBase.execute({})
-        args.starting_pos = starting_pos
+        args['starting_pos'] = starting_pos
         return args
 
     @classmethod
@@ -116,18 +121,17 @@ class Dither(NIRESTranslatorFunction):
         cls.execute_dither(args, logger, cfg)
 
     @classmethod
-    def post_condition(cls, args, logger, cfg):
-
-        current_location = MarkBase()
-        dra = current_location.ra - args['starting_pos'].ra
-        ddec = current_location.dec - args['starting_pos'].dec
-        if dra > cfg['dither_delta'] or ddec > cfg['dither_delta']:
-            logger.error(f"Dither did not return to starting position of {args['starting_pos'].ra}:{args['starting_pos'].dec}")
-        return args
+    def post_condition(cls, pc_args, logger, cfg):
+        current_location = MarkBase.execute({})
+        dra = current_location['ra'] - pc_args['starting_pos']['ra']
+        ddec = current_location['dec'] - pc_args['starting_pos']['dec']
+        if dra > cfg['dither_delta']['dither_delta'] or ddec > cfg['dither_delta']['dither_delta']:
+            logger.error(f"Dither did not return to starting position of {pc_args['starting_pos']['ra']}:{pc_args['starting_pos']['dec']}")
+        return pc_args
 
     @classmethod
     def execute_dither(cls, args, logger, cfg):
-        offset, pattern = args['offset'], cls.known_dithers[args['pattern']]
+        offset, pattern = args['offset'], cls.known_dithers[args['pattern']]['offsets']
         teArgs = {'nFrames': 1, 'sv': args['sv']}
         for location in pattern:
             local_offset = location * offset # How far to move this time
