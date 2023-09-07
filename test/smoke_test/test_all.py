@@ -7,6 +7,7 @@ from test.smoke_test.shared.test_set_detector_configuration import TestSetDetect
 from test.smoke_test.shared.test_take_exposures import TestTakeExposures
 from test.smoke_test.shared.test_take_tests import TestTakeTests
 from test.smoke_test.shared.test_wait_for_exposure import TestWaitForExposure
+from test.smoke_test.spectrograph.test_dither import TestDither 
 
 
 import unittest

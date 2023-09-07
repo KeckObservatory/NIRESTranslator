@@ -1,4 +1,3 @@
-from nires.shared.take_exposures import TakeExposures as te 
 from nires.spectrograph.dither import Dither
 import unittest
 from unittest.mock import Mock, patch, MagicMock
@@ -16,6 +15,8 @@ class TestDither(unittest.TestCase):
         self.logger = MagicMock(side_effect=logger_side_effect)
         self.logger.info.side_effect = logger_side_effect
         self.logger.debug.side_effect = logger_side_effect
+        self.logger.warning.side_effect = logger_side_effect
+        self.logger.error.side_effect = logger_side_effect
         self.cfg = {
             'ob_keys': {
                 'n_read_padding': 1.5,
