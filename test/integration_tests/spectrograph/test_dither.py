@@ -30,8 +30,8 @@ class TestDither(unittest.TestCase):
             'operation_mode': {
                 'operation_mode': 'operational'
             }, 
-            'dither_delta': { 'dither_delta': -1 },
-            'slit_length': { 'slit_length': -1 }
+            'dither_delta': { 'dither_delta': 1 },
+            'slit_length': { 'slit_length': 10 }
         }
 
         args = {}

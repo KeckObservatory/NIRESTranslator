@@ -43,6 +43,10 @@ try:
 except ImportError:
     SlitMove = Mock()
     MarkBase = Mock()
+try: 
+    import ktl
+except ImportError:
+    ktl = Mock()
 from nires.shared.take_exposures import TakeExposures
 
 from nires.NIRESTranslatorFunction import NIRESTranslatorFunction
@@ -112,7 +116,8 @@ class Dither(NIRESTranslatorFunction):
             logger.warning(f"Target will not always be in slit.")
         pass
 
-        starting_pos = MarkBase.execute({})
+        MarkBase.execute({})
+        starting_pos = { 'ra': float(ktl.read('dcs2', 'ra')), 'dec': float(ktl.read('dcs2', 'dec')) }
         args['starting_pos'] = starting_pos
         return args
 
@@ -122,11 +127,12 @@ class Dither(NIRESTranslatorFunction):
 
     @classmethod
     def post_condition(cls, pc_args, logger, cfg):
-        current_location = MarkBase.execute({})
-        dra = current_location['ra'] - pc_args['starting_pos']['ra']
-        ddec = current_location['dec'] - pc_args['starting_pos']['dec']
+        end_pos = { 'ra': float(ktl.read('dcs2', 'ra')), 'dec': float(ktl.read('dcs2', 'dec')) }
+        dra = end_pos['ra'] - pc_args['starting_pos']['ra']
+        ddec = end_pos['dec'] - pc_args['starting_pos']['dec']
+        logger.info(f"Dither complete. dra:ddec={dra}:{ddec}")
         if dra > cfg['dither_delta']['dither_delta'] or ddec > cfg['dither_delta']['dither_delta']:
-            logger.error(f"Dither did not return to starting position of {pc_args['starting_pos']['ra']}:{pc_args['starting_pos']['dec']}")
+            logger.error(f"Dither did not return to starting position {pc_args['starting_pos']['ra']}:{pc_args['starting_pos']['dec']}")
         return pc_args
 
     @classmethod
