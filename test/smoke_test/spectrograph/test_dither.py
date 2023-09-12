@@ -1,10 +1,18 @@
 from nires.spectrograph.dither import Dither
 import unittest
+import pdb
+from astropy.coordinates import SkyCoord
 from unittest.mock import Mock, patch, MagicMock
 try:
     import ktl
 except ImportError:
     ktl = Mock()
+
+    
+def ktl_side_effects(service, value):
+    if value == 'ra': return '04:16:00.00 h'
+    if value == 'dec': return '+45:00:00.0 deg' 
+    return 0
 
 def logger_side_effect(msg):
     print(msg)
@@ -30,20 +38,34 @@ class TestDither(unittest.TestCase):
             'dither_delta': { 'dither_delta': -1 },
             'slit_length': { 'slit_length': -1 }
         }
+
+    @patch('nires.spectrograph.dither.ktl')
+    def test_ra_dec_convert(self, mock_ktl):
+        mock_ktl.read.side_effect = ktl_side_effects
+        raStr = mock_ktl.read('dcs2', 'ra')
+        decStr = mock_ktl.read('dcs2', 'dec')
+        coords = SkyCoord(raStr, decStr)
+        starting_pos = { 'ra': coords.ra.degree, 'dec': coords.dec.degree}
     
     @patch('nires.spectrograph.dither.MarkBase')
-    def test_pre_condition(self, mock_MarkBase):
+    @patch('nires.spectrograph.dither.ktl')
+    def test_pre_condition(self, mock_ktl, mock_MarkBase):
         def mb_execute_side_effect(args):
             return {'ra': 1, 'dec': 1}
+        mock_ktl.read = Mock() 
+        mock_ktl.read.side_effect = ktl_side_effects
         mock_MarkBase.execute = mb_execute_side_effect
         args = {'sv': 's', 'pattern': 'ABBA', 'offset': 1}
         outArgs = Dither.pre_condition(args, self.logger, self.cfg)
         self.assertTrue( 'starting_pos' in outArgs.keys() )
 
     @patch('nires.spectrograph.dither.MarkBase')
-    def test_post_condition(self, mock_MarkBase):
+    @patch('nires.spectrograph.dither.ktl')
+    def test_post_condition(self, mock_ktl, mock_MarkBase):
         def mb_execute_side_effect(args):
             return {'ra': 1, 'dec': 1}
+        mock_ktl.read = Mock()
+        mock_ktl.read.side_effect = ktl_side_effects
         mock_MarkBase.execute = mb_execute_side_effect
         pc_args = {'starting_pos': {'ra': 1, 'dec': 1}, 'sv': 's', 'pattern': 'ABBA', 'offset': 1}
         outArgs = Dither.post_condition(pc_args, self.logger, self.cfg)

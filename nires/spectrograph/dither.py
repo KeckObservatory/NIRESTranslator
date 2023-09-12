@@ -37,6 +37,7 @@ do that list num_repeats times
 
 import pdb
 from unittest.mock import Mock 
+from astropy.coordinates import SkyCoord
 try:
     from TelescopeTranslator.SlitMove import SlitMove
     from TelescopeTranslator.MarkBase import MarkBase
@@ -117,7 +118,11 @@ class Dither(NIRESTranslatorFunction):
         pass
 
         MarkBase.execute({})
-        starting_pos = { 'ra': float(ktl.read('dcs2', 'ra')), 'dec': float(ktl.read('dcs2', 'dec')) }
+        raStr = ktl.read('dcs2', 'ra')
+        decStr = ktl.read('dcs2', 'dec')
+        coords = SkyCoord(raStr, decStr)
+        
+        starting_pos = { 'ra': coords.ra.degree, 'dec': coords.dec.degree}
         args['starting_pos'] = starting_pos
         return args
 
@@ -127,9 +132,12 @@ class Dither(NIRESTranslatorFunction):
 
     @classmethod
     def post_condition(cls, pc_args, logger, cfg):
-        end_pos = { 'ra': float(ktl.read('dcs2', 'ra')), 'dec': float(ktl.read('dcs2', 'dec')) }
-        dra = end_pos['ra'] - pc_args['starting_pos']['ra']
-        ddec = end_pos['dec'] - pc_args['starting_pos']['dec']
+
+        raStr = ktl.read('dcs2', 'ra')
+        decStr = ktl.read('dcs2', 'dec')
+        end_coords = SkyCoord(raStr, decStr)
+        dra = end_coords.ra.degree - pc_args['starting_pos']['ra']
+        ddec = end_coords.dec.degree - pc_args['starting_pos']['dec']
         logger.info(f"Dither complete. dra:ddec={dra}:{ddec}")
         if dra > cfg['dither_delta']['dither_delta'] or ddec > cfg['dither_delta']['dither_delta']:
             logger.error(f"Dither did not return to starting position {pc_args['starting_pos']['ra']}:{pc_args['starting_pos']['dec']}")
