@@ -33,8 +33,8 @@ class WaitForExposure(NIRESTranslatorFunction):
         itime = float(ktl.read(service, 'itime'))
         coadds = int(ktl.read(service, 'coadds'))
         nread = int(ktl.read(service, 'numreads'))
-        waitForEndReads = cfg['ob_keys']['n_read_padding'] * nread
-        extra = cfg['ob_keys']['extra_wait'] # add some extra to "wait" to allow for miscalculations
+        waitForEndReads = float(cfg['ob_keys']['n_read_padding']) * nread
+        extra = float(cfg['ob_keys']['extra_wait']) # add some extra to "wait" to allow for miscalculations
         wait = int(itime) * waitForEndReads * int(coadds) + extra
 
         logger.info(f'wait_for_exposure: Time estimate: {wait} seconds (includes {extra} seconds for overhead)')
