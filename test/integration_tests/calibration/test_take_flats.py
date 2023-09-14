@@ -3,7 +3,7 @@ import unittest
 from unittest.mock import Mock, patch, MagicMock
 import ktl
 import os
-
+import pdb
 
 def logger_side_effect(msg):
     print(msg)
@@ -25,15 +25,16 @@ class TestTakeFlats(unittest.TestCase):
         }
     
     def test_take_flats(self):
+        breakpoint()
         service = 'nsds'
         ktl.write(service, 'sampmode', 3)
-        ktl.waitfor(f'${service}.sampmode=={3}', timeout=2)
+        ktl.waitfor(f'${service}.sampmode==3', timeout=2)
         ktl.write(service, 'itime', 5)
-        ktl.waitfor(f'${service}.itime=={5}', timeout=2)
+        ktl.waitfor(f'${service}.itime==5', timeout=2)
         ktl.write(service, 'numfs', 1)
-        ktl.waitfor(f'${service}.numfs=={1}', timeout=2)
+        ktl.waitfor(f'${service}.numfs==1', timeout=2)
         ktl.write(service, 'coadds', 1)
-        ktl.waitfor(f'${service}.coadds=={1}', timeout=2)
+        ktl.waitfor(f'${service}.coadds==1', timeout=2)
 
         framenumBefore1 = int(ktl.read(service, 'framenum'))
         tf._take_flats(logger=self.logger, cfg=self.cfg, nFrames=1)
@@ -55,13 +56,13 @@ class TestTakeFlats(unittest.TestCase):
     def test_execute(self):
         service = 'nsds'
         ktl.write(service, 'sampmode', 3)
-        ktl.waitfor(f'${service}.sampmode=={3}', timeout=2)
+        ktl.waitfor(f'${service}.sampmode==3', timeout=2)
         ktl.write(service, 'itime', 5)
-        ktl.waitfor(f'${service}.itime=={5}', timeout=2)
+        ktl.waitfor(f'${service}.itime==5', timeout=2)
         ktl.write(service, 'numfs', 1)
-        ktl.waitfor(f'${service}.numfs=={1}', timeout=2)
+        ktl.waitfor(f'${service}.numfs==1', timeout=2)
         ktl.write(service, 'coadds', 1)
-        ktl.waitfor(f'${service}.coadds=={1}', timeout=2)
+        ktl.waitfor(f'${service}.coadds==1', timeout=2)
 
         framenumBefore1 = int(ktl.read(service, 'framenum'))
 

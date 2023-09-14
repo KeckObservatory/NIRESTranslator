@@ -13,8 +13,8 @@ class execute_observation(NIRESTranslatorFunction):
     '''
     '''
 
-    @staticmethod
-    def determine_spec_or_imager(self, detType, logger):
+    @classmethod
+    def determine_spec_or_imager(cls, detType, logger):
         if 'spectrograph' in detType.lower():
             sv = 's'
         elif 'imager' in detType.lower():

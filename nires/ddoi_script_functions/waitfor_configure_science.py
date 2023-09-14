@@ -50,7 +50,6 @@ class waitfor_configure_science(NIRESTranslatorFunction):
         else:
             logger.error(f'det_type_mode value {detType} not Spectrograph, Imager, or Both')
             raise(f'det_type_mode value {detType} not Spectrograph, Imager, or Both')
-        raise NotImplementedError()
 
     @classmethod
     def post_condition(cls, args, logger, cfg):
