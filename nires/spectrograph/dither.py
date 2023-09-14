@@ -154,9 +154,9 @@ class Dither(NIRESTranslatorFunction):
         teArgs = {'nFrames': 1, 'sv': args['sv']}
         for location in pattern[:-1]:
             local_offset = location * offset # How far to move this time
-            SlitMove.execute({'inst_offset_y' : local_offset})
+            #  SlitMove.execute({'inst_offset_y' : local_offset})
             TakeExposures.execute(teArgs, logger, cfg)
 
         reset_offset = sum(pattern) * offset * -1 # How far to get back to where we started
-        SlitMove(reset_offset)
+        #  SlitMove(reset_offset)
 
