@@ -69,9 +69,12 @@ class SetDetectorConfig(NIRESTranslatorFunction):
 
     @classmethod
     def set_readout_mode(cls, readoutMode, sv, logger, cfg, nSamp=None):
-        """For the NIRES imaging/spec detector, sets the readout mode to
+        """For the NIRES spec detector, sets the readout mode to
         one of four types. If MCDS is chosen, a second parameter can be used to set
         the number of samples. 
+
+        For the NIRES imager (slit-viewing camera), readout mode should NEVER be
+        set to anything other than 1. This function will raise an error if sv=v
 
         Args:
             readoutMode (int): Known modes are:
@@ -79,7 +82,7 @@ class SetDetectorConfig(NIRESTranslatorFunction):
                                 2 (or "PCDS") Pseudo Correlated Double Sampling
                                 3 (or "MCDS") Multiple-read Correlated Double (Fowler) Sampling
                                 4 (or "single") Single exposure
-            sv (int): spec 's' or imager 'v'
+            sv (int): spec 's' or imager 'v'. Error raised if 'v'.
             logger (class): Logger object
             cfg (class): Config object
             nSamp (int): number of Fowler samples
@@ -107,7 +110,11 @@ class SetDetectorConfig(NIRESTranslatorFunction):
         readoutModeValid = cls.log_readout_mode(readoutMode, logger)
         if not readoutModeValid:
             return
-
+        
+        # Imager detector cannot be set to any sampling mode other than 3
+        if sv == 'v' and readoutMode != 3:
+            raise ValueError('Cannot set sampmode to anything other than 3!')
+        
         cls._write_to_ktl(service, 'sampmode', readoutMode, logger, cfg)
 
         if readoutMode==3 and nSamp:
@@ -167,6 +174,9 @@ class SetDetectorConfig(NIRESTranslatorFunction):
                                 4 (or "single") Single exposure
         """        
 
+        if sv == 'v':
+            raise ValueError('Cannot change the number of samples for SVC detector')
+
         service = cls._determine_nires_service(sv) 
 
         if nSamp:
@@ -208,10 +218,13 @@ class SetDetectorConfig(NIRESTranslatorFunction):
         cls.set_coadd(nCoadd, sv, logger, cfg)
         logger.info(f'setting integration time: {requestTime}')
         cls.set_integration_time(requestTime, sv, logger, cfg)
-        logger.info(f'setting readout mode: {readoutMode}')
-        cls.set_readout_mode(readoutMode, sv, logger, cfg, nSamp) 
-        logger.info(f'setting num reads: {numreads}')
-        cls.set_numreads(numreads, sv, logger, cfg)
+        if sv == 's': # Only change these values for the spectrograph!
+            logger.info(f'setting readout mode: {readoutMode}')
+            cls.set_readout_mode(readoutMode, sv, logger, cfg, nSamp) 
+            logger.info(f'setting num reads: {numreads}')
+            cls.set_numreads(numreads, sv, logger, cfg)
+        else:
+            logger.info('NOT setting readoutmode and num reads for SVC')
         logger.info('set_dectector_configuration complete')
 
         
