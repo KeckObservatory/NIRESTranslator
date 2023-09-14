@@ -74,22 +74,22 @@ class Dither(NIRESTranslatorFunction):
 
         """
         "sp2" : {
-            "offsets" : [0, 1, -1],
+            "offsets" : [0, 1],
         },
         "sp3" : {
-            "offsets" : [0, 1, -2, 1]
+            "offsets" : [0, 1, -2]
         },
         "sp5" : {
-            "offsets" : [0, 2, -3, 2, -3, 2]
+            "offsets" : [0, 2, -3, 2, -3]
         },
         "sp7" : {
-            "offsets" : [0, 2, -4, 5, -4, 2, -4, 3]
+            "offsets" : [0, 2, -4, 5, -4, 2, -4]
         },
         "ABBA" : {
-            "offsets" : [0, -1, 0, 1, 0]
+            "offsets" : [0, -1, 0, 1]
         },
         "AB" : {
-            "offsets" : [0, 1, -1]
+            "offsets" : [0, 1]
         }
     }
 
@@ -99,14 +99,15 @@ class Dither(NIRESTranslatorFunction):
         if args['pattern'] not in cls.known_dithers.keys():
             logger.error("Unknown pattern entered.")
             raise ValueError
-
+        """
+        Uncomment if patterns contain their reset-to-base offset
         # Raise an error if the whole pattern leaves the telescope in a new position
         pattern_sum = sum(cls.known_dithers[args['pattern']]['offsets'])
         if pattern_sum != 0:
             net_offset = pattern_sum * args['offset']
             logger.error(f"Invalid pattern: {','.join(args['pattern'])} results in offset of {net_offset} arcseconds!")
             raise ValueError
-        
+        """
         # Raise a warning if the total range > slit length
         min = 0
         max = 0
@@ -118,7 +119,7 @@ class Dither(NIRESTranslatorFunction):
         total_range = (max - min) * args['offset']
         if total_range > float(cfg['slit_length']['slit_length']):
             logger.warning(f"Target will not always be in slit.")
-        pass
+        
 
         # MarkBase.execute({})
         raStr = ktl.read('dcs2', 'ra')
