@@ -42,7 +42,7 @@ class WaitForExposure(NIRESTranslatorFunction):
         logger.info('wait_for_exposure: Waiting for exposure to end.')
         count = 0
         imageDone = int(ktl.read(service, 'imagedone'))
-        while (imageDone != 1) or (count <= wait):
+        while (imageDone != 1) and (count <= wait):
             count = count + 1
             time.sleep(1)
             imageDone = int(ktl.read(service, 'imagedone'))
