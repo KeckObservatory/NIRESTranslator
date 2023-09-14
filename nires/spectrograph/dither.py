@@ -117,7 +117,7 @@ class Dither(NIRESTranslatorFunction):
             logger.warning(f"Target will not always be in slit.")
         pass
 
-        MarkBase.execute({})
+        #MarkBase.execute({})
         raStr = ktl.read('dcs2', 'ra')
         decStr = ktl.read('dcs2', 'dec')
         coords = SkyCoord(raStr, decStr)
@@ -147,11 +147,11 @@ class Dither(NIRESTranslatorFunction):
     def execute_dither(cls, args, logger, cfg):
         offset, pattern = args['offset'], cls.known_dithers[args['pattern']]['offsets']
         teArgs = {'nFrames': 1, 'sv': args['sv']}
-        for location in pattern:
+        for location in pattern[:-1]:
             local_offset = location * offset # How far to move this time
-            SlitMove.execute({'inst_offset_y' : local_offset})
+            #SlitMove.execute({'inst_offset_y' : local_offset})
             TakeExposures.execute(teArgs, logger, cfg)
 
         reset_offset = sum(pattern) * offset * -1 # How far to get back to where we started
-        SlitMove(reset_offset)
+        #SlitMove(reset_offset)
 
