@@ -38,9 +38,12 @@ do that list num_repeats times
 import pdb
 from unittest.mock import Mock 
 from astropy.coordinates import SkyCoord
+from astropy import units as u
 try:
-    from TelescopeTranslator.SlitMove import SlitMove
-    from TelescopeTranslator.MarkBase import MarkBase
+    # from TelescopeTranslator.SlitMove import SlitMove
+    # from TelescopeTranslator.MarkBase import MarkBase
+    SlitMove = ""
+    MarkBase = ""
 except ImportError:
     SlitMove = Mock()
     MarkBase = Mock()
@@ -113,14 +116,14 @@ class Dither(NIRESTranslatorFunction):
             if absolute_location > max   : max = absolute_location
             elif absolute_location < min : min = absolute_location
         total_range = (max - min) * args['offset']
-        if total_range > cfg['slit_length']['slit_length']:
+        if total_range > float(cfg['slit_length']['slit_length']):
             logger.warning(f"Target will not always be in slit.")
         pass
 
-        MarkBase.execute({})
+        # MarkBase.execute({})
         raStr = ktl.read('dcs2', 'ra')
         decStr = ktl.read('dcs2', 'dec')
-        coords = SkyCoord(raStr, decStr)
+        coords = SkyCoord(ra = raStr, dec = decStr, unit=(u.hourangle, u.deg))
         
         starting_pos = { 'ra': coords.ra.degree, 'dec': coords.dec.degree}
         args['starting_pos'] = starting_pos
@@ -135,11 +138,12 @@ class Dither(NIRESTranslatorFunction):
 
         raStr = ktl.read('dcs2', 'ra')
         decStr = ktl.read('dcs2', 'dec')
-        end_coords = SkyCoord(raStr, decStr)
+        end_coords = SkyCoord(ra=raStr, dec=decStr, unit=(u.hourangle, u.deg))
         dra = end_coords.ra.degree - pc_args['starting_pos']['ra']
         ddec = end_coords.dec.degree - pc_args['starting_pos']['dec']
+        ditherDelta = float(cfg['dither_delta']['dither_delta'])
         logger.info(f"Dither complete. dra:ddec={dra}:{ddec}")
-        if dra > cfg['dither_delta']['dither_delta'] or ddec > cfg['dither_delta']['dither_delta']:
+        if dra > ditherDelta  or ddec > ditherDelta:
             logger.error(f"Dither did not return to starting position {pc_args['starting_pos']['ra']}:{pc_args['starting_pos']['dec']}")
         return pc_args
 
@@ -149,9 +153,9 @@ class Dither(NIRESTranslatorFunction):
         teArgs = {'nFrames': 1, 'sv': args['sv']}
         for location in pattern:
             local_offset = location * offset # How far to move this time
-            SlitMove.execute({'inst_offset_y' : local_offset})
+            # SlitMove.execute({'inst_offset_y' : local_offset})
             TakeExposures.execute(teArgs, logger, cfg)
 
         reset_offset = sum(pattern) * offset * -1 # How far to get back to where we started
-        SlitMove(reset_offset)
+        # SlitMove(reset_offset)
 
