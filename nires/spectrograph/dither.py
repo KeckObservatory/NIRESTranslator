@@ -165,6 +165,8 @@ class Dither(NIRESTranslatorFunction):
     @classmethod
     def sltmov(cls, logger, cfg, offset):
 
+        dcs = 'dcs2'
+
         # Call to sltmov
         angle = -2.02
         dx = offset * math.sin(math.radians(angle))
@@ -174,30 +176,31 @@ class Dither(NIRESTranslatorFunction):
         # Which calls mxy...
         autoresum = ktl.read('dcs2', 'autresum')
 
-        cls._write_to_ktl(cls, 'dcs2', 'rel2curr', 't', logger, cfg)
-        cls._write_to_ktl(cls, 'dcs2', 'instxoff', dx, logger, cfg)
-        cls._write_to_ktl(cls, 'dcs2', 'instyoff', dy, logger, cfg)
+        cls._write_to_ktl(cls, dcs, 'instxoff', dx, logger, cfg)
+        cls._write_to_ktl(cls, dcs, 'instyoff', dy, logger, cfg)
+        cls._write_to_ktl(cls, dcs, 'rel2curr', 't', logger, cfg)
 
         # Which calls wftel...
         start = time.time()
 
         try:
-            waited = ktl.waitfor('axestat=tracking', service='dcs',
+            waited = ktl.waitfor('axestat=tracking', service=dcs,
                                  timeout=cfg['ob_keys']['ktl_wait'])
         except:
             waited = False
+
         if not waited:
-            msg = f'tracking was not established in {cls.timeout}'
+            msg = f'tracking was not established! Exiting'
             logger.error(msg)
             raise ValueError(msg)
 
-        if ktl.read('dcs', 'autactiv') == 'no':
-            msg = 'guider not currently active'
+        if ktl.read(dcs, 'autactiv') == 'no':
+            msg = 'guider not currently active! Exiting'
             logger.error(msg)
             raise ValueError(msg)
 
-        serv_auto_resume = ktl.cache('dcs', 'autresum')
-        serv_auto_go = ktl.cache('dcs', 'autgo')
+        serv_auto_resume = ktl.cache(dcs, 'autresum')
+        serv_auto_go = ktl.cache(dcs, 'autgo')
 
         # set the value for the current autpause
         if not cls.auto_resume:
