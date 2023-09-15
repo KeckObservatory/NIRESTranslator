@@ -70,13 +70,13 @@ class SltMov(NIRESTranslatorFunction):
         serv_auto_go = ktl.cache(dcs, 'autgo')
 
         # set the value for the current autpause
-        if not cls.auto_resume:
-            cls.auto_resume = serv_auto_resume.read()
+        if not autoresum:
+            autoresum = serv_auto_resume.read()
 
         success = False
         for i in range(0, cfg['ob_keys']['ktl_wait']):
             value = serv_auto_resume.read()
-            if value == cls.auto_resume:
+            if value == autoresum:
                 success = True
                 break
         
