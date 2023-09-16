@@ -56,6 +56,7 @@ except ImportError:
 from nires.shared.take_exposures import TakeExposures
 
 from nires.NIRESTranslatorFunction import NIRESTranslatorFunction
+from nires.spectrograph.sltmov import SltMov
 
 class Dither(NIRESTranslatorFunction):
 
@@ -156,10 +157,10 @@ class Dither(NIRESTranslatorFunction):
         teArgs = {'nFrames': 1, 'sv': args['sv']}
         for location in pattern:
             local_offset = location * offset # How far to move this time
-            #  SlitMove.execute({'inst_offset_y' : local_offset})
+            SltMov.execute({'dcs' : 'dcs2', 'offset' : local_offset})
             TakeExposures.execute(teArgs, logger, cfg)
 
         reset_offset = sum(pattern) * offset * -1 # How far to get back to where we started
-        #  SlitMove(reset_offset)
+        SltMov.execute({'dcs' : 'dcs2', 'offset' : reset_offset})
 
     
