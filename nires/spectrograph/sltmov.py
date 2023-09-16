@@ -51,8 +51,14 @@ class SltMov(NIRESTranslatorFunction):
         start = time.time()
 
         try:
-            waited = ktl.waitfor('axestat=tracking', service=dcs,
-                                 timeout=cfg['ob_keys']['ktl_wait'])
+            for i in range(0, 20):
+                value = ktl.read('dcs2', 'axestat')
+                if value == 'tracking':
+                    waited = True
+                    break
+                time.sleep(1)
+            # waited = ktl.waitfor('axestat=tracking', service=dcs,
+            #                      timeout=cfg['ob_keys']['ktl_wait'])
         except:
             waited = False
 
