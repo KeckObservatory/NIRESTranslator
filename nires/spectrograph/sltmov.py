@@ -88,6 +88,7 @@ class SltMov(NIRESTranslatorFunction):
             if value != autoresum:
                 success = True
                 break
+            time.sleep(1)
         
         if not success:
             logger.error("Timeout exceeded waiting for AUTRESUM to increment")
@@ -97,9 +98,10 @@ class SltMov(NIRESTranslatorFunction):
         for i in range(0, wftel_wait):
             # value = serv_auto_go.read()
             value = ktl.read('dcs2', 'autgo')
-            if value == "RESUMEACK" or value == "GUIDE":
+            if value == "resumeack" or value == "guide":
                 success = True
                 break
+            time.sleep(1)
 
         if not success:
             logger.error("Timeout exceeded waiting for AUTGO to reach RESUMEACK or GUIDE")
