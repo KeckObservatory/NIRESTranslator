@@ -82,6 +82,7 @@ class SltMov(NIRESTranslatorFunction):
         wftel_wait = 20
 
         success = False
+        logger.info(f'Waiting for autresum to not equal {autoresum}')
         for i in range(0, wftel_wait):
             # value = serv_auto_resume.read()
             value = ktl.read('dcs2', 'autresum')
