@@ -79,8 +79,10 @@ class SltMov(NIRESTranslatorFunction):
         if not autoresum:
             autoresum = serv_auto_resume.read()
 
+        wftel_wait = 20
+
         success = False
-        for i in range(0, cfg['ob_keys']['ktl_wait']):
+        for i in range(0, wftel_wait):
             value = serv_auto_resume.read()
             if value == autoresum:
                 success = True
@@ -91,7 +93,7 @@ class SltMov(NIRESTranslatorFunction):
             raise Exception("KTL timeout reached for AUTRESUM")
         
         success = False
-        for i in range(0, cfg['ob_keys']['ktl_wait']):
+        for i in range(0, wftel_wait):
             value = serv_auto_go.read()
             if value == "RESUMEACK" or value == "GUIDE":
                 success = True
