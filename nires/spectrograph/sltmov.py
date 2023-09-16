@@ -72,8 +72,8 @@ class SltMov(NIRESTranslatorFunction):
             logger.error(msg)
             raise ValueError(msg)
 
-        serv_auto_resume = ktl.cache(dcs, 'autresum')
-        serv_auto_go = ktl.cache(dcs, 'autgo')
+        # serv_auto_resume = ktl.cache(dcs, 'autresum')
+        # serv_auto_go = ktl.cache(dcs, 'autgo')
 
         # # set the value for the current autpause
         # if not autoresum:
@@ -83,7 +83,8 @@ class SltMov(NIRESTranslatorFunction):
 
         success = False
         for i in range(0, wftel_wait):
-            value = serv_auto_resume.read()
+            # value = serv_auto_resume.read()
+            value = ktl.read('dcs2', 'autresum')
             if value != autoresum:
                 success = True
                 break
@@ -94,7 +95,8 @@ class SltMov(NIRESTranslatorFunction):
         
         success = False
         for i in range(0, wftel_wait):
-            value = serv_auto_go.read()
+            # value = serv_auto_go.read()
+            value = ktl.read('dcs2', 'autgo')
             if value == "RESUMEACK" or value == "GUIDE":
                 success = True
                 break
