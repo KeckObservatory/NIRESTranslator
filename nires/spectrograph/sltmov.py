@@ -43,9 +43,9 @@ class SltMov(NIRESTranslatorFunction):
         # Which calls mxy...
         autoresum = ktl.read('dcs2', 'autresum')
 
-        cls._write_to_ktl(cls, dcs, 'instxoff', dx, logger, cfg)
-        cls._write_to_ktl(cls, dcs, 'instyoff', dy, logger, cfg)
-        cls._write_to_ktl(cls, dcs, 'rel2curr', 't', logger, cfg)
+        cls._write_to_ktl(dcs, 'instxoff', dx, logger, cfg)
+        cls._write_to_ktl(dcs, 'instyoff', dy, logger, cfg)
+        cls._write_to_ktl(dcs, 'rel2curr', 't', logger, cfg)
 
         # Which calls wftel...
         start = time.time()
