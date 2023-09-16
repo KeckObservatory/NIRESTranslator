@@ -5,7 +5,7 @@ from unittest.mock import Mock
 from astropy.coordinates import SkyCoord
 from astropy import units as u
 
-try: 
+try:
     import ktl
 except ImportError:
     ktl = Mock()
