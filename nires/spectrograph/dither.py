@@ -161,6 +161,7 @@ class Dither(NIRESTranslatorFunction):
         for location in pattern:
             local_offset = location * offset # How far to move this time
             if location != 0:
+                logger.info(f"Applying offset of {local_offset}")
                 SltMov.execute({'dcs' : 'dcs2', 'offset' : local_offset})
             TakeExposures.execute(teArgs, logger, cfg)
 
