@@ -125,7 +125,7 @@ class Dither(NIRESTranslatorFunction):
         
 
         # MarkBase.execute({})
-        cls._write_to_ktl('dcs2', 'mark', 'true', logger, cfg, True)
+        # cls._write_to_ktl('dcs2', 'mark', 'true', logger, cfg, True)
 
 
         raStr = ktl.read('dcs2', 'ra')
