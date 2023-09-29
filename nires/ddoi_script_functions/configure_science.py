@@ -11,11 +11,15 @@ class configure_science(NIRESTranslatorFunction):
     @classmethod
     def set_detector_config(cls, args, logger, cfg, sv):
         sequence = args.get('sequence')
+        ob = args.get('ob')
+        target = ob.get('target')
+        tgtParams = target.get('parameters')
         params = sequence.get('parameters')
         coadds = params.get('det_coadd_number')
         itime = params.get('det_exp_time')
         readoutMode = params.get('det_samp_mode')
         readPairs = params.get('det_exp_read_pairs')
+        obsType = tgtParams.get('target_info_name')
         nSamp = params.get('det_num_fs')
         args = {
             'itime': itime,
@@ -23,7 +27,8 @@ class configure_science(NIRESTranslatorFunction):
             'readoutMode': readoutMode,
             'numreads': readPairs,
             'nSamp': nSamp,
-            'sv': sv
+            'sv': sv,
+            'obsType': obsType 
         }
 
         SetDetectorConfig.execute(args, logger, cfg)
