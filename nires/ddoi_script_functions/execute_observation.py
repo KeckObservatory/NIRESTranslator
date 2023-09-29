@@ -72,7 +72,7 @@ class execute_observation(NIRESTranslatorFunction):
             cls.dither_exposure(args, logger, cfg)
         elif 'nires_slit_scan_sci' in seqName:
             raise NotImplementedError
-        elif 'nires_cals' in seqName:
+        elif 'nires_calibration' in seqName:
             parameters = sequence.get('parameters')
             calType = parameters.get('det_cal_type')
 
