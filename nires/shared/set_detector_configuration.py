@@ -201,7 +201,7 @@ class SetDetectorConfig(NIRESTranslatorFunction):
         cls._write_to_ktl(service, 'numreads', numreads, logger, cfg)
 
     @classmethod
-    def set_obstype(cls, obsType, obj, sv, logger, cfg):
+    def set_obstype(cls, obsType, sv, logger, cfg):
         service = cls._determine_nires_service(sv)
         cls._write_to_ktl(service, 'obstype', obsType, logger, cfg)
              
@@ -217,7 +217,6 @@ class SetDetectorConfig(NIRESTranslatorFunction):
         readoutMode = args['readoutMode'] # sampmode
         requestTime = args['itime'] # itime
         obsType = args['obsType']
-        obj = args['object']
         nSamp = args['nSamp'] # fowler sampling
         sv = args['sv']
         cls.set_obstype(obsType ,sv,logger, cfg)

@@ -11,7 +11,7 @@ class configure_science(NIRESTranslatorFunction):
     @classmethod
     def set_detector_config(cls, args, logger, cfg, sv):
         sequence = args.get('sequence')
-        ob = args.get('ob')
+        ob = args.get('OB')
         target = ob.get('target')
         tgtParams = target.get('parameters')
         params = sequence.get('parameters')
