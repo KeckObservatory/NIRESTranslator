@@ -36,6 +36,8 @@ do that list num_repeats times
 # TODO: Update args keys to match OB keys
 
 import pdb
+import math
+import time
 from unittest.mock import Mock 
 from astropy.coordinates import SkyCoord
 from astropy import units as u
@@ -54,6 +56,7 @@ except ImportError:
 from nires.shared.take_exposures import TakeExposures
 
 from nires.NIRESTranslatorFunction import NIRESTranslatorFunction
+from nires.spectrograph.sltmov import SltMov
 
 class Dither(NIRESTranslatorFunction):
 
@@ -122,6 +125,9 @@ class Dither(NIRESTranslatorFunction):
         
 
         # MarkBase.execute({})
+        # cls._write_to_ktl('dcs2', 'mark', 'true', logger, cfg, True)
+
+
         raStr = ktl.read('dcs2', 'ra')
         decStr = ktl.read('dcs2', 'dec')
         coords = SkyCoord(ra = raStr, dec = decStr, unit=(u.hourangle, u.deg))
@@ -154,9 +160,12 @@ class Dither(NIRESTranslatorFunction):
         teArgs = {'nFrames': 1, 'sv': args['sv']}
         for location in pattern:
             local_offset = location * offset # How far to move this time
-            #  SlitMove.execute({'inst_offset_y' : local_offset})
+            if location != 0:
+                logger.info(f"Applying offset of {local_offset}")
+                SltMov.execute({'dcs' : 'dcs2', 'offset' : local_offset})
             TakeExposures.execute(teArgs, logger, cfg)
 
         reset_offset = sum(pattern) * offset * -1 # How far to get back to where we started
-        #  SlitMove(reset_offset)
+        SltMov.execute({'dcs' : 'dcs2', 'offset' : reset_offset})
 
+    
