@@ -158,6 +158,13 @@ class Dither(NIRESTranslatorFunction):
     def execute_dither(cls, args, logger, cfg):
         offset, pattern = args['offset'], cls.known_dithers[args['pattern']]['offsets']
         teArgs = {'nFrames': 1, 'sv': args['sv']}
+        if args['pattern'] == 'ABBA' or args['pattern'] == 'AB':
+            # Move in the opposite direction of the first move, by
+            # one half of the offset. This allows the dither to start
+            # at the center of the slit
+            move_amt = pattern[0] * .5 * -1 * offset
+            logger.info(f"Offseting {move_amt} to start ABBA or AB")
+            SltMov.execute({'dcs' : 'dcs2', 'offset' : move_amt})
         for location in pattern:
             local_offset = location * offset # How far to move this time
             if location != 0:
