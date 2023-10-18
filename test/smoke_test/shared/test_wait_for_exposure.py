@@ -1,6 +1,7 @@
 from nires.shared.wait_for_exposure import WaitForExposure as wfe 
 import unittest
 from unittest.mock import Mock, patch, MagicMock
+import pdb
 try:
     import ktl
 except ImportError:
@@ -8,13 +9,13 @@ except ImportError:
 
 
 def ktl_side_effects(service, value):
-    if value == 'itime': return 1
+    if value == 'itime': return 4
     if value == 'sampmode': return 4
     if value == 'numreads': return 1
     if value == 'coadds': return 1
     if value == 'readtime': return 1
     if value == 'readtime': return 1
-    if value == 'imagedone': return 1
+    if value == 'imagedone': return 0
     return 0
 
 def logger_side_effect(msg):
@@ -37,6 +38,12 @@ class TestWaitForExposure(unittest.TestCase):
             },
             'operation_mode': {
                 'operation_mode': 'operational'
+            },
+            'logger': {
+                'ping_period': 1
+            },
+            'exposure': {
+                'sleep_length': 1
             }
         }
     
@@ -44,8 +51,9 @@ class TestWaitForExposure(unittest.TestCase):
     def test_wait_for_exposure(self, mock_ktl):
         mock_ktl.read = Mock()
         mock_ktl.read.side_effect = ktl_side_effects
+        pdb.set_trace()
         wait = wfe.wait_for_exposure(sv='s', logger=self.logger, cfg=self.cfg)
-        self.assertEqual(wait, 2.5)
+        self.assertEqual(wait, 7.0)
 
 
 if __name__ == "__main__":

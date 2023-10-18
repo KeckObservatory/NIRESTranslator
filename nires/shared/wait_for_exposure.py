@@ -18,9 +18,6 @@ from nires.NIRESTranslatorFunction import NIRESTranslatorFunction
 
 class WaitForExposure(NIRESTranslatorFunction):
 
-    SLEEP_LENGTH = 1 # seconds
-    LOG_PERIOD = 120 # seconds
-
     @classmethod
     def wait_for_exposure(cls, sv, logger, cfg):
         """Waits for an exposure to finsih on either
@@ -45,14 +42,17 @@ class WaitForExposure(NIRESTranslatorFunction):
         logger.info('wait_for_exposure: Waiting for exposure to end.')
         count = 0
         imageDone = int(ktl.read(service, 'imagedone'))
-        countPeriod = int(cls.LOG_PERIOD / cls.SLEEP_LENGTH)
+
+        logPeriod = cfg['logger']['ping_period']
+        sleepLength = cfg['exposure']['sleep_length']
+        countPeriod = int(logPeriod / sleepLength)
         while (imageDone != 1) and (count <= wait):
             count = count + 1
-            time.sleep(cls.SLEEP_LENGTH)
+            time.sleep(sleepLength)
             imageDone = int(ktl.read(service, 'imagedone'))
             if countPeriod % count == 0:
-                percComplete = round( 100 * count * cls.SLEEP_LENGTH / wait )
-                timeRemaining = wait - count * cls.SLEEP_LENGTH
+                percComplete = round( 100 * count * sleepLength / wait )
+                timeRemaining = wait - count * sleepLength
                 logger.info(f'exposure {percComplete}% completed. Time remaining: {timeRemaining}')
         if imageDone: logger.info('image done: OK')
         else:
