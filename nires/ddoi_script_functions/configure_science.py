@@ -14,8 +14,7 @@ class configure_science(NIRESTranslatorFunction):
         ob = args.get('OB')
         target = ob.get('target')
         if target:
-            tgtParams = target.get('parameters')
-            obsType = tgtParams.get('target_info_name')
+            obsType = 'object' 
         else:
             calibration = ob['metadata']['ob_type'].lower() == 'calibration' 
             if calibration:
