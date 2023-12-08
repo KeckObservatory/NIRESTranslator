@@ -1,0 +1,98 @@
+{
+    "_ob_id": "2022B_N133_0013",
+    "acquisition": {
+        "metadata": {
+            "instrument": "NIRES",
+            "name": "nires_acq",
+            "script": "nires_acq",
+            "sequence_number": 0,
+            "template_type": "acquisition",
+            "ui_name": "NIRES acquisition",
+            "version": "0.1.0"
+        },
+        "parameters": {
+            "guider1_cfg_mode": "operator",
+            "rot_cfg_mode": "PA",
+            "rot_cfg_wrap": "auto",
+            "tcs_coord_po": "NIRES"
+        }
+    },
+    "metadata": {
+        "comment": "Use for DVT",
+        "instrument": "NIRES",
+        "name": "Copy of NIRES DVT Stare and Dither",
+        "ob_type": "Science",
+        "pi_id": 4866,
+        "priority": 0,
+        "sem_id": "2022B_N133",
+        "tags": [],
+        "version": "0.1.0"
+    },
+    "observations": [
+        {
+            "metadata": {
+                "instrument": "NIRES",
+                "name": "nires_stare_sci",
+                "script": "nires_stare_sci",
+                "template_type": "science",
+                "ui_name": "NIRES stare science",
+                "version": "0.1.0",
+                "sequence_number": 1
+            },
+            "parameters": {
+                "det_coadd_number": 1,
+                "det_exp_number": 1,
+                "det_samp_mode": "MCDS",
+                "det_type_mode": "Imager",
+                "det_exp_read_pairs": 2,
+                "det_exp_time": 5,
+                "det_num_fs": 3
+            }
+        },
+        {
+            "metadata": {
+                "instrument": "NIRES",
+                "name": "nires_dither_sci",
+                "script": "nires_dither_sci",
+                "sequence_number": 2,
+                "template_type": "science",
+                "ui_name": "NIRES dither science",
+                "version": "0.1.0"
+            },
+            "parameters": {
+                "det_coadd_number": 1,
+                "det_exp_number": 1,
+                "det_exp_read_pairs": 2,
+                "det_exp_time": 5,
+                "det_num_fs": 3,
+                "det_samp_mode": "MCDS",
+                "det_type_mode": "Spectrograph",
+                "sequence_dither_type": "ABBA"
+            }
+        }
+    ],
+    "status": {
+        "current_exp_det1": 0,
+        "current_exp_det2": 0,
+        "current_seq": 0,
+        "current_step": 0,
+        "deleted": false,
+        "executions": [],
+        "state": 0
+    },
+    "target": {
+        "metadata": {
+            "name": "non_sidereal_target",
+            "template_type": "target",
+            "ui_name": "Non-Sidereal Target",
+            "version": "0.1.0"
+        },
+        "parameters": {
+            "target_coord_dec": "85:00:00",
+            "target_coord_epoch": "FK5",
+            "target_coord_frame": "FK5",
+            "target_coord_ra": "00:00:00",
+            "target_info_name": "Test Target"
+        }
+    }
+}

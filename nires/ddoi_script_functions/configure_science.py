@@ -13,7 +13,10 @@ class configure_science(NIRESTranslatorFunction):
         sequence = args.get('sequence')
         ob = args.get('OB')
         target = ob.get('target')
-        tgtParams = target.get('parameters')
+        if target:
+            tgtParams = target.get('parameters')
+        else:
+            tgtParams = {'target_info_name': 'calibration'}
         params = sequence.get('parameters')
         coadds = params.get('det_coadd_number')
         itime = params.get('det_exp_time')
