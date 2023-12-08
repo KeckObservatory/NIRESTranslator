@@ -43,9 +43,9 @@ class WaitForExposure(NIRESTranslatorFunction):
         count = 0
         imageDone = int(ktl.read(service, 'imagedone'))
 
-        logPeriod = cfg['logger']['ping_period']
-        sleepLength = cfg['exposure']['sleep_length']
-        countPeriod = int(logPeriod) // int(sleepLength)
+        logPeriod = int(cfg['logger']['ping_period'])
+        sleepLength = int(cfg['exposure']['sleep_length'])
+        countPeriod = logPeriod // sleepLength
         while (imageDone != 1) and (count <= wait):
             count = count + 1
             time.sleep(sleepLength)
