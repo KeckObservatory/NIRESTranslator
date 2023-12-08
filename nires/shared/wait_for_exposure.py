@@ -50,9 +50,9 @@ class WaitForExposure(NIRESTranslatorFunction):
             count = count + 1
             time.sleep(sleepLength)
             imageDone = int(ktl.read(service, 'imagedone'))
+            percComplete = round( 100 * count * sleepLength / wait )
+            timeRemaining = wait - count * sleepLength
             if countPeriod % count == 0:
-                percComplete = round( 100 * count * sleepLength / wait )
-                timeRemaining = wait - count * sleepLength
                 logger.info(f'exposure {percComplete}% completed. Time remaining: {timeRemaining}')
         if imageDone: logger.info('image done: OK')
         else:
