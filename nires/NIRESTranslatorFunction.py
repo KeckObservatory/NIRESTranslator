@@ -29,6 +29,8 @@ class NIRESTranslatorFunction(TranslatorModuleFunction):
         if cfg['operation_mode']['operation_mode'].lower()=='operational':
             wait = wait if wait is not None else cfg['ob_keys']['ktl_wait']
             timeout = timeout if timeout is not None else float(cfg['ob_keys']['ktl_timeout'])
+
+            logger.debug(f'writing ktl service: {service}, kw: {keyword}, value: {value})')
             ktl.write(service, keyword, value, wait=wait, timeout=timeout)
             if waitfor:
                 ktl.waitfor(f"${service}.{keyword}=={value}", timeout=timeout)
