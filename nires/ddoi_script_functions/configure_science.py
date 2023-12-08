@@ -15,14 +15,26 @@ class configure_science(NIRESTranslatorFunction):
         target = ob.get('target')
         if target:
             tgtParams = target.get('parameters')
+            obsType = tgtParams.get('target_info_name')
         else:
-            tgtParams = {'target_info_name': 'calibration'}
+            calibration = ob['metadata']['ob_type'].lower() == 'calibration' 
+            if calibration:
+                calType = sequence.get('parameters').get('det_cal_type')
+                if 'flats' in calType.lower():
+                    obsType = 'domeflat'
+                elif 'arcs' in calType.lower():
+                    obsType = 'domearc'
+                elif 'darcs' in calType.lower():
+                    obsType = 'dark'
+                else: 
+                    obsType = 'unknown' # will cause an error
+                
+
         params = sequence.get('parameters')
         coadds = params.get('det_coadd_number')
         itime = params.get('det_exp_time')
         readoutMode = params.get('det_samp_mode')
         readPairs = params.get('det_exp_read_pairs')
-        obsType = tgtParams.get('target_info_name')
         nSamp = params.get('det_num_fs')
         args = {
             'itime': itime,
