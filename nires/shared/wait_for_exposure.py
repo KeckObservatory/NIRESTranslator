@@ -45,7 +45,7 @@ class WaitForExposure(NIRESTranslatorFunction):
 
         logPeriod = cfg['logger']['ping_period']
         sleepLength = cfg['exposure']['sleep_length']
-        countPeriod = int(logPeriod / sleepLength)
+        countPeriod = int(logPeriod) / int(sleepLength)
         while (imageDone != 1) and (count <= wait):
             count = count + 1
             time.sleep(sleepLength)
