@@ -13,9 +13,7 @@ class configure_science(NIRESTranslatorFunction):
         sequence = args.get('sequence')
         ob = args.get('OB')
         target = ob.get('target')
-        if target:
-            obsType = 'object' 
-        else:
+        if not target:
             calibration = ob['metadata']['ob_type'].lower() == 'calibration' 
             if calibration:
                 calType = sequence.get('parameters').get('det_cal_type')
@@ -27,6 +25,10 @@ class configure_science(NIRESTranslatorFunction):
                     obsType = 'dark'
                 else: 
                     obsType = 'unknown' # will cause an error
+        elif sequence:
+            obsType = sequence['parameters']['det_obs_type']
+        else: 
+            obsType = 'unknown' # will cause an error
                 
 
         params = sequence.get('parameters')
