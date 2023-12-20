@@ -47,10 +47,6 @@ class WaitForExposure(NIRESTranslatorFunction):
         sleepLength = int(cfg['exposure']['sleep_length'])
         countPeriod = logPeriod // sleepLength
         while (imageDone != 1) and (count <= wait):
-            isPaused = ktl.read('k2ddoi', 'pause')
-            isHalted = ktl.read('k2ddoi', 'halt')
-            if isPaused=='true' or isHalted=='true':
-                logger.info(f'wait_for_exposure: paused: {isPaused}. halted: {isHalted}. Not implemented yet.')
             count = count + 1
             time.sleep(sleepLength)
             imageDone = int(ktl.read(service, 'imagedone'))
@@ -58,6 +54,10 @@ class WaitForExposure(NIRESTranslatorFunction):
             timeRemaining = wait - count * sleepLength
             if countPeriod % count == 0:
                 logger.info(f'exposure {percComplete}% completed. Time remaining: {timeRemaining}')
+                isPaused = ktl.read('k2ddoi', 'pause')
+                isHalted = ktl.read('k2ddoi', 'halt')
+                if isPaused=='true' or isHalted=='true':
+                    logger.info(f'wait_for_exposure: paused: {isPaused}. halted: {isHalted}. Not implemented yet.')
         if imageDone: logger.info('image done: OK')
         else:
             logger.info('wait_for_exposure: exposure timed out.')
