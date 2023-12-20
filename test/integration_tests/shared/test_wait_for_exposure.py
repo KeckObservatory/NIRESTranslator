@@ -41,6 +41,9 @@ class TestTakeTests(unittest.TestCase):
                 'subsystem':"NIRES",
                 'configLoc': None,
                 'ping_period':120
+            },
+            'exposure': {
+                'sleep_length':1
             }
         }
     
