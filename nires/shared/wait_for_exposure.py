@@ -17,7 +17,7 @@ import time
 from nires.NIRESTranslatorFunction import NIRESTranslatorFunction
 
 class WaitForExposure(NIRESTranslatorFunction):
-
+    
     @classmethod
     def wait_for_exposure(cls, sv, logger, cfg):
         """Waits for an exposure to finsih on either
@@ -47,6 +47,10 @@ class WaitForExposure(NIRESTranslatorFunction):
         sleepLength = int(cfg['exposure']['sleep_length'])
         countPeriod = logPeriod // sleepLength
         while (imageDone != 1) and (count <= wait):
+            isPaused = ktl.read('k2ddoi', 'pause')
+            isHalted = ktl.read('k2ddoi', 'halt')
+            if isPaused=='true' or isHalted=='true':
+                logger.info(f'wait_for_exposure: paused: {isPaused}. halted: {isHalted}. Not implemented yet.')
             count = count + 1
             time.sleep(sleepLength)
             imageDone = int(ktl.read(service, 'imagedone'))
