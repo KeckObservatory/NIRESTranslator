@@ -6,24 +6,12 @@ import ktl
 import os
 
 
-def ktl_side_effects(service, value):
-    if value == 'itime': return 1
-    if value == 'sampmode': return 4
-    if value == 'numreads': return 1
-    if value == 'coadds': return 1
-    if value == 'readtime': return 1
-    if value == 'readtime': return 1
-    if value == 'imagedone': return 1
-    return 0
-
 def logger_side_effect(msg):
     print(msg)
 
 class TestTakeTests(unittest.TestCase):
 
     def setUp(self):
-        ktl.read = Mock()
-        ktl.read.side_effect = ktl_side_effects
         self.logger = MagicMock(side_effect=logger_side_effect)
         self.logger.info.side_effect = logger_side_effect
         self.logger.debug.side_effect = logger_side_effect
