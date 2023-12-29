@@ -18,6 +18,7 @@ class waitfor_configure_science(NIRESTranslatorFunction):
         service = cls._determine_nires_service(sv)
         for key, val in args.get('wait_for_params', {}).items():
             ktl.waitfor(f'${service}.{key}={val}', timeout=2)
+            cls.check_pause(logger)
 
 
     @classmethod
