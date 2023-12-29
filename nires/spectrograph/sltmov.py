@@ -42,72 +42,79 @@ class SltMov(NIRESTranslatorFunction):
 
         # Which calls mxy...
         autoresum = ktl.read('dcs2', 'autresum')
+        guiding = True
+        if ktl.read('dcs' 'AUTACTIV') == "no":
+            logger.info(f"Wait for telescope (wftel): guider not currently active")
+            guiding = False
 
         cls._write_to_ktl(dcs, 'instxoff', dx, logger, cfg)
         cls._write_to_ktl(dcs, 'instyoff', dy, logger, cfg)
         cls._write_to_ktl(dcs, 'rel2curr', 't', logger, cfg)
 
-        # Which calls wftel...
-        start = time.time()
+        if guiding:
+            # Which calls wftel...
+            start = time.time()
 
-        try:
-            for i in range(0, 20):
-                value = ktl.read('dcs2', 'axestat')
-                if value == 'tracking':
-                    waited = True
+            try:
+                for i in range(0, 20):
+                    value = ktl.read('dcs2', 'axestat')
+                    if value == 'tracking':
+                        waited = True
+                        break
+                    time.sleep(1)
+                # waited = ktl.waitfor('axestat=tracking', service=dcs,
+                #                      timeout=cfg['ob_keys']['ktl_wait'])
+            except:
+                waited = False
+
+            if not waited:
+                msg = f'tracking was not established! Exiting'
+                logger.error(msg)
+                raise ValueError(msg)
+
+            if ktl.read(dcs, 'autactiv') == 'no':
+                msg = 'guider not currently active! Exiting'
+                logger.error(msg)
+                raise ValueError(msg)
+
+            # serv_auto_resume = ktl.cache(dcs, 'autresum')
+            # serv_auto_go = ktl.cache(dcs, 'autgo')
+
+            # # set the value for the current autpause
+            # if not autoresum:
+            #     autoresum = serv_auto_resume.read()
+
+            wftel_wait = 20
+
+            success = False
+            logger.info(f'Waiting for autresum to not equal {autoresum}')
+            for i in range(0, wftel_wait):
+                # value = serv_auto_resume.read()
+                value = ktl.read('dcs2', 'autresum')
+                if value != autoresum:
+                    success = True
                     break
                 time.sleep(1)
-            # waited = ktl.waitfor('axestat=tracking', service=dcs,
-            #                      timeout=cfg['ob_keys']['ktl_wait'])
-        except:
-            waited = False
+            
+            if not success:
+                logger.error("Timeout exceeded waiting for AUTRESUM to increment")
+                raise Exception("KTL timeout reached for AUTRESUM")
+            
+            success = False
+            for i in range(0, wftel_wait):
+                # value = serv_auto_go.read()
+                value = ktl.read('dcs2', 'autgo')
+                if value == "resumeack" or value == "guide":
+                    success = True
+                    break
+                time.sleep(1)
 
-        if not waited:
-            msg = f'tracking was not established! Exiting'
-            logger.error(msg)
-            raise ValueError(msg)
+            if not success:
+                logger.error("Timeout exceeded waiting for AUTGO to reach RESUMEACK or GUIDE")
+                raise Exception("KTL timeout reached for AUTGO")
 
-        if ktl.read(dcs, 'autactiv') == 'no':
-            msg = 'guider not currently active! Exiting'
-            logger.error(msg)
-            raise ValueError(msg)
-
-        # serv_auto_resume = ktl.cache(dcs, 'autresum')
-        # serv_auto_go = ktl.cache(dcs, 'autgo')
-
-        # # set the value for the current autpause
-        # if not autoresum:
-        #     autoresum = serv_auto_resume.read()
-
-        wftel_wait = 20
-
-        success = False
-        logger.info(f'Waiting for autresum to not equal {autoresum}')
-        for i in range(0, wftel_wait):
-            # value = serv_auto_resume.read()
-            value = ktl.read('dcs2', 'autresum')
-            if value != autoresum:
-                success = True
-                break
-            time.sleep(1)
-        
-        if not success:
-            logger.error("Timeout exceeded waiting for AUTRESUM to increment")
-            raise Exception("KTL timeout reached for AUTRESUM")
-        
-        success = False
-        for i in range(0, wftel_wait):
-            # value = serv_auto_go.read()
-            value = ktl.read('dcs2', 'autgo')
-            if value == "resumeack" or value == "guide":
-                success = True
-                break
-            time.sleep(1)
-
-        if not success:
-            logger.error("Timeout exceeded waiting for AUTGO to reach RESUMEACK or GUIDE")
-            raise Exception("KTL timeout reached for AUTGO")
-
-        end = time.time()
-        elapsed = end - start
-        logger.info(f"wftel elapsed in {elapsed} sec")
+            end = time.time()
+            elapsed = end - start
+            logger.info(f"wftel elapsed in {elapsed} sec")
+        else:
+            logger.info("Not guiding, so not waiting for tracking to be established")
