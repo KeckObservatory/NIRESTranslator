@@ -66,14 +66,15 @@ class Dither(NIRESTranslatorFunction):
         pattern_name : {
             "offsets" : list of offsets to apply AFTER each frame
         }
-        
-        The last number must be the return move, that is, it should return the
-        telescope to where we started (sum(pattern[:-1]) == -1*pattern[-1]). 
-        Also expressable as sum(pattern) = 0
 
         For example, sp5 will do the following:
 
-        Take a 
+        1. Take an exoposure at the current location (0)
+        2. Move 2*offset arcseconds up, and expose
+        3. Move 3*offset arcseconds down, and expose
+        4. Move 2*offset arcseconds up, and expose
+        5. Move 3*offset arcseconds down, and expose
+
 
         """
         "sp2" : {
@@ -92,7 +93,7 @@ class Dither(NIRESTranslatorFunction):
             "offsets" : [0, -1, 0, 1]
         },
         "AB" : {
-            "offsets" : [0, 1]
+            "offsets" : [0, -1]
         }
     }
 
@@ -162,7 +163,7 @@ class Dither(NIRESTranslatorFunction):
             # Move in the opposite direction of the first move, by
             # one half of the offset. This allows the dither to start
             # at the center of the slit
-            move_amt = pattern[0] * .5 * -1 * offset
+            move_amt = -.5 * offset
             logger.info(f"Offseting {move_amt} to start ABBA or AB")
             SltMov.execute({'dcs' : 'dcs2', 'offset' : move_amt})
         for location in pattern:
@@ -172,7 +173,13 @@ class Dither(NIRESTranslatorFunction):
                 SltMov.execute({'dcs' : 'dcs2', 'offset' : local_offset})
             TakeExposures.execute(teArgs, logger, cfg)
 
-        reset_offset = sum(pattern) * offset * -1 # How far to get back to where we started
-        SltMov.execute({'dcs' : 'dcs2', 'offset' : reset_offset})
+        if args['pattern'] == 'ABBA' or args['pattern'] == 'AB':
+            # Move back to the center of the slit
+            move_amt = .5 * offset
+            logger.info(f"Offseting {move_amt} to return to center")
+            SltMov.execute({'dcs' : 'dcs2', 'offset' : move_amt})
+        else:
+            reset_offset = sum(pattern) * offset * -1 # How far to get back to where we started
+            SltMov.execute({'dcs' : 'dcs2', 'offset' : reset_offset})
 
     
