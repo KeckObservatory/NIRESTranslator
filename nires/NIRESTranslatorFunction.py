@@ -25,6 +25,33 @@ class NIRESTranslatorFunction(TranslatorModuleFunction):
         cls._write_to_ktl(service='nids', keyword='comment', value=" ", logger=logger, cfg=cfg)
 
     @classmethod
+    def check_pause(cls, logger):
+        isPaused = ktl.read('k2ddoi', 'pause')
+        timeout = 60 * 10 # 10 minutes
+        while isPaused=='true':
+            logger.info(f'k2ddoi:pause is true. Waiting for pause to be false.')
+            try:
+                cls.check_halt(logger)
+            except DDOIAbortedException:
+                logger.error('Abort recieved while waiting for pause to be false. Aborting...')
+                raise DDOIAbortedException
+            if timeout <= 0:
+                logger.error(f'k2ddoi:pause is true. Timeout waiting for pause to be false, Aborting...')
+                raise DDOIAbortedException
+            time.sleep(1)
+
+    @classmethod
+    def check_halt(cls, logger):
+        if cls.abortable != True:
+            logger.warning('Abort recieved, but this method is not aboratble.')
+            raise NotImplementedError
+        else:
+            abort = ktl.read('k2ddoi', 'halt')
+            if abort=='true':
+                logger.error(f'k2ddoi:abort is true. Aborting.')
+                raise DDOIAbortedException
+
+    @classmethod
     def _write_to_ktl(cls, service, keyword, value, logger, cfg, wait=None, timeout=None, waitfor=False):
         if cfg['operation_mode']['operation_mode'].lower()=='operational':
             wait = wait if wait is not None else cfg['ob_keys']['ktl_wait']
@@ -160,3 +187,7 @@ class NIRESTranslatorFunction(TranslatorModuleFunction):
                 break
 
             time.sleep(1)
+
+
+class DDOIAbortedException(Exception):
+    pass
