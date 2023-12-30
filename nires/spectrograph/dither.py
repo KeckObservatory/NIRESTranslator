@@ -90,10 +90,10 @@ class Dither(NIRESTranslatorFunction):
             "offsets" : [0, 2, -4, 5, -4, 2, -4]
         },
         "ABBA" : {
-            "offsets" : [0, -1, 0, 1]
+            "offsets" : [0, 1, 0, -1]
         },
         "AB" : {
-            "offsets" : [0, -1]
+            "offsets" : [0, 1]
         }
     }
 
