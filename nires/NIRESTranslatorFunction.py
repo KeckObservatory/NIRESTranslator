@@ -42,14 +42,14 @@ class NIRESTranslatorFunction(TranslatorModuleFunction):
 
     @classmethod
     def check_halt(cls, logger):
-        if cls.abortable != True:
-            logger.warning('Abort recieved, but this method is not aboratble.')
-            raise NotImplementedError
-        else:
-            abort = ktl.read('k2ddoi', 'halt')
-            if abort=='true':
-                logger.error(f'k2ddoi:abort is true. Aborting.')
-                raise DDOIAbortedException
+        # if cls.abortable != True:
+        #     logger.warning('Abort recieved, but this method is not aboratble.')
+        #     raise NotImplementedError
+        # else:
+        abort = ktl.read('k2ddoi', 'halt')
+        if abort=='true':
+            logger.error(f'k2ddoi:abort is true. Aborting.')
+            raise DDOIAbortedException
 
     @classmethod
     def _write_to_ktl(cls, service, keyword, value, logger, cfg, wait=None, timeout=None, waitfor=False):
