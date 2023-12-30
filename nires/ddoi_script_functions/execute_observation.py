@@ -2,6 +2,7 @@ import ktl
 
 from nires.shared.take_exposures import TakeExposures as te 
 from nires.spectrograph.dither import Dither
+from nires.imager.box_pattern import BoxPattern
 from nires.calibration.take_arcs import TakeArcs
 from nires.calibration.take_darks import TakeDarks
 from nires.calibration.take_flats import TakeFlats
@@ -50,7 +51,15 @@ class execute_observation(NIRESTranslatorFunction):
         detType = params.get('det_type_mode')
         sv = cls.determine_spec_or_imager(detType, logger)
         ditherArgs = {'pattern': pattern, 'offset': offset, 'sv': sv}
-        Dither.execute(ditherArgs, logger, cfg)
+        if 'box' in pattern or 'bxy' in pattern:
+            if 'xy' in pattern:
+                ditherArgs['coord_frame'] = 'det'
+            else:
+                ditherArgs['coord_frame'] = 'en'
+            ditherArgs['num_repeats'] = params.get('det_exp_number')
+            BoxPattern.execute(ditherArgs, logger, cfg)
+        else:
+            Dither.execute(ditherArgs, logger, cfg)
 
 
     @classmethod
