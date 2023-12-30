@@ -67,7 +67,7 @@ class BoxPattern(NIRESTranslatorFunction):
             logger.info(f"Executing box pattern {i}/{args['num_repeats']}")
             logger.info(f"Box pattern will be in {frame} space.")
             cls.check_pause(logger)
-            cls.execute_box(args['offset'], args['pattern'], args['coord_frame'], logger)
+            cls.execute_box(args['offset'], cls.known_patterns[args['pattern']], args['coord_frame'], logger)
 
     @classmethod
     def post_condition(cls, args, logger, cfg):
