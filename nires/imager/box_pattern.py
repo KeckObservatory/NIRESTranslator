@@ -11,10 +11,15 @@ box(4,5,8,9)
 """
 
 from NIRESTranslatorFunction import NIRESTranslatorFunction
-from TelescopeTranslator.en import en
-from TelescopeTranslator.mxy import mxy
-from TelescopeTranslator.MarkBase import MarkBase
+from en import en
+from mxy import mxy
+from MarkBase import MarkBase
 from shared.take_exposures import TakeExposures
+
+import ktl
+
+from astropy.coordinates import SkyCoord
+from astropy import units as u
 
 
 class BoxPattern(NIRESTranslatorFunction):
@@ -44,8 +49,12 @@ class BoxPattern(NIRESTranslatorFunction):
             logger.error("Unknown pattern entered.")
             raise ValueError
 
-        starting_pos = MarkBase() # This isn't actually mark base -> need to add?
-        args.starting_pos = starting_pos
+        raStr = ktl.read('dcs2', 'ra')
+        decStr = ktl.read('dcs2', 'dec')
+        coords = SkyCoord(ra = raStr, dec = decStr, unit=(u.hourangle, u.deg))
+        
+        starting_pos = { 'ra': coords.ra.degree, 'dec': coords.dec.degree}
+        args['starting_pos'] = starting_pos
         return args
 
     @classmethod
@@ -61,10 +70,16 @@ class BoxPattern(NIRESTranslatorFunction):
 
     @classmethod
     def post_condition(cls, args, logger, cfg):
-
-        current_location = MarkBase()
-        if current_location.ra - args.starting_pos.ra > cfg['dither_delta'] or current_location.dec - args.starting_pos.dec > cfg['dither_delta']:
-            logger.error(f"Dither did not return to starting position of {args.starting_pos.ra}:{args.starting_pos.dec}")
+        
+        raStr = ktl.read('dcs2', 'ra')
+        decStr = ktl.read('dcs2', 'dec')
+        end_coords = SkyCoord(ra=raStr, dec=decStr, unit=(u.hourangle, u.deg))
+        dra = end_coords.ra.degree - args['starting_pos']['ra']
+        ddec = end_coords.dec.degree - args['starting_pos']['dec']
+        ditherDelta = float(cfg['dither_delta']['dither_delta'])
+        logger.info(f"Dither complete. dra:ddec={dra}:{ddec}")
+        if dra > ditherDelta  or ddec > ditherDelta:
+            logger.error(f"Dither did not return to starting position {args['starting_pos']['ra']}:{args['starting_pos']['dec']}")
         return args
 
     @classmethod
@@ -73,5 +88,5 @@ class BoxPattern(NIRESTranslatorFunction):
             if coord == 'en':
                 en.execute(pattern['lateral'] * offset, pattern['vertical'] * offset)
             elif coord == 'det':
-                mxy.execute(pattern['lateral'] * offset, pattern['vertical'] * offset)
+                mxy.execute({'x' : pattern['lateral'] * offset, 'y' : pattern['vertical'] * offset})
             TakeExposures.execute({'nFrames' : 1, 'sv' : 'v'})
