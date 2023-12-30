@@ -10,7 +10,7 @@ Replaces:
 box(4,5,8,9)
 """
 
-from NIRESTranslatorFunction import NIRESTranslatorFunction
+from nires.NIRESTranslatorFunction import NIRESTranslatorFunction
 from en import en
 from mxy import mxy
 from MarkBase import MarkBase
