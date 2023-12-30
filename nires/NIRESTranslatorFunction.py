@@ -38,6 +38,7 @@ class NIRESTranslatorFunction(TranslatorModuleFunction):
             if timeout <= 0:
                 logger.error(f'k2ddoi:pause is true. Timeout waiting for pause to be false, Aborting...')
                 raise DDOIAbortedException
+            isPaused = ktl.read('k2ddoi', 'pause')
             time.sleep(1)
 
     @classmethod
