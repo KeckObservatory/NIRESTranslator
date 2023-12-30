@@ -22,14 +22,14 @@ class en(NIRESTranslatorFunction):
 
     @classmethod
     def perform(cls, args, logger, cfg):
-        cls.mxy(args, logger, cfg)
+        cls.en(args, logger, cfg)
 
     @classmethod
     def post_condition(cls, pc_args, logger, cfg):
        pass
 
     @classmethod
-    def mxy(cls, args, logger, cfg):
+    def en(cls, args, logger, cfg):
 
         dcs = args['dcs']
 
