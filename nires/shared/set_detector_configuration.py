@@ -61,6 +61,9 @@ class SetDetectorConfig(NIRESTranslatorFunction):
         """
 
         service = cls._determine_nires_service(sv) 
+        if not nCoadd: 
+            nCoadd = 1
+            logger.info('Attempt to set coadds to None; coadds will be set to 1.')
 
         if nCoadd<1:
             nCoadd=1
