@@ -14,7 +14,7 @@ from nires.NIRESTranslatorFunction import NIRESTranslatorFunction
 from nires.imager.en import en
 from nires.imager.mxy import mxy
 from nires.imager.MarkBase import MarkBase
-from shared.take_exposures import TakeExposures
+from nires.shared.take_exposures import TakeExposures
 
 import ktl
 
