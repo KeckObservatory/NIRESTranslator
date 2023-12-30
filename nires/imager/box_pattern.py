@@ -88,8 +88,8 @@ class BoxPattern(NIRESTranslatorFunction):
         for i in range(len(pattern)):
             cls.check_pause(logger)
             if coord == 'en':
-                en.execute({'ra': pattern['lateral'] * offset, 'dec' : pattern['vertical'] * offset, 'dcs' : 'dcs2'})
+                en.execute({'ra': pattern['lateral'][i] * offset, 'dec' : pattern['vertical'][i] * offset, 'dcs' : 'dcs2'})
             elif coord == 'det':
-                mxy.execute({'x' : pattern['lateral'] * offset, 'y' : pattern['vertical'] * offset, 'dcs' : 'dcs2'})
+                mxy.execute({'x' : pattern['lateral'][i] * offset, 'y' : pattern['vertical'][i] * offset, 'dcs' : 'dcs2'})
             cls.check_pause(logger)
             TakeExposures.execute({'nFrames' : 1, 'sv' : 'v'})
