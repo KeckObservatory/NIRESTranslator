@@ -21,7 +21,7 @@ class configure_science(NIRESTranslatorFunction):
                     obsType = 'domeflat'
                 elif 'arcs' in calType.lower():
                     obsType = 'domearc'
-                elif 'darcs' in calType.lower():
+                elif 'darks' in calType.lower():
                     obsType = 'dark'
                 else: 
                     obsType = 'unknown' # will cause an error
