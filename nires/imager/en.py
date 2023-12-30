@@ -35,7 +35,6 @@ class en(NIRESTranslatorFunction):
 
         ra = args['ra']
         dec = args['dec']
-        abs = args['abs'] == "true"
 
         autoresum = ktl.read('dcs2', 'autresum')
         guiding = True

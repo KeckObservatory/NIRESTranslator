@@ -35,7 +35,7 @@ class mxy(NIRESTranslatorFunction):
 
         x = args['x']
         y = args['y']
-        abs = args['abs'] == "true"
+        abs = args.get('abs', None) == "true"
 
         autoresum = ktl.read('dcs2', 'autresum')
         guiding = True
