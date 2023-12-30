@@ -38,11 +38,28 @@ class TestTakeArcs(unittest.TestCase):
             },
             'operation_mode': {
                 'operation_mode': 'test'
+            },
+            'logger': {
+                'ping_period': 1,
+            },
+            'exposure': {
+                'sleep_length': 1,
             }
         }
     
     @patch('nires.calibration.take_arcs.ktl')
-    def test_take_arcs(self, mock_ktl):
+    @patch('nires.shared.wait_for_exposure.ktl')
+    @patch('nires.shared.take_exposures.ktl')
+    @patch('nires.NIRESTranslatorFunction.ktl')
+    def test_take_arcs(self, mock_ktl, mk_ktl, m_ktl, _ktl):
+        _ktl.read = Mock()
+        _ktl.read.side_effect = ktl_side_effects
+        m_ktl.read = Mock()
+        m_ktl.read.side_effect = ktl_side_effects
+        mk_ktl.read = Mock()
+        mk_ktl.read.side_effect = ktl_side_effects
+        mock_ktl.read = Mock()
+        mock_ktl.read.side_effect = ktl_side_effects
         ktl.read = Mock()
         ktl.read.side_effect = ktl_side_effects
         ta._take_arcs(logger=self.logger, cfg=self.cfg, nFrames=1)

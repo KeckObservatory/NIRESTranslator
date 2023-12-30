@@ -51,7 +51,6 @@ class TestWaitForExposure(unittest.TestCase):
     def test_wait_for_exposure(self, mock_ktl):
         mock_ktl.read = Mock()
         mock_ktl.read.side_effect = ktl_side_effects
-        pdb.set_trace()
         wait = wfe.wait_for_exposure(sv='s', logger=self.logger, cfg=self.cfg)
         self.assertEqual(wait, 7.0)
 
