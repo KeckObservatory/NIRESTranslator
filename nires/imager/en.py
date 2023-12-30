@@ -39,7 +39,7 @@ class en(NIRESTranslatorFunction):
 
         autoresum = ktl.read('dcs2', 'autresum')
         guiding = True
-        if ktl.read('dcs' 'AUTACTIV') == "no":
+        if ktl.read(dcs, 'AUTACTIV') == "no":
             logger.info(f"Wait for telescope (wftel): guider not currently active")
             guiding = False
 
