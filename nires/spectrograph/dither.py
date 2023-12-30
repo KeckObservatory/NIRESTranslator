@@ -157,14 +157,6 @@ class Dither(NIRESTranslatorFunction):
 
     @classmethod
     def execute_dither(cls, args, logger, cfg):
-
-        cls._write_to_ktl('nsds', 'dpatname', args['pattern'], logger, cfg)
-        cls._write_to_ktl('nsds', 'dpatnpos',  len(cls.known_dithers[args['pattern']]), logger, cfg)
-        cls._write_to_ktl('nsds', 'dpatmode', 'relative', logger, cfg)
-        cls._write_to_ktl('nsds', 'dpatcsys', 'inst', logger, cfg)
-        dpatirep = ktl.read('nsds', 'dpatirep')
-        cls._write_to_ktl('nsds', 'dpatirep', dpatirep+1, logger, cfg)
-
         offset, pattern = args['offset'], cls.known_dithers[args['pattern']]['offsets']
         teArgs = {'nFrames': 1, 'sv': args['sv']}
         if args['pattern'] == 'ABBA' or args['pattern'] == 'AB':
@@ -176,16 +168,13 @@ class Dither(NIRESTranslatorFunction):
             move_amt = -.5 * offset
             logger.info(f"Offseting {move_amt} to start ABBA or AB")
             SltMov.execute({'dcs' : 'dcs2', 'offset' : move_amt})
-        for location, i in enumerate(pattern):
+        for location in pattern:
             cls.check_pause(logger) # Check for pause before moving
             local_offset = location * offset # How far to move this time
             if location != 0:
                 logger.info(f"Applying offset of {local_offset}")
                 SltMov.execute({'dcs' : 'dcs2', 'offset' : local_offset})
             cls.check_pause(logger) # Check for pause before exposing
-            cls._write_to_ktl('nsds', 'dpatipos', i, logger, cfg)
-            cls._write_to_ktl('nsds', 'yoffset', local_offset, logger, cfg)
-            cls._write_to_ktl('nsds', 'dpatstpy', local_offset, logger, cfg)
             TakeExposures.execute(teArgs, logger, cfg)
 
         cls.check_pause(logger) # Check for pause before returning to center
