@@ -13,7 +13,7 @@ from nires.shared.take_exposures import TakeExposures
 
 from nires.NIRESTranslatorFunction import NIRESTranslatorFunction
 
-class SltMov(NIRESTranslatorFunction):
+class mxy(NIRESTranslatorFunction):
 
    
     @classmethod

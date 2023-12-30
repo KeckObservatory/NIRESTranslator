@@ -11,9 +11,9 @@ box(4,5,8,9)
 """
 
 from nires.NIRESTranslatorFunction import NIRESTranslatorFunction
-from en import en
-from mxy import mxy
-from MarkBase import MarkBase
+from nires.imager.en import en
+from nires.imager.mxy import mxy
+from nires.imager.MarkBase import MarkBase
 from shared.take_exposures import TakeExposures
 
 import ktl
