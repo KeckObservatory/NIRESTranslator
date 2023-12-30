@@ -66,6 +66,7 @@ class BoxPattern(NIRESTranslatorFunction):
         for i in range(args['num_repeats']):
             logger.info(f"Executing box pattern {i}/{args['num_repeats']}")
             logger.info(f"Box pattern will be in {frame} space.")
+            cls.check_pause(logger)
             cls.execute_box(args['offset'], args['pattern'], args['coord_frame'])
 
     @classmethod
@@ -85,8 +86,10 @@ class BoxPattern(NIRESTranslatorFunction):
     @classmethod
     def execute_box(cls, offset, pattern, coord):
         for i in range(len(pattern)):
+            cls.check_pause(logger)
             if coord == 'en':
                 en.execute(pattern['lateral'] * offset, pattern['vertical'] * offset)
             elif coord == 'det':
                 mxy.execute({'x' : pattern['lateral'] * offset, 'y' : pattern['vertical'] * offset})
+            cls.check_pause(logger)
             TakeExposures.execute({'nFrames' : 1, 'sv' : 'v'})
