@@ -45,6 +45,7 @@ class TakeExposures(NIRESTranslatorFunction):
         maxFrames = nFrames
         while nFrames > 0:
             nFrames = nFrames - 1
+            cls.check_pause(logger)
             cls.expose(service, sv, logger, cfg)
             fileName = ktl.read(service, 'filename')
             if (nFrames > 0):
