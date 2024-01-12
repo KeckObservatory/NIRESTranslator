@@ -24,6 +24,14 @@ class TestTakeFlatsOnOff(unittest.TestCase):
             },
             'operation_mode': {
                 'operation_mode': 'operational'
+            },
+            'logger': {
+                'subsystem':"NIRES",
+                'configLoc': None,
+                'ping_period':120
+            },
+            'exposure': {
+                'sleep_length':1
             }
         }
     
