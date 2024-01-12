@@ -36,6 +36,12 @@ class TestTakeTests(unittest.TestCase):
             },
             'operation_mode': {
                 'operation_mode': 'operational'
+            },
+            'logger': {
+                'ping_period': 1,
+            },
+            'exposure': {
+                'sleep_length': 1,
             }
         }
     
