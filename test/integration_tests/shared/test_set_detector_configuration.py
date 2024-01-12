@@ -88,30 +88,30 @@ class TestSetDetectorConfiguration(unittest.TestCase):
         coadds = int(ktl.read(service, 'coadds'))
         self.assertEqual(coadds, 1)
 
-    # def test_set_readout_mode(self):
-    #     service = 'nsds'
-    #     ktl.write(service, 'sampmode', 3)
-    #     ktl.waitfor(f'${service}.sampmode=={3}', timeout=2)
-    #     ktl.write(service, 'numfs', 1)
-    #     ktl.waitfor(f'${service}.numfs=={1}', timeout=2)
+    def test_set_readout_mode(self):
+        service = 'nsds'
+        ktl.write(service, 'sampmode', 3)
+        ktl.waitfor(f'${service}.sampmode=={3}', timeout=2)
+        ktl.write(service, 'numfs', 1)
+        ktl.waitfor(f'${service}.numfs=={1}', timeout=2)
 
-    #     sdc.set_readout_mode(1, sv='s', logger=self.logger, cfg=self.cfg)
-    #     sampmode = int(ktl.read(service, 'sampmode'))
-    #     self.assertEqual(sampmode, 1)
+        sdc.set_readout_mode(1, sv='s', logger=self.logger, cfg=self.cfg)
+        sampmode = int(ktl.read(service, 'sampmode'))
+        self.assertEqual(sampmode, 1)
 
-    #     sdc.set_readout_mode(2, sv='s', logger=self.logger, cfg=self.cfg)
-    #     sampmode = int(ktl.read(service, 'sampmode'))
-    #     self.assertEqual(sampmode, 2)
+        sdc.set_readout_mode(2, sv='s', logger=self.logger, cfg=self.cfg)
+        sampmode = int(ktl.read(service, 'sampmode'))
+        self.assertEqual(sampmode, 2)
 
-    #     sdc.set_readout_mode(3, sv='s', logger=self.logger, cfg=self.cfg, nSamp=5)
-    #     sampmode = int(ktl.read(service, 'sampmode'))
-    #     numfs = int(ktl.read(service, 'numfs'))
-    #     self.assertEqual(sampmode, 3)
-    #     self.assertEqual(numfs, 5)
+        sdc.set_readout_mode(3, sv='s', logger=self.logger, cfg=self.cfg, nSamp=5)
+        sampmode = int(ktl.read(service, 'sampmode'))
+        numfs = int(ktl.read(service, 'numfs'))
+        self.assertEqual(sampmode, 3)
+        self.assertEqual(numfs, 5)
 
-    #     sdc.set_readout_mode(4, sv='s', logger=self.logger, cfg=self.cfg)
-    #     sampmode = int(ktl.read(service, 'sampmode'))
-    #     self.assertEqual(sampmode, 4)
+        sdc.set_readout_mode(4, sv='s', logger=self.logger, cfg=self.cfg)
+        sampmode = int(ktl.read(service, 'sampmode'))
+        self.assertEqual(sampmode, 4)
 
     def test_minimum_integration_time(self):
         # function uses nsds.numreads
@@ -159,16 +159,16 @@ class TestSetDetectorConfiguration(unittest.TestCase):
         numfs = int(ktl.read(service, 'numfs'))
         self.assertEqual(numfs, 11)
 
-        # sampmode = 4
-        # ktl.write(service, 'sampmode', sampmode)
-        # ktl.waitfor(f'$nsds.sampmode=={sampmode}', timeout=2)
-        # sdc.set_number_of_samples(12, sv=sv, logger=self.logger, cfg=self.cfg, readoutMode=None)
-        # numreads = int(ktl.read(service, 'numreads'))
+        sampmode = 4
+        ktl.write(service, 'sampmode', sampmode)
+        ktl.waitfor(f'$nsds.sampmode=={sampmode}', timeout=2)
+        sdc.set_number_of_samples(12, sv=sv, logger=self.logger, cfg=self.cfg, readoutMode=None)
+        numreads = int(ktl.read(service, 'numreads'))
 
-        # self.assertEqual(numreads, 12)
-        # sdc.set_number_of_samples(13, sv=sv, logger=self.logger, cfg=self.cfg, readoutMode=1)
-        # numreads = int(ktl.read(service, 'numreads'))
-        # self.assertEqual(numreads, 13)
+        self.assertEqual(numreads, 12)
+        sdc.set_number_of_samples(13, sv=sv, logger=self.logger, cfg=self.cfg, readoutMode=1)
+        numreads = int(ktl.read(service, 'numreads'))
+        self.assertEqual(numreads, 13)
 
     def test_execute(self):
         args = {}
