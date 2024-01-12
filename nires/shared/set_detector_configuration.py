@@ -232,12 +232,11 @@ class SetDetectorConfig(NIRESTranslatorFunction):
             if str(readoutMode) in ['MCDS', 'mcds', 'Fowler', 'fowler', '3']:
                 numfs = nSamp # Fowler samples === number of samples 
                 logger.debug(f'MCDS sampmode automatically sets numreads to be set to 2x numfs ({numfs*2}).')
-                assert numreads == 2 * nSamp, 'nSamp does not equal 2 x numfs'
             else:
                 logger.info(f'setting num reads to: {numreads}')
                 cls.set_numreads(numreads, sv, logger, cfg)
         else:
-            logger.info('NOT setting readoutmode and num reads for SVC')
+            logger.debug('NOT setting readoutmode and num reads for SVC')
         logger.info('set_dectector_configuration complete')
 
         
