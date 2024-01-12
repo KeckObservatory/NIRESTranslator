@@ -1,6 +1,6 @@
 import os
 import logging 
-from DDOILoggerClient import DDOILogger as dl
+from LoggerClient import Logger as dl
 from ddoitranslatormodule.BaseFunction import TranslatorModuleFunction
 try:
     import ktl
