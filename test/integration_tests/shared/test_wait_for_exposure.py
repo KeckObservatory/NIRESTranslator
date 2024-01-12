@@ -9,7 +9,7 @@ import os
 def logger_side_effect(msg):
     print(msg)
 
-class TestTakeTests(unittest.TestCase):
+class TestWaitForExposure(unittest.TestCase):
 
     def setUp(self):
         self.logger = MagicMock(side_effect=logger_side_effect)
