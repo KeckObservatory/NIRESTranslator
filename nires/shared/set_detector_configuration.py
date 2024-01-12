@@ -230,6 +230,10 @@ class SetDetectorConfig(NIRESTranslatorFunction):
         if sv == 's': # Only change these values for the spectrograph!
             logger.info(f'setting readout mode: {readoutMode}')
             cls.set_readout_mode(readoutMode, sv, logger, cfg, nSamp) 
+            if str(readoutMode) in ['MCDS', 'mcds', 'Fowler', 'fowler', '3']:
+                numfs = nSamp # Fowler samples === number of samples 
+                logger.warning(f'MCDS mode requires numreads to be set to 2x numfs ({numfs*2})')
+                assert numreads == 2 * nSamp, 'nSamp does not equal 2 x numfs'
             logger.info(f'setting num reads: {numreads}')
             cls.set_numreads(numreads, sv, logger, cfg)
         else:
