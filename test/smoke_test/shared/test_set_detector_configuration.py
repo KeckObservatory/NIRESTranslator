@@ -112,6 +112,7 @@ class TestSetDetectorConfiguration(unittest.TestCase):
         args['itime'] = 10 
         args['sv'] = 's'
         args['nSamp'] = 1
+        args['obsType'] = 'telluric'
         sdc.perform(args=args, logger=self.logger, cfg=self.cfg)
 
 if __name__ == "__main__":

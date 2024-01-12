@@ -1,6 +1,7 @@
 from nires.shared.take_exposures import TakeExposures as te 
 import unittest
 from unittest.mock import Mock, patch, MagicMock
+import pdb
 try:
     import ktl
 except ImportError:
@@ -15,6 +16,7 @@ def ktl_side_effects(service, value):
     if value == 'readtime': return 1
     if value == 'readtime': return 1
     if value == 'imagedone': return 1
+    if value == 'framenum': return 1
     return 0
 
 def logger_side_effect(msg):
@@ -36,12 +38,24 @@ class TestTakeExposures(unittest.TestCase):
                 'ktl_timeout': 2,
             },
             'operation_mode': {
-                'operation_mode': 'operational'
+                'operation_mode': 'test'
+            },
+            'logger': {
+                'ping_period': 1,
+            },
+            'exposure': {
+                'sleep_length': 1,
             }
         }
     
     @patch('nires.shared.take_exposures.ktl')
-    def test_take_an_exposure(self, mock_ktl):
+    @patch('nires.shared.wait_for_exposure.ktl')
+    @patch('nires.NIRESTranslatorFunction.ktl')
+    def test_take_an_exposure(self, mock_ktl, mk_ktl, m_ktl):
+        m_ktl.read = Mock()
+        m_ktl.read.side_effect = ktl_side_effects
+        mk_ktl.read = Mock()
+        mk_ktl.read.side_effect = ktl_side_effects
         mock_ktl.read = Mock()
         mock_ktl.read.side_effect = ktl_side_effects
         te._take_an_exposure(logger=self.logger, cfg=self.cfg)

@@ -1,6 +1,7 @@
 from nires.shared.take_tests import TakeTests as tt 
 import unittest
 from unittest.mock import Mock, patch, MagicMock
+import pdb
 try:
     import ktl
 except ImportError:
@@ -36,12 +37,24 @@ class TestTakeTests(unittest.TestCase):
                 'ktl_timeout': 2,
             },
             'operation_mode': {
-                'operation_mode': 'operational'
+                'operation_mode': 'test'
+            },
+            'logger': {
+                'ping_period': 1,
+            },
+            'exposure': {
+                'sleep_length': 1,
             }
         }
     
     @patch('nires.shared.take_tests.ktl')
-    def test_take_tests(self, mock_ktl):
+    @patch('nires.shared.wait_for_exposure.ktl')
+    @patch('nires.NIRESTranslatorFunction.ktl')
+    def test_take_tests(self, mock_ktl, mk_ktl, m_ktl):
+        m_ktl.read = Mock()
+        m_ktl.read.side_effect = ktl_side_effects
+        mk_ktl.read = Mock()
+        mk_ktl.read.side_effect = ktl_side_effects
         mock_ktl.read = Mock()
         mock_ktl.read.side_effect = ktl_side_effects
         tt._take_tests(nFrames=1, sv='s', logger=self.logger, cfg=self.cfg)

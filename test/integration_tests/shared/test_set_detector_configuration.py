@@ -25,7 +25,7 @@ class TestSetDetectorConfiguration(unittest.TestCase):
                 'ktl_timeout': 2,
             },
             'operation_mode': {
-                'operation_mode': 'operational'
+                'operation_mode': 'test'
             }
         }
 

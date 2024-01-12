@@ -73,16 +73,18 @@ class TestDither(unittest.TestCase):
 
     @patch('nires.shared.take_exposures.TakeExposures')
     @patch('nires.spectrograph.dither.SlitMove')
-    def test_execute_dither(self, mock_SlitMove, mock_TakeExposures):
+    @patch('nires.NIRESTranslatorFunction.ktl')
+    def test_execute_dither(self, mock_ktl, mock_SlitMove, mock_TakeExposures):
         def sm_execute_side_effect(args):
             return 
         def te_execute_side_effect(args):
             print('take exposure execute!')
+        mock_ktl.read = Mock()
+        mock_ktl.read.side_effect = ktl_side_effects
         mock_SlitMove.execute = sm_execute_side_effect
         mock_TakeExposures.execute = te_execute_side_effect
         args = { 'offset': 1, 'pattern': 'ABBA', 'sv': 's'}
         Dither.execute_dither(args, self.logger, self.cfg)
-
 
 
 if __name__ == "__main__":
