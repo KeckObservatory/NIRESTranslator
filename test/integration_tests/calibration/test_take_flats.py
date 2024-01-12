@@ -22,7 +22,7 @@ class TestTakeFlats(unittest.TestCase):
                 'ktl_timeout': 2,
             },
             'operation_mode': {
-                'operation_mode': 'test'
+                'operation_mode': 'operational'
             },
             'logger': {
                 'subsystem':"NIRES",
