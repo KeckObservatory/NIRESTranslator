@@ -34,6 +34,19 @@ class TestSetDetectorConfiguration(unittest.TestCase):
                 'sleep_length': 1,
             }
         }
+    
+    def setUp(self):
+        sampmode = 3 # default samp mode to fs
+        numfs = 1 
+        numreads = 2*numfs # numreads always = 2 for fs mode
+        service = 'nsds'
+        ktl.write(service, 'sampmode', sampmode)
+        ktl.waitfor(f'${service}.sampmode=={sampmode}', timeout=2)
+        ktl.write(service, 'numfs', numfs)
+        ktl.waitfor(f'${service}.numfs=={numfs}', timeout=2)
+        ktl.write(service, 'numreads', numreads)
+        ktl.waitfor(f'${service}.numreads=={numreads}', timeout=2)
+        
 
     def test_set_integration_time(self):
 
@@ -102,15 +115,8 @@ class TestSetDetectorConfiguration(unittest.TestCase):
     #     self.assertEqual(sampmode, 4)
 
     def test_minimum_integration_time(self):
-
         # function uses nsds.numreads
-        sampmode = 3
         service = 'nsds'
-        ktl.write(service, 'sampmode', sampmode)
-        ktl.waitfor(f'${service}.sampmode=={sampmode}', timeout=2)
-        numreads = 2
-        ktl.write(service, 'numreads', numreads)
-        ktl.waitfor(f'${service}.numreads=={numreads}', timeout=2)
 
         readtime = float(ktl.read(service, 'readtime'))
         itime = sdc._minimum_integration_time('s')
@@ -123,13 +129,7 @@ class TestSetDetectorConfiguration(unittest.TestCase):
     def test_check_integration_time(self):
 
         service = 'nsds'
-        sampmode = 3
-        numreads = 2
         itime = 1
-        ktl.write(service, 'sampmode', sampmode)
-        ktl.waitfor(f'${service}.sampmode=={sampmode}', timeout=2)
-        ktl.write(service, 'numreads', numreads)
-        ktl.waitfor(f'${service}.numreads=={numreads}', timeout=2)
         ktl.write(service, 'itime', itime)
         ktl.waitfor(f'${service}.itime == {itime}', timeout=2)
 
