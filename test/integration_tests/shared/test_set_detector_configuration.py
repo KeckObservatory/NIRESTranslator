@@ -35,7 +35,6 @@ class TestSetDetectorConfiguration(unittest.TestCase):
             }
         }
     
-    def setUp(self):
         sampmode = 3 # default samp mode to fs
         numfs = 1 
         numreads = 2*numfs # numreads always = 2 for fs mode
