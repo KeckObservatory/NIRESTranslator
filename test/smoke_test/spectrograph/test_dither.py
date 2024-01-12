@@ -36,7 +36,13 @@ class TestDither(unittest.TestCase):
                 'operation_mode': 'operational'
             }, 
             'dither_delta': { 'dither_delta': -1 },
-            'slit_length': { 'slit_length': -1 }
+            'slit_length': { 'slit_length': -1 },
+            'logger': {
+                'ping_period': 1,
+            },
+            'exposure': {
+                'sleep_length': 1,
+            }
         }
 
     @patch('nires.spectrograph.dither.ktl')
