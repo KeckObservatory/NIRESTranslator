@@ -46,6 +46,7 @@ class TestTakeExposures(unittest.TestCase):
         args['itime'] = 3 
         args['nSamp'] = 1 
         args['sv'] = 's'
+        args['obsType'] = 'object'
         sdc.execute(args=args, logger=self.logger, cfg=self.cfg)
     
     def test_take_an_exposure(self):
