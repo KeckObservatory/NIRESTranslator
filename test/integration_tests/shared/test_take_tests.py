@@ -48,6 +48,7 @@ class TestTakeTests(unittest.TestCase):
         args['readoutMode'] = 4 
         args['itime'] = 3 
         args['nSamp'] = None 
+        args['obsType'] = 'object'
         args['sv'] = 'v'
         service = 'nids'
         sdc.perform(args=args, logger=self.logger, cfg=self.cfg)

@@ -174,6 +174,7 @@ class TestSetDetectorConfiguration(unittest.TestCase):
         args['itime'] = 10 
         args['nSamp'] = 1
         args['sv'] = 's'
+        args['obsType'] = 'object'
         service = 'nsds'
         sdc.execute(args=args, logger=self.logger, cfg=self.cfg)
 

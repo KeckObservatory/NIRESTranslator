@@ -31,7 +31,15 @@ class TestDither(unittest.TestCase):
                 'operation_mode': 'operational'
             }, 
             'dither_delta': { 'dither_delta': 1 },
-            'slit_length': { 'slit_length': 10 }
+            'slit_length': { 'slit_length': 10 },
+            'logger': {
+                'subsystem':"NIRES",
+                'configLoc': None,
+                'ping_period':120
+            },
+            'exposure': {
+                'sleep_length':1
+            }
         }
 
         args = {}
@@ -42,6 +50,7 @@ class TestDither(unittest.TestCase):
         args['itime'] = 3 
         args['nSamp'] = 1 
         args['sv'] = 's'
+        args['obsType'] = 'object'
         sdc.execute(args=args, logger=self.logger, cfg=self.cfg)
     
     def test_execute(self):
