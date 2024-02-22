@@ -37,6 +37,7 @@ class configure_science(NIRESTranslatorFunction):
         readoutMode = params.get('det_samp_mode')
         readPairs = params.get('det_exp_read_pairs')
         nSamp = params.get('det_num_fs')
+        targetInfoObject = params.get('target_info_object')
         args = {
             'itime': itime,
             'nCoadds': coadds,
@@ -49,6 +50,9 @@ class configure_science(NIRESTranslatorFunction):
 
         if target:
             args['obsName'] = target['parameters'].get('target_info_name')
+        if targetInfoObject:
+            args['obsName'] = targetInfoObject
+        
 
         SetDetectorConfig.execute(args, logger, cfg)
 
