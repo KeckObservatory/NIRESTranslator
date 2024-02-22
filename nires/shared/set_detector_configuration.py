@@ -225,10 +225,10 @@ class SetDetectorConfig(NIRESTranslatorFunction):
         requestTime = args['itime'] # itime
         obsType = args['obsType']
         obsName = args.get('obsName')
-        cls.set_obsname(obsName, logger, cfg)
         nSamp = args['nSamp'] # fowler sampling
         sv = args['sv']
-        cls.set_obstype(obsType ,sv,logger, cfg)
+        cls.set_obsname(obsName, sv, logger, cfg)
+        cls.set_obstype(obsType, sv, logger, cfg)
         logger.info(f'setting coadds: {nCoadd}')
         cls.set_coadd(nCoadd, sv, logger, cfg)
         logger.info(f'setting integration time: {requestTime}')
