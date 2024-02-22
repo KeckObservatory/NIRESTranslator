@@ -47,6 +47,9 @@ class configure_science(NIRESTranslatorFunction):
             'obsType': obsType 
         }
 
+        if target:
+            args['obsName'] = target['parameters'].get('target_info_name')
+
         SetDetectorConfig.execute(args, logger, cfg)
 
 
