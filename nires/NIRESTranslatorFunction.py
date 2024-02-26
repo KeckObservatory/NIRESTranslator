@@ -25,6 +25,10 @@ class NIRESTranslatorFunction(TranslatorModuleFunction):
     @classmethod
     def check_pause(cls, logger):
         isPaused = ktl.read('k2ddoi', 'pause')
+        isHalted = ktl.read('k2ddoi', 'halt')
+        if isHalted:
+            logger.error('k2ddoi:halt is true. Aborting...')
+            raise DDOIAbortedException
         timeout = 60 * 10 # 10 minutes
         while isPaused=='true':
             logger.info(f'k2ddoi:pause is true. Waiting for pause to be false.')
