@@ -168,13 +168,22 @@ class Dither(NIRESTranslatorFunction):
             move_amt = -.5 * offset
             logger.info(f"Offseting {move_amt} to start ABBA or AB")
             SltMov.execute({'dcs' : 'dcs2', 'offset' : move_amt})
-        for location in pattern:
+        
+        # Set Dither Pattern Name
+        ktl.write('nires', 'dpatname', args['pattern'].upper())
+        ktl.write('nires', 'dpatnpos', len(pattern))
+        ktl.write('nires', 'dpatmide', 'relative')
+        ktl.write('nires', 'dpatcsys', 'inst')
+        for i, location in enumerate(pattern):
             cls.check_pause(logger) # Check for pause before moving
             local_offset = location * offset # How far to move this time
             if location != 0:
                 logger.info(f"Applying offset of {local_offset}")
                 SltMov.execute({'dcs' : 'dcs2', 'offset' : local_offset})
             cls.check_pause(logger) # Check for pause before exposing
+            ktl.write('nires', 'yoffset', local_offset)
+            ktl.write('nires', 'dpatstpy', local_offset)
+            ktl.write('nires', 'dpatipos', i+1)
             TakeExposures.execute(teArgs, logger, cfg)
 
         cls.check_pause(logger) # Check for pause before returning to center
@@ -186,5 +195,12 @@ class Dither(NIRESTranslatorFunction):
         else:
             reset_offset = sum(pattern) * offset * -1 # How far to get back to where we started
             SltMov.execute({'dcs' : 'dcs2', 'offset' : reset_offset})
+        
+        ktl.write('nires', 'yoffset', 0)
+        ktl.write('nires', 'dpatstpy', 0)
+        ktl.write('nires', 'dpatipos', "")
+        ktl.write('nires', 'dpatnpos', 1)
+
+        
 
     
